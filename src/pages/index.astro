@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title='Easy Shot: Capture, Beautify, and Impress – Elevate your Screenshots Instantly!'>
+    <main class="relative overflow-hidden min-h-screen">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <header class="container flex items-center justify-between p-4 relative z-10">
+            <div>
+                <Logo height={42} />
+            </div>
+            <nav>
+                <a href="#">How it works</a>
+            </nav>
+        </header>
+        <div class="text-center py-16 relative z-10">
+            <h1 class="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Capture, Beautify, and Impress</h1>
+            <p>Elevate your Screenshots Instantly!</p>
+            <button class="py-2 px-4 rounded-md border-0 bg-slate-500 text-white mt-8">Coming soon..</button>
+        </div>
+    </main>
+</Layout>
+
+<style></style>
