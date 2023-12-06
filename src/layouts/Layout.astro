@@ -1,4 +1,6 @@
 ---
+// import { ViewTransitions } from 'astro:transitions';
+import '../static/global.css';
 interface Props {
     title: string;
 }
@@ -10,30 +12,15 @@ const { title } = Astro.props;
 <html lang='en'>
     <head>
         <meta charset='UTF-8' />
-        <meta name='description' content='Astro description' />
         <meta name='viewport' content='width=device-width' />
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
         <title>{title}</title>
-		<meta name="description" content="Shot Easy is Seize the Moment in Style, Your Ultimate Tool for Picture-Perfect Web Snaps!">
+		<meta name="description" content="Shot Easy is edit, resize, and filter any photos, edit images or photos online, screenshot extension, area or full page screenshot, change image format online">
+        <meta name="keywords" content="Shot Easy, edit photos, photo converter, image converter, editor online, change image format online, convert image to jpg, jpg to webp, jpg to png">
+        <!-- <ViewTransitions /> -->
     </head>
     <body>
         <slot />
     </body>
 </html>
-<style is:global>
-    :root {
-        --accent: 136, 58, 234;
-        --accent-light: 224, 204, 250;
-        --accent-dark: 49, 10, 101;
-        --accent-gradient: linear-gradient(
-            45deg,
-            rgb(var(--accent)),
-            rgb(var(--accent-light)) 30%,
-            white 60%
-        );
-    }
-    html {
-        font-family: system-ui, sans-serif;
-    }
-</style>

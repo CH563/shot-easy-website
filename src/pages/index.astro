@@ -1,26 +1,73 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Logo from '../components/Logo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Chrome from '../components/Chrome.astro';
+import EditBox from '../components/EditBox.jsx';
 ---
 
-<Layout title='Shot Easy: Capture, Beautify, and Impress – Elevate your Screenshots Instantly!'>
-    <main class="relative overflow-hidden min-h-screen">
+<Layout title='Shot Easy'>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
         <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
         <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
         <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
-        <header class="container flex items-center justify-between p-4 relative z-10">
-            <div>
-                <Logo height={42} />
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <h1 class="text-4xl text-center leading-[42px] font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Edit, Resize, and Filter any photos</h1>
+            <p class="text-center"><span>No sign up required.</span><span>A faster way to edit photos online </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">for free ✨</span></p>
+            <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-8">
+                <button disabled class="py-2 flex gap-1 items-center px-4 rounded-full text-sm border-0 bg-slate-500 text-white mt-6 relative">
+                    <Chrome width={16} height={16} />
+                    <span>Get ShotEasy extension for free</span>
+                    <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">Coming soon</div>
+                </button>
+                <p class="text-xs opacity-80">Capture your visible screen, a selected area, or even the full page with just a single click.</p>
+                <p class="text-xs opacity-80">And editing, elevate your Screenshots Instantly!</p>
             </div>
-            <nav>
-                <a href="#">How it works</a>
-            </nav>
-        </header>
-        <div class="text-center py-16 relative z-10">
-            <h1 class="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Capture, Beautify, and Impress</h1>
-            <p>Elevate your Screenshots Instantly!</p>
-            <button class="py-2 px-4 rounded-md border-0 bg-slate-500 text-white mt-8">Coming soon..</button>
+            <div class="pb-12">
+                <EditBox client:only="react" />
+            </div>
+            <section id="howitworks">
+                <h2 class="text-xl font-extrabold mb-2 text-center">How it works</h2>
+                <div class="grid grid-cols-1 gap-3 md:grid-cols-3 mb-3">
+                    <div class="rounded-md bg-blue-50/50 p-3">
+                        <div class="mb-1 text-center">🖼️</div>
+                        <h3 class="text-sm mb-1 text-center">Crop & resize effortlessly</h3>
+                        <p class="text-xs text-slate-400 mt-1">Cropping and resizing has never been easier. Adjust the framing, size, and focus point of your image for optimal impact on delivery.</p>
+                    </div>
+                    <div class="rounded-md bg-purple-50/50 p-3">
+                        <div class="mb-1 text-center">🌊</div>
+                        <h3 class="text-sm mb-1 text-center">Add watermark easily</h3>
+                        <p class="text-xs text-slate-400 mt-1">Want to protect your images? Place a discrete logo, an image, or a simple text line as a watermark. Placement and orientation are up to you.</p>
+                    </div>
+                    <div class="rounded-md bg-orange-50/50 p-3">
+                        <div class="mb-1 text-center">🎯</div>
+                        <h3 class="text-sm mb-1 text-center">Annotate seamlessly</h3>
+                        <p class="text-xs text-slate-400 mt-1">Enrich and collaborate directly on your media to keep track of changes and ideas in one place.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div class="rounded-md bg-green-50/50 p-3">
+                        <div class="mb-1 text-center">📸</div>
+                        <h3 class="text-sm mb-1 text-center">Take a screenshot</h3>
+                        <p class="text-xs text-slate-400 mt-1">Ues <span class="underline font-semibold">ShotEasy</span> browser extension capture the visible screen, a selected area, or even the full page with just a single click. Or upload an photo from your local disk and clipboard. Or write some thing with markdown.</p>
+                    </div>
+                    <div class="rounded-md bg-indigo-50/50 p-3">
+                        <div class="mb-1 text-center">🪄</div>
+                        <h3 class="text-sm mb-1 text-center">Editing more beautifully</h3>
+                        <p class="text-xs text-slate-400 mt-1">Use our tool to easily upgrade your screenshots into impressive visuals. Add custom backgrounds, frames, shadows, and watermarks for a professional and fun look, all with just a few clicks.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="py-8">
+                <h2 class="text-xl font-extrabold mb-2 text-center">Your privacy is important</h2>
+                <p class="text-slate-600 text-center">Your photos are not uploaded, image editing happens in your browser.</p>
+            </section>
+            <section class="text-center text-xs text-slate-400 [&_a]:underline">
+                Image Editor by <a href="https://github.com/scaleflex/filerobot-image-editor" target="_blank" rel="noopener noreferrer">Filerobot Image Editor</a>
+            </section>
         </div>
+        <Footer />
     </main>
 </Layout>
 
