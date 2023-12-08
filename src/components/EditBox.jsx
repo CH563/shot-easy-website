@@ -3,13 +3,13 @@ import FilerobotImageEditor, {
     TABS,
     TOOLS,
 } from 'react-filerobot-image-editor';
-import singer from '../static/singer.png';
+import photo from '../static/photo.png';
 
 export default function App() {
     const fileInput = useRef(null);
     const [isReader, setIsReader] = useState(true);
-    const [photoUrl, setPhotoUrl] = useState(singer.src)
-    const [photoName, setPhotoName] = useState('shot-easy')
+    const [photoUrl, setPhotoUrl] = useState(photo.src)
+    const [photoName, setPhotoName] = useState('neom-s6g6ZSxM3kQ-unsplash')
     const handleSelect = () => {
         fileInput.current?.click();
     }
