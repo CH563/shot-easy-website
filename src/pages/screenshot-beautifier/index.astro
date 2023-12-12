@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Beautifier from '../../components/Beautifier.jsx';
+---
+
+<Layout title="Screenshot Beautifier Online" description="Screenshot Beautifier Online tool is helps to beautify your screnshots with good background and you can share it on social media.">
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <h1 class="text-4xl text-center leading-[42px] font-bold mb-2 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Screenshot Beautifier</h1>
+            <div class="pb-12">
+                <Beautifier client:only="react" />
+            </div>
+            <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs">
+                <div class="mb-1 text-sm">🏙️</div>
+                <h2 class="text-lg font-bold mb-2">Screenshot Beautifier Online</h2>
+                <p>Screenshot Beautifier tool helps to beautify your screenshot and photo with an amazing collection of backgrounds. Select your screenshot and choose your desired theme and get your picture.</p>
+            </section>
+            <section class="mb-3 rounded-md p-4 bg-pink-100/40 text-xs">
+                <div class="mb-1 text-sm">🤩</div>
+                <h2 class="text-lg font-bold mb-2">What can you do with Screenshot Beautifier Tool?</h2>
+                <p>It helps to create amazing picture by adding good background with your screenshot and download a beautiful picture that can be shared on Facebook, Twitter and Web forums.</p>
+                <p>Users can download beautiful pictures with the perfect size and good quality.</p>
+                <p>Online Screenshot Beautifier tool works well on Windows, MAC, Linux, Chrome, Firefox, Edge, and Safari.</p>
+            </section>
+        </div>
+        <Footer />
+    </main>
+</Layout>

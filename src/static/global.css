@@ -9,6 +9,8 @@
         white 60%
     );
     --c-bg: #fbfbfb;
+    --c-wg: #fff;
+    --c-wb: #c2c2c2;
     --c-bg-op: #fbfbfb00;
     --c-fg: #444444;
     --c-scroll: #d9d9d9;
@@ -25,10 +27,17 @@ html {
 
 html.dark {
     --c-bg: #212129;
+    --c-wg: #222;
+    --c-wb: #555;
     --c-bg-op: #21212900;
     --c-fg: #ddddf0;
     --c-scroll: #333333;
     --c-scroll-hover: #555555;
+}
+
+.polka {
+    background-image: radial-gradient(var(--c-wb) 0.7px, var(--c-wg) 1px);
+    background-size: 14px 14px;
 }
 
 ::-webkit-scrollbar {
