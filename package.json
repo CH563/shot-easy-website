@@ -20,9 +20,11 @@
     "@types/react-dom": "^18.0.6",
     "antd": "^5.12.2",
     "astro": "^3.4.3",
+    "clsx": "^2.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-filerobot-image-editor": "^4.6.3",
+    "tailwind-merge": "^2.1.0",
     "tailwindcss": "^3.0.24",
     "typescript": "^5.2.2"
   }

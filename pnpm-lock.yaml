@@ -35,6 +35,9 @@ dependencies:
   astro:
     specifier: ^3.4.3
     version: 3.4.3(typescript@5.2.2)
+  clsx:
+    specifier: ^2.0.0
+    version: 2.0.0
   react:
     specifier: ^18.0.0
     version: 18.2.0
@@ -44,6 +47,9 @@ dependencies:
   react-filerobot-image-editor:
     specifier: ^4.6.3
     version: 4.6.3(@types/react@18.2.42)(react-dom@18.2.0)(react-konva@18.2.10)(react@18.2.0)(styled-components@5.3.11)
+  tailwind-merge:
+    specifier: ^2.1.0
+    version: 2.1.0
   tailwindcss:
     specifier: ^3.0.24
     version: 3.3.5
@@ -5267,6 +5273,12 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+    dev: false
+
+  /tailwind-merge@2.1.0:
+    resolution: {integrity: sha512-l11VvI4nSwW7MtLSLYT4ldidDEUwQAMWuSHk7l4zcXZDgnCRa0V3OdCwFfM7DCzakVXMNRwAeje9maFFXT71dQ==}
+    dependencies:
+      '@babel/runtime': 7.23.5
     dev: false
 
   /tailwindcss@3.3.5:

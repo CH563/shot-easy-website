@@ -39,6 +39,10 @@ html.dark {
     background-image: radial-gradient(var(--c-wb) 0.7px, var(--c-wg) 1px);
     background-size: 14px 14px;
 }
+.ant-radio-wrapper-checked .w-8 {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 255, 0.415);
+
+}
 
 ::-webkit-scrollbar {
     width: 6px;
