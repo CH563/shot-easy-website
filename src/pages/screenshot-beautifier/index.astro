@@ -12,7 +12,8 @@ import Beautifier from '../../components/Beautifier.jsx';
         <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
         <Header />
         <div class="container py-8 relative z-10 flex-1">
-            <h1 class="text-4xl text-center leading-[42px] font-bold mb-2 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Screenshot Beautifier</h1>
+            <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Screenshot Beautifier</h1>
+            <p class="text-slate-600 text-center mb-2">Not uploaded and editing in browser</p>
             <div class="pb-12">
                 <Beautifier client:only="react" />
             </div>
@@ -27,6 +28,10 @@ import Beautifier from '../../components/Beautifier.jsx';
                 <p>It helps to create amazing picture by adding good background with your screenshot and download a beautiful picture that can be shared on Facebook, Twitter and Web forums.</p>
                 <p>Users can download beautiful pictures with the perfect size and good quality.</p>
                 <p>Online Screenshot Beautifier tool works well on Windows, MAC, Linux, Chrome, Firefox, Edge, and Safari.</p>
+            </section>
+            <section class="py-8">
+                <h2 class="text-xl font-extrabold mb-2 text-center">Your privacy is important</h2>
+                <p class="text-slate-600 text-center">Your photos are not uploaded, image editing happens in your browser.</p>
             </section>
         </div>
         <Footer />
