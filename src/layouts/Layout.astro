@@ -1,14 +1,18 @@
 ---
 // import { ViewTransitions } from 'astro:transitions';
+import { SEO } from 'astro-seo';
 import '../static/global.css';
 interface Props {
     title: string;
     description?: string;
 }
 
+const resolvedImageWithDomain = `${Astro.url.origin}/image.png`;
+const canonicalURL = Astro.url.toString();
+
 const { title, description } = Astro.props;
 const headTitle = `${title} | photo editor online for free`;
-const headDesc = description || "Easy Shot and edit online for free, resize, and filter any photos, edit photo or image on browser, convert image to jpg/png/jpeg/webp, easy to screenshot, area or full page screenshot"
+const headDesc = description || "Photo edit online for free, resize, and filter any photos, edit photo on browser, convert image to jpg/png/jpeg/webp, easy to screenshot area or full page"
 ---
 
 <!doctype html>
@@ -18,9 +22,32 @@ const headDesc = description || "Easy Shot and edit online for free, resize, and
         <meta name='viewport' content='width=device-width' />
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
-        <title>{headTitle}</title>
-		<meta name="description" content={headDesc}>
+        <link rel="sitemap" href="/sitemap-index.xml" />
         <meta name="keywords" content="Shot Easy, easy shot, screenshot, edit photo, photo converter, image converter, editor online, change image format online, convert image to jpg, jpg to webp, jpg to png">
+        <SEO
+            title={headTitle}
+            description={headDesc}
+            canonical={canonicalURL}
+            twitter={{
+                creator: '@LiWen563',
+                site: '@LiWen563',
+                card: 'summary_large_image',
+                imageAlt: 'Shot Easy',
+                description: headDesc,
+            }}
+            openGraph={{
+                basic: {
+                    url: canonicalURL,
+                    type: 'website',
+                    title: headTitle,
+                    image: resolvedImageWithDomain,
+                },
+                image: {
+                    url: resolvedImageWithDomain,
+                    alt: 'Shot Easy',
+                },
+            }}
+        />
         <!-- <ViewTransitions /> -->
     </head>
     <body>

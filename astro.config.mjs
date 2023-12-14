@@ -7,7 +7,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://shoteasy.fun/',
+  site: 'https://shoteasy.fun',
   integrations: [tailwind(), react(), sitemap()],
   output: "server",
   adapter: vercel({
