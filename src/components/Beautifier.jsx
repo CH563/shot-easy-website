@@ -53,7 +53,7 @@ export default function Beautifier() {
     const toDownload = () => {
         setLoading(true);
         toPng(boxRef.current, {
-            cacheBust: true,
+            cacheBust: false,
             pixelRatio: 1
         }).then((dataUrl) => {
             let tmpLink = document.createElement('a');
@@ -76,7 +76,7 @@ export default function Beautifier() {
     const toCopy = () => {
         setLoading(true);
         toBlob(boxRef.current, {
-            cacheBust: true,
+            cacheBust: false,
             pixelRatio: 1
         }).then((value) => {
             navigator.clipboard.write([

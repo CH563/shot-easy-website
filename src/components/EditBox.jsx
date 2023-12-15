@@ -111,7 +111,7 @@ export default function App() {
                     defaultTabId={TABS.ADJUST} // or 'Annotate'
                     defaultToolId={TOOLS.CROP} // or 'Text'
                     useBackendTranslations={false}
-                    avoidChangesNotSavedAlertOnLeave={true}
+                    avoidChangesNotSavedAlertOnLeave={false}
                 />}
             </div>
         </>
