@@ -1,15 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import FilerobotImageEditor, {
     TABS,
     TOOLS,
 } from 'react-filerobot-image-editor';
 import photo from '../static/photo.png';
+import { supportImg } from '../lib/utils';
 
 export default function App() {
     const fileInput = useRef(null);
     const [isReader, setIsReader] = useState(true);
-    const [photoUrl, setPhotoUrl] = useState(photo.src)
-    const [photoName, setPhotoName] = useState('neom-s6g6ZSxM3kQ-unsplash')
+    const [photoUrl, setPhotoUrl] = useState(photo.src);
+    const [photoName, setPhotoName] = useState('neom-s6g6ZSxM3kQ-unsplash');
+
+    useEffect(() => {
+        const getPaste = (e) => {
+            const data = e.clipboardData;
+            if (!data || !data.items) return;
+            const items = Array.from(data.items).filter(e => supportImg.includes(e.type));
+            if (!items.length) return;
+            const file = items[0].getAsFile();
+            setPhotoUrl(window.URL.createObjectURL(file));
+        }
+        document.addEventListener('paste', getPaste, false);
+        return (() => {
+            document.removeEventListener('paste', getPaste);
+        })
+    }, [document])
+
     const handleSelect = () => {
         fileInput.current?.click();
     }
