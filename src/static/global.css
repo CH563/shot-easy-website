@@ -44,6 +44,64 @@ html.dark {
 
 }
 
+.macbook {
+    position: relative;
+    padding: 1.7% 10.35% 7.2%;
+}
+
+.iphone {
+    --aspect-ratio: 1339/2716;
+    --shadow-inset: 5.6% 6.0%;
+    --shadow-radius: 8.1em;
+    --drop-padding: 7.9% 8.4% 8% 8.4%;
+    --drop-radius: 5em;
+    --mockup-shadow: 0,0,0, 0.70;
+    --x: 2em;
+    --y: 2em;
+    --b: 2em;
+    --s: 1;
+    position: relative;
+    padding: var(--drop-padding);
+}
+
+.iphone .frame {
+    border-radius: var(--drop-radius);
+}
+.iphone .sd {
+    top: 7.9%;
+    left: 8.4%;
+    right: 8.4%;
+    bottom: 2%;
+    border-radius: var(--drop-radius);
+}
+.iphone .sd .layer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(var(--mockup-shadow));
+    pointer-events: none;
+    --ratio: 0;
+    transform: translate(calc(var(--x) * var(--ratio)),calc(var(--y) * var(--ratio))) scale(calc(var(--s)));
+    filter: blur(calc(var(--b) * var(--ratio)));
+}
+
+.iphone .sd .layer.layer-1 {
+    --ratio: 1;
+}
+.iphone .sd .layer.layer-2 {
+    --ratio: 1.5;
+}
+.iphone .sd .layer.layer-3 {
+    --ratio: 2.5;
+}
+.iphone .sd .layer.layer-4 {
+    --ratio: 4;
+}
+
+.iphone .sd .layer.layer-5 {
+    --ratio: 6;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;

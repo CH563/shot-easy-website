@@ -15,14 +15,18 @@ import EditBox from '../components/EditBox.jsx';
         <div class="container py-8 relative z-10 flex-1">
             <h1 class="text-4xl text-center leading-[42px] font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Edit, Resize, and Filter any photos</h1>
             <p class="text-center"><span>No sign up required.</span><span>A faster way to edit photos online </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">for free ✨</span></p>
-            <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-8">
-                <button disabled class="py-2 flex gap-1 items-center px-4 rounded-full text-sm border-0 bg-slate-500 text-white mt-6 relative">
+            <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
+                <button disabled class="py-2 flex gap-1 items-center px-4 rounded-full text-sm border-0 bg-slate-500 text-white mt-4 relative">
                     <Chrome width={16} height={16} />
                     <span>Get ShotEasy extension for free</span>
                     <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">Coming soon</div>
                 </button>
                 <p class="text-xs opacity-80">Capture your visible screen, a selected area, or even the full page with just a single click.</p>
                 <p class="text-xs opacity-80">And editing, elevate your Screenshots Instantly!</p>
+            </div>
+            <div class="flex flex-col gap-3 justify-center text-xs hover:[&_a]:bg-blue-600 hover:[&_a]:text-white [&_a]:py-1 [&_a]:px-3 [&_a]:block [&_a]:rounded-full [&_a]:bg-white [&_a]:text-blue-600 [&_a]:border [&_a]:border-blue-600 md:flex-row">
+                <a href="/screenshot-beautifier" title="Screenshot Beautifier">🏞️ Screenshot Beautifier</a>
+                <a href="/photo-to-rounded" title="Photo to Rounded">🛟 Photo to Rounded</a>
             </div>
             <div class="pt-4 pb-12">
                 <EditBox client:only="react" />

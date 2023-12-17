@@ -4,6 +4,10 @@ import { DownloadOutlined, CopyOutlined, UploadOutlined, DeleteOutlined } from '
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
 import { Icons } from '../components/Icons';
 import { cn, supportImg } from '../lib/utils';
+import { MacbookPro } from './MacbookPro';
+import { IphonePro } from './IphonePro';
+
+const modelFrame = ['macbookPro', 'iphonePro'];
 
 const { Dragger } = Upload;
 
@@ -11,10 +15,10 @@ export default function Beautifier() {
     const [messageApi, contextHolder] = message.useMessage();
     const boxRef = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [photoUrl, setPhotoUrl] = useState('');
+    const [photoUrl, setPhotoUrl] = useState('https://images.unsplash.com/photo-1682685797208-c741d58c2eff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTY5OTZ8MXwxfGFsbHw2fHx8fHx8Mnx8MTcwMjcyMjY2MHw&ixlib=rb-4.0.3&q=80&w=600');
     const [marginValue, setMarginValue] = useState(150);
     const [paddingValue, setPaddingValue] = useState(0);
-    const [paddingBg, setPaddingBg] = useState('rgba(255,255,255,1)');
+    const [paddingBg, setPaddingBg] = useState('rgba(255,255,255,.85)');
     const [roundValue, setRoundValue] = useState(10);
     const [shadowValue, setShadowValue] = useState(3);
     const [frame, setFrame] = useState('none');
@@ -25,6 +29,7 @@ export default function Beautifier() {
     const [waterColor, setWaterColor] = useState('rgba(0,0,0,.15)');
     const [waterIndex, setWaterIndex] = useState(11);
     const [direction, setDirection] = useState(-22);
+    const [fit, setFit] = useState('cover');
 
     useEffect(() => {
         const getPaste = (e) => {
@@ -77,7 +82,7 @@ export default function Beautifier() {
         setLoading(true);
         toBlob(boxRef.current, {
             cacheBust: false,
-            pixelRatio: 1
+            pixelRatio: 2
         }).then((value) => {
             navigator.clipboard.write([
                 new ClipboardItem({
@@ -104,8 +109,8 @@ export default function Beautifier() {
         <>
             {contextHolder}
             <div className="polka flex flex-col min-h-[500px] rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased md:flex-row md:items-center">
-                <div className="md:w-0 md:flex-1 md:h-[660px] overflow-auto select-none">
-                    <div className="min-w-full md:min-w-[600px] min-h-full flex items-center justify-center p-5">
+                <div className="md:w-0 md:flex-1 md:h-[660px] overflow-auto select-none p-5">
+                    <div className="min-w-full md:min-w-[600px] min-h-full flex items-center justify-center">
                         <div ref={boxRef} className={cn(
                             'relative overflow-hidden w-full md:w-[600px] bg-gradient-to-r',
                             bgValue === 1 && 'from-indigo-500 via-purple-500 to-pink-500',
@@ -127,7 +132,17 @@ export default function Beautifier() {
                                         <p className="text-2xl"><UploadOutlined /></p>
                                         <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
                                     </Dragger>}
-                                    {photoUrl && <div className={cn(
+                                    {(photoUrl && frame === 'macbookPro') && <MacbookPro width={600 - marginValue} img={photoUrl} fit={fit} style={{
+                                            padding: `${ paddingValue }px`,
+                                            backgroundColor: paddingBg
+                                        }}
+                                    />}
+                                    {(photoUrl && frame === 'iphonePro') && <IphonePro height={600/ratio - marginValue} img={photoUrl} shadow={shadowValue} fit={fit} style={{
+                                            padding: `${ paddingValue }px`,
+                                            backgroundColor: paddingBg
+                                        }}
+                                    />}
+                                    {(photoUrl && !modelFrame.includes(frame)) && <div className={cn(
                                         "overflow-hidden translate-x-0",
                                         shadowValue === 0 && 'shadow-none',
                                         shadowValue === 1 && 'shadow',
@@ -193,24 +208,29 @@ export default function Beautifier() {
                             value={typeof paddingValue === 'number' ? paddingValue : 0}
                         />
                     </div>
-                    <div className="[&_label]:font-semibold [&_label]:text-sm">
-                        <label>Roundness</label>
-                        <Slider
-                            min={0}
-                            max={20}
-                            onChange={setRoundValue}
-                            value={typeof roundValue === 'number' ? roundValue : 0}
-                        />
-                    </div>
-                    <div className="[&_label]:font-semibold [&_label]:text-sm">
-                        <label>Shadow</label>
-                        <Slider
-                            min={0}
-                            max={6}
-                            onChange={setShadowValue}
-                            value={typeof shadowValue === 'number' ? shadowValue : 0}
-                        />
-                    </div>
+                    {!modelFrame.includes(frame) &&
+                            <div className="[&_label]:font-semibold [&_label]:text-sm">
+                                <label>Roundness</label>
+                                <Slider
+                                    min={0}
+                                    max={20}
+                                    onChange={setRoundValue}
+                                    value={typeof roundValue === 'number' ? roundValue : 0}
+                                />
+                            </div>
+                    }
+                    {
+                        frame !== 'macbookPro' &&
+                        <div className="[&_label]:font-semibold [&_label]:text-sm">
+                            <label>Shadow</label>
+                            <Slider
+                                min={0}
+                                max={6}
+                                onChange={setShadowValue}
+                                value={typeof shadowValue === 'number' ? shadowValue : 0}
+                            />
+                        </div>
+                    }
                     <div className="[&_label]:font-semibold [&_label]:text-sm">
                         <label>Background</label>
                         <div className="py-3">
@@ -259,6 +279,8 @@ export default function Beautifier() {
                                 { value: 'none', label: 'None' },
                                 { value: 'light', label: 'Light Glass' },
                                 { value: 'dark', label: 'Dark Glass' },
+                                { value: 'macbookPro', label: 'Macbook Pro M3' },
+                                { value: 'iphonePro', label: 'Iphone 15 Pro' },
                                 { value: 'macosBarLight', label: 'MacOS Light' },
                                 { value: 'macosBarDark', label: 'MacOS Dark' },
                                 { value: 'windowsBarLight', label: 'Windows Light' },
@@ -266,12 +288,24 @@ export default function Beautifier() {
                             ]}
                         />
                     </div>
+                    {modelFrame.includes(frame) &&
+                        <div className="flex items-center justify-between text-xs">
+                            <label></label>
+                            <div>
+                                <Radio.Group defaultValue={fit} onChange={(e) => setFit(e.target.value)} size="small">
+                                    <Radio.Button value="contain" className="text-xs">Contain</Radio.Button>
+                                    <Radio.Button value="cover" className="text-xs">Cover</Radio.Button>
+                                    <Radio.Button value="fill" className="text-xs">Fill</Radio.Button>
+                                </Radio.Group>
+                            </div>
+                        </div>
+                    }
                     <div className="[&_label]:font-semibold [&_label]:text-sm flex gap-4 items-center">
                         <label>Watermark</label>
                         <Switch defaultChecked={useWater} onChange={(checked) => setUseWater(checked)} size="small" className="bg-slate-200" />
                     </div>
                     {useWater && 
-                        <div className="[&_label]:font-semibold [&_label]:text-xs grid gap-2">
+                        <div className="[&_label]:font-semibold [&_label]:text-xs grid gap-2 pl-4">
                             <Input defaultValue={waterCont} placeholder="Watermark content" onChange={(e) => setWaterCont(e.target.value)} />
                             <div className="flex items-center justify-between">
                                 <label>Color</label>
