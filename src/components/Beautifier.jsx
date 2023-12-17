@@ -15,7 +15,7 @@ export default function Beautifier() {
     const [messageApi, contextHolder] = message.useMessage();
     const boxRef = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [photoUrl, setPhotoUrl] = useState('https://images.unsplash.com/photo-1682685797208-c741d58c2eff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTY5OTZ8MXwxfGFsbHw2fHx8fHx8Mnx8MTcwMjcyMjY2MHw&ixlib=rb-4.0.3&q=80&w=600');
+    const [photoUrl, setPhotoUrl] = useState('');
     const [marginValue, setMarginValue] = useState(150);
     const [paddingValue, setPaddingValue] = useState(0);
     const [paddingBg, setPaddingBg] = useState('rgba(255,255,255,.85)');

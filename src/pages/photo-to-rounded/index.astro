@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import Rounded from '../../components/Rounded';
 ---
 
 <Layout title="Photo To Rounded" description="Online photo to rounded tool, quickly add rounded to the photo, made of beautiful rounded photo, size of the rounded, generate rounded photo in PNG format.">
@@ -14,6 +15,7 @@ import Footer from '../../components/Footer.astro';
             <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Photo To Rounded</h1>
             <p class="text-slate-600 text-center mb-2">Not uploaded and editing in browser</p>
             <div class="pb-12">
+                <Rounded client:only="react" />
             </div>
             <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs">
                 <div class="mb-1 text-sm">🏙️</div>
