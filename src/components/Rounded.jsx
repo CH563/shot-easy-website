@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { InputNumber, Button, Upload, message } from 'antd';
 import { DeleteOutlined, DownloadOutlined, CopyOutlined, UploadOutlined, RadiusUpleftOutlined, RadiusUprightOutlined, RadiusBottomleftOutlined, RadiusBottomrightOutlined } from '@ant-design/icons';
-import { cn, supportImg, fileToDataURL } from '../lib/utils';
+import { DownBtn } from './DownBtn';
+import { cn, supportImg, fileToDataURL, url2Blob, toDownloadFile, computedSize } from '../lib/utils';
+import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
+import usePaste from '../lib/usePaste';
 
 const { Dragger } = Upload;
 
@@ -14,22 +17,14 @@ export default function Rounded() {
     const [roundValue, setRoundValue] = useState(30);
     const [radius, setRadius] = useState(['tl', 'tr', 'bl', 'br']);
 
-    useEffect(() => {
-        const getPaste = async (e) => {
-            const data = e.clipboardData;
-            if (!data || !data.items) return;
-            const items = Array.from(data.items).filter(e => supportImg.includes(e.type));
-            if (!items.length) return;
-            const file = items[0].getAsFile();
-            const img = await fileToDataURL(file);
+    usePaste(async (file) => {
+        fileToDataURL(file).then(img => {
             toDraw(img, roundValue, radius);
             setPhotoData(img);
-        }
-        document.addEventListener('paste', getPaste, false);
-        return (() => {
-            document.removeEventListener('paste', getPaste);
-        })
-    }, [document]);
+        }).catch(error => console.error(error));
+    });
+
+    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoUrl]);
 
     const beforeUpload = async (file) => {
         const img = await fileToDataURL(file);
@@ -96,29 +91,39 @@ export default function Rounded() {
     }
 
     const toDownload = () => {
-        let tmpLink = document.createElement('a');
-        tmpLink.href = photoUrl;
-        tmpLink.download = 'shotEasy.png';
-        tmpLink.style = 'position: absolute; z-index: -111; visibility: none;';
-        document.body.appendChild(tmpLink);
-        tmpLink.click();
-        document.body.removeChild(tmpLink);
-        tmpLink = null;
+        toDownloadFile(photoUrl, 'shotEasy.png');
         messageApi.success('Download Success!');
     }
     const toCopy = () => {
+        setLoading(true);
+        url2Blob(photoUrl).then(value => {
+            navigator.clipboard.write([
+                new ClipboardItem({
+                    [value.type]: value
+                })
+            ]).then(() => {
+                messageApi.success('Copied Success!');
+            }).catch(() => {
+                messageApi.error('Copy Failed!');
+            });
+        }).catch(error => {
+            messageApi.error('Copy Failed!');
+        }).finally(() => {
+            setLoading(false);
+        });
     }
+    
     const toRefresh = () => {
         setPhotoUrl('');
-        setPhotoData('')
+        setPhotoData('');
     }
 
     return (
         <>
             {contextHolder}
             <div className="polka rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased">
-                <div className="flex gap-4 justify-between bg-white p-2 border-b shadow-md">
-                    <div className="flex items-center gap-3">
+                <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
+                    <div className="flex items-center justify-center gap-3">
                         <div className="w-32">
                             <InputNumber min={0} keyboard defaultValue={roundValue} addonAfter="px" onChange={handleInput} />
                         </div>
@@ -129,8 +134,7 @@ export default function Rounded() {
                     </div>
                     <div className="flex gap-4 items-center justify-center">
                         {photoData && <div className="text-xs opacity-60">{photoData.width} x {photoData.height} px</div>}
-                        <Button disabled={!photoUrl} loading={loading} icon={<DownloadOutlined />} onClick={toDownload}>Save</Button>
-                        {/* <Button disabled={!photoUrl} loading={loading} icon={<CopyOutlined />} onClick={toCopy}>Copy</Button> */}
+                        <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<DeleteOutlined />} onClick={toRefresh}></Button>
                     </div>
                 </div>
@@ -146,7 +150,9 @@ export default function Rounded() {
                             <p className="text-2xl"><UploadOutlined /></p>
                             <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
                         </Dragger>}
-                        {photoUrl && <div className="overflow-hidden"><img src={photoUrl} className="w-full" /></div>}
+                        {photoUrl && <div className="overflow-hidden max-w-[80%]" style={{
+                            width: computedSize(photoData.width, photoData.height).width + 'px'
+                        }}><img src={photoUrl} className="w-full" /></div>}
                     </div>
                 </div>
             </div>

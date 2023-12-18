@@ -62,6 +62,9 @@ dependencies:
   tailwindcss:
     specifier: ^3.0.24
     version: 3.3.5
+  tinykeys:
+    specifier: ^2.1.0
+    version: 2.1.0
   typescript:
     specifier: ^5.2.2
     version: 5.2.2
@@ -5425,6 +5428,10 @@ packages:
   /throttle-debounce@5.0.0:
     resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
     engines: {node: '>=12.22'}
+    dev: false
+
+  /tinykeys@2.1.0:
+    resolution: {integrity: sha512-/MESnqBD1xItZJn5oGQ4OsNORQgJfPP96XSGoyu4eLpwpL0ifO0SYR5OD76u0YMhMXsqkb0UqvI9+yXTh4xv8Q==}
     dev: false
 
   /tippy.js@6.3.7:
