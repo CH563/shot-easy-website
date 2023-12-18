@@ -22,7 +22,7 @@ export default function Rounded() {
             if (!items.length) return;
             const file = items[0].getAsFile();
             const img = await fileToDataURL(file);
-            toDraw(img);
+            toDraw(img, roundValue, radius);
             setPhotoData(img);
         }
         document.addEventListener('paste', getPaste, false);
@@ -33,12 +33,12 @@ export default function Rounded() {
 
     const beforeUpload = async (file) => {
         const img = await fileToDataURL(file);
-        toDraw(img);
+        toDraw(img, roundValue, radius);
         setPhotoData(img);
         return Promise.reject();
     }
 
-    const toDraw = (image) => {
+    const toDraw = (image, r = 0, type = []) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const { width, height } = image;
@@ -46,31 +46,31 @@ export default function Rounded() {
         canvas.height = height;
 
         ctx.save();
-        ctx.moveTo(0, roundValue);
+        ctx.moveTo(0, r);
         ctx.beginPath();
 
         // 绘制圆角矩形的路径
-        if (radius.includes('tr')) {
-            ctx.lineTo(width - roundValue, 0);
-            ctx.arc(width - roundValue, roundValue, roundValue, 1.5 * Math.PI, 2 * Math.PI);
+        if (type.includes('tr')) {
+            ctx.lineTo(width - r, 0);
+            ctx.arc(width - r, r, r, 1.5 * Math.PI, 2 * Math.PI);
         } else {
             ctx.lineTo(width, 0);
         }
-        if (radius.includes('br')) {
-            ctx.lineTo(width, height - roundValue);
-            ctx.arc(width - roundValue, height - roundValue, roundValue, 0, 0.5 * Math.PI)
+        if (type.includes('br')) {
+            ctx.lineTo(width, height - r);
+            ctx.arc(width - r, height - r, r, 0, 0.5 * Math.PI)
         } else {
             ctx.lineTo(width, height);
         }
-        if (radius.includes('bl')) {
-            ctx.lineTo(roundValue, height);
-            ctx.arc(roundValue, height - roundValue, roundValue, 0.5 * Math.PI, 1 * Math.PI);
+        if (type.includes('bl')) {
+            ctx.lineTo(r, height);
+            ctx.arc(r, height - r, r, 0.5 * Math.PI, 1 * Math.PI);
         } else {
             ctx.lineTo(0, height);
         }
-        if (radius.includes('tl')) {
-            ctx.lineTo(0, roundValue)
-            ctx.arc(roundValue, roundValue, roundValue, 1 * Math.PI, 1.5 * Math.PI)
+        if (type.includes('tl')) {
+            ctx.lineTo(0, r)
+            ctx.arc(r, r, r, 1 * Math.PI, 1.5 * Math.PI)
         } else {
             ctx.lineTo(0, 0);
         }
@@ -85,12 +85,29 @@ export default function Rounded() {
     }
 
     const handleRadiusChange = (key) => {
-        radius.includes(key) ? setRadius(radius.filter(e => e !== key)) : setRadius([key, ...radius]);
-        toDraw(photoData);
+        const type = radius.includes(key) ? radius.filter(e => e !== key) : [key, ...radius];
+        setRadius(type);
+        if (photoData) toDraw(photoData, roundValue, type);
     }
 
-    const toDownload = () => {}
-    const toCopy = () => {}
+    const handleInput = (value) => {
+        setRoundValue(value)
+        if (photoData) toDraw(photoData, value, radius);
+    }
+
+    const toDownload = () => {
+        let tmpLink = document.createElement('a');
+        tmpLink.href = photoUrl;
+        tmpLink.download = 'shotEasy.png';
+        tmpLink.style = 'position: absolute; z-index: -111; visibility: none;';
+        document.body.appendChild(tmpLink);
+        tmpLink.click();
+        document.body.removeChild(tmpLink);
+        tmpLink = null;
+        messageApi.success('Download Success!');
+    }
+    const toCopy = () => {
+    }
     const toRefresh = () => {
         setPhotoUrl('');
         setPhotoData('')
@@ -103,7 +120,7 @@ export default function Rounded() {
                 <div className="flex gap-4 justify-between bg-white p-2 border-b shadow-md">
                     <div className="flex items-center gap-3">
                         <div className="w-32">
-                            <InputNumber min={0} keyboard defaultValue={roundValue} addonAfter="px" onChange={(e) => setRoundValue(e.target.value)} />
+                            <InputNumber min={0} keyboard defaultValue={roundValue} addonAfter="px" onChange={handleInput} />
                         </div>
                         <Button size="small" type={radius.includes('tl')?'primary':'dashed'} shape="circle" onClick={() => handleRadiusChange('tl')} icon={<RadiusUpleftOutlined />} />
                         <Button size="small" type={radius.includes('tr')?'primary':'dashed'} shape="circle" onClick={() => handleRadiusChange('tr')} icon={<RadiusUprightOutlined />} />
@@ -113,7 +130,7 @@ export default function Rounded() {
                     <div className="flex gap-4 items-center justify-center">
                         {photoData && <div className="text-xs opacity-60">{photoData.width} x {photoData.height} px</div>}
                         <Button disabled={!photoUrl} loading={loading} icon={<DownloadOutlined />} onClick={toDownload}>Save</Button>
-                        <Button disabled={!photoUrl} loading={loading} icon={<CopyOutlined />} onClick={toCopy}>Copy</Button>
+                        {/* <Button disabled={!photoUrl} loading={loading} icon={<CopyOutlined />} onClick={toCopy}>Copy</Button> */}
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<DeleteOutlined />} onClick={toRefresh}></Button>
                     </div>
                 </div>
