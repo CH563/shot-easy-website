@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toPng, toBlob } from 'html-to-image';
-import { DownloadOutlined, CopyOutlined, UploadOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
 import { Icons } from '../components/Icons';
-import { cn, supportImg } from '../lib/utils';
+import { cn, supportImg, toDownloadFile } from '../lib/utils';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
+import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
+import usePaste from '../lib/usePaste';
+import { DownBtn } from './DownBtn';
 
 const modelFrame = ['macbookPro', 'iphonePro'];
 
@@ -31,20 +34,11 @@ export default function Beautifier() {
     const [direction, setDirection] = useState(-22);
     const [fit, setFit] = useState('cover');
 
-    useEffect(() => {
-        const getPaste = (e) => {
-            const data = e.clipboardData;
-            if (!data || !data.items) return;
-            const items = Array.from(data.items).filter(e => supportImg.includes(e.type));
-            if (!items.length) return;
-            const file = items[0].getAsFile();
-            setPhotoUrl(window.URL.createObjectURL(file));
-        }
-        document.addEventListener('paste', getPaste, false);
-        return (() => {
-            document.removeEventListener('paste', getPaste);
-        })
-    }, [document])
+    usePaste((file) => {
+        setPhotoUrl(window.URL.createObjectURL(file));
+    });
+
+    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoUrl]);
 
     const beforeUpload = (file) => {
         setPhotoUrl(window.URL.createObjectURL(file));
@@ -61,14 +55,7 @@ export default function Beautifier() {
             cacheBust: false,
             pixelRatio: 1
         }).then((dataUrl) => {
-            let tmpLink = document.createElement('a');
-            tmpLink.href = dataUrl;
-            tmpLink.download = 'shotEasy.png';
-            tmpLink.style = 'position: absolute; z-index: -111; visibility: none;';
-            document.body.appendChild(tmpLink);
-            tmpLink.click();
-            document.body.removeChild(tmpLink);
-            tmpLink = null;
+            toDownloadFile(dataUrl, 'shotEasy.png');
             messageApi.success('Download Success!');
         }).catch(error => {
             console.log(error);
@@ -129,7 +116,7 @@ export default function Beautifier() {
                                         beforeUpload={beforeUpload}
                                         rootClassName="p-4 rounded-md bg-white"
                                     >
-                                        <p className="text-2xl"><UploadOutlined /></p>
+                                        <p className="text-2xl"><Icon name="ImagePlus" /></p>
                                         <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
                                     </Dragger>}
                                     {(photoUrl && frame === 'macbookPro') && <MacbookPro width={600 - marginValue} img={photoUrl} fit={fit} style={{
@@ -183,9 +170,8 @@ export default function Beautifier() {
                 </div>
                 <div className="bg-white flex flex-col gap-2 p-4 md:w-[340px] md:h-[660px] border-l border-l-gray-50 shadow-lg">
                     <div className="flex gap-4 justify-center">
-                        <Button disabled={!photoUrl} loading={loading} icon={<DownloadOutlined />} onClick={toDownload}>Save</Button>
-                        <Button disabled={!photoUrl} loading={loading} icon={<CopyOutlined />} onClick={toCopy}>Copy</Button>
-                        <Button type="text" disabled={!photoUrl} loading={loading} icon={<DeleteOutlined />} onClick={toRefresh}></Button>
+                        <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
+                        <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
                     </div>
                     <div className="[&_label]:font-semibold [&_label]:text-sm">
                         <label>Margin</label>
@@ -315,8 +301,8 @@ export default function Beautifier() {
                                 <label>Direction</label>
                                 <div>
                                 <Radio.Group defaultValue={direction} onChange={(e) => setDirection(e.target.value)} size="small">
-                                        <Radio.Button value={-22}><Icons.arrowUp className="mt-[3px]" /></Radio.Button>
-                                    <Radio.Button value={22}><Icons.arrowDown className="mt-[3px]" /></Radio.Button>
+                                    <Radio.Button value={-22}><Icon name="ArrowUpRight" className="mt-[3px]" /></Radio.Button>
+                                    <Radio.Button value={22}><Icon name="ArrowDownRight" className="mt-[3px]" /></Radio.Button>
                                 </Radio.Group>
                                 </div>
                             </div>

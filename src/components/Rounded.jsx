@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { InputNumber, Button, Upload, message } from 'antd';
-import { DeleteOutlined, DownloadOutlined, CopyOutlined, UploadOutlined, RadiusUpleftOutlined, RadiusUprightOutlined, RadiusBottomleftOutlined, RadiusBottomrightOutlined } from '@ant-design/icons';
+import { RadiusUpleftOutlined, RadiusUprightOutlined, RadiusBottomleftOutlined, RadiusBottomrightOutlined } from '@ant-design/icons';
+import { Icon } from './Icons'
 import { DownBtn } from './DownBtn';
 import { cn, supportImg, fileToDataURL, url2Blob, toDownloadFile, computedSize } from '../lib/utils';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
@@ -16,6 +17,7 @@ export default function Rounded() {
     const [photoData, setPhotoData] = useState('');
     const [roundValue, setRoundValue] = useState(30);
     const [radius, setRadius] = useState(['tl', 'tr', 'bl', 'br']);
+    const [isGrid, setIsGrid] = useState(false);
 
     usePaste(async (file) => {
         fileToDataURL(file).then(img => {
@@ -121,7 +123,7 @@ export default function Rounded() {
     return (
         <>
             {contextHolder}
-            <div className="polka rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased">
+            <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isGrid ? 'tr':'polka')}>
                 <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
                     <div className="flex items-center justify-center gap-3">
                         <div className="w-32">
@@ -131,11 +133,12 @@ export default function Rounded() {
                         <Button size="small" type={radius.includes('tr')?'primary':'dashed'} shape="circle" onClick={() => handleRadiusChange('tr')} icon={<RadiusUprightOutlined />} />
                         <Button size="small" type={radius.includes('bl')?'primary':'dashed'} shape="circle" onClick={() => handleRadiusChange('bl')} icon={<RadiusBottomleftOutlined />} />
                         <Button size="small" type={radius.includes('br')?'primary':'dashed'} shape="circle" onClick={() => handleRadiusChange('br')} icon={<RadiusBottomrightOutlined />} />
+                        <Button type="text" shape="circle" className={isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => setIsGrid(!isGrid)}></Button>
                     </div>
-                    <div className="flex gap-4 items-center justify-center">
+                    <div className="flex gap-3 items-center justify-center">
                         {photoData && <div className="text-xs opacity-60">{photoData.width} x {photoData.height} px</div>}
                         <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
-                        <Button type="text" disabled={!photoUrl} loading={loading} icon={<DeleteOutlined />} onClick={toRefresh}></Button>
+                        <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
                     </div>
                 </div>
                 <div className="relative min-h-[200px] p-10">
@@ -147,7 +150,7 @@ export default function Rounded() {
                             beforeUpload={beforeUpload}
                             rootClassName="p-4 rounded-md bg-white shadow-md"
                         >
-                            <p className="text-2xl"><UploadOutlined /></p>
+                            <p className="text-2xl"><Icon name="ImagePlus" /></p>
                             <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
                         </Dragger>}
                         {photoUrl && <div className="overflow-hidden max-w-[80%]" style={{

@@ -15,6 +15,7 @@
     --c-fg: #444444;
     --c-scroll: #d9d9d9;
     --c-scroll-hover: #bbbbbb;
+    --ant-color-primary: #1677ff;
     scrollbar-color: var(--c-scrollbar) var(--c-bg);
     --primary-glow: conic-gradient(from 180deg at 50% 50%,#16abff33 0deg,#0885ff33 55deg,#54d6ff33 120deg,#0071ff33 160deg,transparent 360deg);
 }
@@ -89,7 +90,16 @@ html.dark {
 }
 
 .ant-btn-primary{
-    background: #1677ff;
+    background: var(--ant-color-primary);
+}
+.ant-btn-primary.bg-black{
+    background: #222;
+}
+.ant-btn-primary.bg-black:not(:disabled):not(.ant-btn-disabled):hover{
+    background: #444;
+}
+.ant-btn-primary.bg-black:disabled{
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .iphone .sd .layer.layer-1 {

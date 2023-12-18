@@ -1,10 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import FilerobotImageEditor, {
     TABS,
     TOOLS,
 } from 'react-filerobot-image-editor';
 import photo from '../static/photo.png';
-import { supportImg } from '../lib/utils';
+import usePaste from '../lib/usePaste';
+import { url2Blob, toDownloadFile } from '../lib/utils'
+
+async function onSaveToClipboard(imageInfo) {
+    const blob = await url2Blob(imageInfo.imageBase64);
+    navigator.clipboard.write([
+        new ClipboardItem({
+            [imageInfo.mimeType]: blob,
+        }),
+        ]).catch((error) => {
+            console.error(error);
+        });
+}
 
 export default function App() {
     const fileInput = useRef(null);
@@ -12,20 +24,9 @@ export default function App() {
     const [photoUrl, setPhotoUrl] = useState(photo.src);
     const [photoName, setPhotoName] = useState('neom-s6g6ZSxM3kQ-unsplash');
 
-    useEffect(() => {
-        const getPaste = (e) => {
-            const data = e.clipboardData;
-            if (!data || !data.items) return;
-            const items = Array.from(data.items).filter(e => supportImg.includes(e.type));
-            if (!items.length) return;
-            const file = items[0].getAsFile();
-            setPhotoUrl(window.URL.createObjectURL(file));
-        }
-        document.addEventListener('paste', getPaste, false);
-        return (() => {
-            document.removeEventListener('paste', getPaste);
-        })
-    }, [document])
+    usePaste((file) => {
+        setPhotoUrl(window.URL.createObjectURL(file));
+    })
 
     const handleSelect = () => {
         fileInput.current?.click();
@@ -63,20 +64,9 @@ export default function App() {
                     source={photoUrl}
                     defaultSavedImageName={photoName}
                     onSave={(editedImageObject, designState) => {
-                        console.log('saved', editedImageObject, designState)
                         const url = editedImageObject.imageBase64;
                         const { fullName: fileName } = editedImageObject;
-
-                        let tmpLink = document.createElement('a');
-                        tmpLink.href = url;
-
-                        tmpLink.download = fileName;
-
-                        tmpLink.style = 'position: absolute; z-index: -111; visibility: none;';
-                        document.body.appendChild(tmpLink);
-                        tmpLink.click();
-                        document.body.removeChild(tmpLink);
-                        tmpLink = null;
+                        toDownloadFile(url, fileName);
                     }}
                     theme={{}}
                     annotationsCommon={{
