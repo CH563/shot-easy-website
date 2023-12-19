@@ -34,6 +34,12 @@ export const url2Blob = async (url) => {
     return await (await fetch(url)).blob();
 };
 
+export const copyAsBlob = (value) => navigator.clipboard.write([
+    new ClipboardItem({
+        [value.type]: value
+    })
+]);
+
 export const toDownloadFile = (url, name) => {
     let tmpLink = document.createElement('a');
     tmpLink.href = url;

@@ -3,7 +3,7 @@ import { toPng, toBlob } from 'html-to-image';
 import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
 import { Icons } from '../components/Icons';
-import { cn, supportImg, toDownloadFile } from '../lib/utils';
+import { cn, supportImg, toDownloadFile, copyAsBlob } from '../lib/utils';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
@@ -71,11 +71,7 @@ export default function Beautifier() {
             cacheBust: false,
             pixelRatio: 2
         }).then((value) => {
-            navigator.clipboard.write([
-                new ClipboardItem({
-                    [value.type]: value
-                })
-            ]).then(() => {
+            copyAsBlob(value).then(() => {
                 messageApi.success('Copied Success!');
             }).catch(() => {
                 messageApi.error('Copy Failed!');

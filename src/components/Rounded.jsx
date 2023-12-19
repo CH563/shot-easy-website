@@ -1,13 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { InputNumber, Button, Upload, message } from 'antd';
+import { InputNumber, Button, message } from 'antd';
 import { RadiusUpleftOutlined, RadiusUprightOutlined, RadiusBottomleftOutlined, RadiusBottomrightOutlined } from '@ant-design/icons';
 import { Icon } from './Icons'
 import { DownBtn } from './DownBtn';
-import { cn, supportImg, fileToDataURL, url2Blob, toDownloadFile, computedSize } from '../lib/utils';
+import { UploadDragger } from './UploadDragger';
+import { cn, fileToDataURL, url2Blob, copyAsBlob, toDownloadFile, computedSize } from '../lib/utils';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
-
-const { Dragger } = Upload;
 
 export default function Rounded() {
     const [messageApi, contextHolder] = message.useMessage();
@@ -99,11 +98,7 @@ export default function Rounded() {
     const toCopy = () => {
         setLoading(true);
         url2Blob(photoUrl).then(value => {
-            navigator.clipboard.write([
-                new ClipboardItem({
-                    [value.type]: value
-                })
-            ]).then(() => {
+            copyAsBlob(value).then(() => {
                 messageApi.success('Copied Success!');
             }).catch(() => {
                 messageApi.error('Copy Failed!');
@@ -143,16 +138,7 @@ export default function Rounded() {
                 </div>
                 <div className="relative min-h-[200px] p-10">
                     <div className="flex w-full items-center justify-center z-10">
-                        {!photoUrl && <Dragger
-                            accept={supportImg.join(',')}
-                            name="file"
-                            showUploadList={false}
-                            beforeUpload={beforeUpload}
-                            rootClassName="p-4 rounded-md bg-white shadow-md"
-                        >
-                            <p className="text-2xl"><Icon name="ImagePlus" /></p>
-                            <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
-                        </Dragger>}
+                        {!photoUrl && <UploadDragger beforeUpload={beforeUpload} />}
                         {photoUrl && <div className="overflow-hidden max-w-[80%]" style={{
                             width: computedSize(photoData.width, photoData.height).width + 'px'
                         }}><img src={photoUrl} className="w-full" /></div>}

@@ -1,8 +1,9 @@
 import { icons } from 'lucide-react';
+import { cn } from '../lib/utils';
 
-export const Icon = ({ name, color, size }) => {
+export const Icon = ({ name, color, size, className }) => {
     const LucideIcon = icons[name];
-    return <span role="img" aria-label={name} className="anticon"><LucideIcon color={color} size={size || '1em'} /></span>;
+    return <span role="img" aria-label={name} className={cn("anticon", className)}><LucideIcon color={color} size={size || '1em'} /></span>;
 };
 
 export const Icons = {
