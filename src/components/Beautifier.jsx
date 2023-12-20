@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toPng, toBlob } from 'html-to-image';
 import { Icon } from './Icons';
-import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
+import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Drawer, message } from 'antd';
 import { Icons } from '../components/Icons';
-import { cn, supportImg, toDownloadFile, copyAsBlob } from '../lib/utils';
+import { cn, supportImg, toDownloadFile, copyAsBlob, getBackground } from '../lib/utils';
+import backgroundConfig from '../lib/backgroundConfig';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
+import { DrawerSide } from './DrawerSide';
 import { DownBtn } from './DownBtn';
 
 const modelFrame = ['macbookPro', 'iphonePro'];
@@ -26,13 +28,14 @@ export default function Beautifier() {
     const [shadowValue, setShadowValue] = useState(3);
     const [frame, setFrame] = useState('none');
     const [ratio, setRatio] = useState(4/3);
-    const [bgValue, setBgValue] = useState(1);
+    const [bgValue, setBgValue] = useState('default_1');
     const [useWater, setUseWater] = useState(false);
     const [waterCont, setWaterCont] = useState('Shot Easy');
     const [waterColor, setWaterColor] = useState('rgba(0,0,0,.15)');
     const [waterIndex, setWaterIndex] = useState(11);
     const [direction, setDirection] = useState(-22);
     const [fit, setFit] = useState('cover');
+    const [showMore, setShowMore] = useState(false);
 
     usePaste((file) => {
         setPhotoUrl(window.URL.createObjectURL(file));
@@ -95,14 +98,10 @@ export default function Beautifier() {
                 <div className="md:w-0 md:flex-1 md:h-[660px] overflow-auto select-none p-5">
                     <div className="min-w-full md:min-w-[600px] min-h-full flex items-center justify-center">
                         <div ref={boxRef} className={cn(
-                            'relative overflow-hidden w-full md:w-[600px] bg-gradient-to-r',
-                            bgValue === 1 && 'from-indigo-500 via-purple-500 to-pink-500',
-                            bgValue === 2 && 'from-red-500 via-pink-500 to-violet-500',
-                            bgValue === 3 && 'from-violet-800 via-pink-600 to-orange-500',
-                            bgValue === 4 && 'from-orange-400 to-rose-400',
-                            bgValue === 5 && 'from-[#4284DB] to-[#29EAC4]',
-                            bgValue === 6 && 'from-[#fc00ff] to-[#00dbde]',
+                            'relative overflow-hidden w-full md:w-[600px]',
+                            getBackground(bgValue),
                         )} style={{ aspectRatio: ratio }}>
+                            {bgValue.includes('cosmic') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
                             <Watermark rootClassName="w-full md:w-[600px] h-full" content={useWater ? waterCont : ''} font={{color: waterColor}} rotate={direction} zIndex={waterIndex}>
                                 <div className="absolute inset-0 flex items-center justify-center z-10">
                                     {!photoUrl && <Dragger
@@ -164,7 +163,8 @@ export default function Beautifier() {
                         </div>
                     </div>
                 </div>
-                <div className="bg-white flex flex-col gap-2 p-4 md:w-[340px] md:h-[660px] border-l border-l-gray-50 shadow-lg">
+                <div className="bg-white flex flex-col gap-2 p-4 md:w-[340px] md:h-[660px] border-l border-l-gray-50 shadow-lg relative">
+                    <DrawerSide value={bgValue} showMore={showMore} onChange={setShowMore} onSelectChange={setBgValue} />
                     <div className="flex gap-4 justify-center">
                         <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
@@ -214,27 +214,27 @@ export default function Beautifier() {
                         </div>
                     }
                     <div className="[&_label]:font-semibold [&_label]:text-sm">
-                        <label>Background</label>
+                        <div className="flex justify-between items-center">
+                            <label>Background</label>
+                            <Button
+                                type="text"
+                                size="small"
+                                className="text-xs flex items-center opacity-80 m-0"
+                                onClick={() => setShowMore(true)}
+                            >More<Icon name="ChevronRight" style={{ marginLeft: 0 }} /></Button>
+                        </div>
                         <div className="py-3">
-                            <Radio.Group onChange={(e) => setBgValue(e.target.value)} value={bgValue}>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={1}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                            <Radio.Group onChange={(e) => setBgValue(e.target.value)} value={bgValue} rootClassName="grid grid-cols-7 [&_span]:ps-0">
+                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value='default_1'>
+                                    <div className={cn("w-8 h-8 rounded-full", backgroundConfig.default_1)}></div>
                                 </Radio>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={2}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 via-pink-500 to-violet-500"></div>
-                                </Radio>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={3}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-800 via-pink-600 to-orange-500"></div>
-                                </Radio>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={4}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-rose-400"></div>
-                                </Radio>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={5}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#4284DB] to-[#29EAC4]"></div>
-                                </Radio>
-                                <Radio className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={6}>
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#fc00ff] to-[#00dbde]"></div>
-                                </Radio>
+                                {Object.keys(backgroundConfig).map((key, index) => {
+                                    if (key.includes('default') && key !== 'default_1') return (
+                                        <Radio key={key} className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={key}>
+                                            <div className={cn("w-8 h-8 rounded-full", backgroundConfig[key])}></div>
+                                        </Radio>
+                                    )
+                                })}
                             </Radio.Group>
                         </div>
                     </div>

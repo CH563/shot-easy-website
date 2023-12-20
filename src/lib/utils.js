@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
+import backgroundConfig from './backgroundConfig';
 
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -68,3 +69,9 @@ export const computedSize = (w, h, maxWidth = 950, maxHeight = 450) => {
     }
     return { width, height };
 };
+
+export const getBackground = (key) => {
+    if (key.includes('cosmic')) return '';
+    if (backgroundConfig[key]) return backgroundConfig[key];
+    return 'bg-white';
+}
