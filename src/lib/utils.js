@@ -71,7 +71,7 @@ export const computedSize = (w, h, maxWidth = 950, maxHeight = 450) => {
 };
 
 export const getBackground = (key) => {
-    if (key.includes('cosmic')) return '';
+    if (key.includes('_img_')) return '';
     if (backgroundConfig[key]) return backgroundConfig[key];
     return 'bg-white';
 }

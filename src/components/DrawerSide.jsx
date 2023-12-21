@@ -36,6 +36,8 @@ export const DrawerSide = ({ showMore, onChange, onSelectChange, value }) => {
                 <BackgroundSelect type="gradient" onChange={onSelectChange} value={value} />
                 <h4 className="text-sm font-bold pb-1 pt-2">Cosmic Gradients</h4>
                 <BackgroundSelect type="cosmic" onChange={onSelectChange} value={value} />
+                <h4 className="text-sm font-bold pb-1 pt-2">Desktop</h4>
+                <BackgroundSelect type="desktop" onChange={onSelectChange} value={value} />
             </div>
         </Drawer>
     )

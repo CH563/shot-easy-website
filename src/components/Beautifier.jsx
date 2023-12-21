@@ -101,7 +101,7 @@ export default function Beautifier() {
                             'relative overflow-hidden w-full md:w-[600px]',
                             getBackground(bgValue),
                         )} style={{ aspectRatio: ratio }}>
-                            {bgValue.includes('cosmic') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
+                            {bgValue.includes('_img_') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
                             <Watermark rootClassName="w-full md:w-[600px] h-full" content={useWater ? waterCont : ''} font={{color: waterColor}} rotate={direction} zIndex={waterIndex}>
                                 <div className="absolute inset-0 flex items-center justify-center z-10">
                                     {!photoUrl && <Dragger
