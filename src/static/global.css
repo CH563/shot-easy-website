@@ -43,9 +43,9 @@ html.dark {
 .tr {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEXj4+P39/dWpvaqAAAAEElEQVQI12Ng+M+AFeEQBgB+vw/xWs16mgAAAABJRU5ErkJggg==) repeat;
 }
+
 .ant-radio-wrapper-checked .h-8 {
     box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 255, 0.415);
-
 }
 
 .macbook {

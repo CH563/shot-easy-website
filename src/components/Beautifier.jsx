@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { toPng, toBlob } from 'html-to-image';
 import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Drawer, message } from 'antd';
@@ -9,6 +9,7 @@ import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
+import useImageColor from '../lib/useImageColor';
 import { DrawerSide } from './DrawerSide';
 import { DownBtn } from './DownBtn';
 
@@ -36,6 +37,18 @@ export default function Beautifier() {
     const [direction, setDirection] = useState(-22);
     const [fit, setFit] = useState('cover');
     const [showMore, setShowMore] = useState(false);
+    const { imgColors, imgSize } = useImageColor(photoUrl);
+
+    const boxStyle = useMemo(() => {
+        let style = {};
+        if (backgroundConfig[bgValue]) return style;
+        try {
+            style = JSON.parse(bgValue)
+        } catch (error) {
+            //
+        }
+        return style;
+    }, [bgValue]);
 
     usePaste((file) => {
         setPhotoUrl(window.URL.createObjectURL(file));
@@ -100,7 +113,7 @@ export default function Beautifier() {
                         <div ref={boxRef} className={cn(
                             'relative overflow-hidden w-full md:w-[600px]',
                             getBackground(bgValue),
-                        )} style={{ aspectRatio: ratio }}>
+                        )} style={{ aspectRatio: ratio, ...boxStyle }}>
                             {bgValue.includes('_img_') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
                             <Watermark rootClassName="w-full md:w-[600px] h-full" content={useWater ? waterCont : ''} font={{color: waterColor}} rotate={direction} zIndex={waterIndex}>
                                 <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -164,7 +177,15 @@ export default function Beautifier() {
                     </div>
                 </div>
                 <div className="bg-white flex flex-col gap-2 p-4 md:w-[340px] md:h-[660px] border-l border-l-gray-50 shadow-lg relative">
-                    <DrawerSide value={bgValue} showMore={showMore} onChange={setShowMore} onSelectChange={setBgValue} />
+                    <DrawerSide
+                        value={bgValue}
+                        showMore={showMore}
+                        onChange={setShowMore}
+                        onSelectChange={setBgValue}
+                        photoUrl={photoUrl}
+                        imgColors={imgColors}
+                        imgSize={imgSize}
+                    />
                     <div className="flex gap-4 justify-center">
                         <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
