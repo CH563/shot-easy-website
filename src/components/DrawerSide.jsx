@@ -16,12 +16,12 @@ export const DrawerSide = ({ showMore, onChange, onSelectChange, value, photoUrl
         if (!imgColors?.length) return {options,lists};
         imgColors.map(item => {
             options.push({
-                key: JSON.stringify({ background: item })
+                key: JSON.stringify({ background: `rgb(${item.join(',')})` })
             });
         });
         scatterArray(imgColors).map(item => {
             lists.push({
-                key: JSON.stringify({ backgroundImage: `url("data:image/svg+xml,${ encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1440 900" fill="none" style="background: ${ item[0] };"><path fill="${ item[1] }" d="M999.7 129.2c180.6-46 277.6-156.1 461-123.1 424.7 76.4 369.8 882.1 0 1104.5-222.4 133.8-426.7 103.7-664.7 0C563.8 1009.4 474 921 345.5 702.7 298.8 623.4 244 474.5 273 367.8c33-121.6 127.4-178 251-203 127.2-25.7 251.5 21.6 475.6-35.6Z" style="filter: blur(300px);"></path><path fill="${ item[2] }" d="M1108.4 282.7c154.7-39.5 237.9-133.8 395-105.5 363.8 65.5 316.8 756 0 946.5-190.5 114.7-365.6 88.9-569.5 0C735 1037 658 961.2 548 774.2c-40-68-86.8-195.6-62-287 28.4-104.2 109.2-152.6 215-174 109-22 215.5 18.5 407.5-30.5Z" style="filter: blur(200px);"></path><ellipse fill="${ item[3] }" cx="1319.7" cy="799.3" rx="556.5" ry="379" transform="rotate(22 1319.7 799.3)" style="filter: blur(200px);"></ellipse></svg>`) }")`, backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' })
+                key: JSON.stringify({ backgroundImage: item, backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' })
             });
         })
         return {options,lists};

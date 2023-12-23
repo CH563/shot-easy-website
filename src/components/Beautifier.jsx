@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { toPng, toBlob } from 'html-to-image';
 import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Drawer, message } from 'antd';
@@ -38,6 +38,7 @@ export default function Beautifier() {
     const [fit, setFit] = useState('cover');
     const [showMore, setShowMore] = useState(false);
     const { imgColors, imgSize } = useImageColor(photoUrl);
+    const [imgwidth, setImgWidth] = useState(600 - marginValue);
 
     const boxStyle = useMemo(() => {
         let style = {};
@@ -49,6 +50,16 @@ export default function Beautifier() {
         }
         return style;
     }, [bgValue]);
+
+    useEffect(() => {
+        setImgWidth(600 - marginValue);
+        if (!imgSize?.width) return;
+        if (imgSize.width > imgSize.height) {
+            return;
+        }
+        const height = 600 / ratio - marginValue;
+        setImgWidth(height * imgSize.width / imgSize.height);
+    }, [marginValue, imgSize, ratio]);
 
     usePaste((file) => {
         setPhotoUrl(window.URL.createObjectURL(file));
@@ -102,6 +113,7 @@ export default function Beautifier() {
 
     const toRefresh = () => {
         setPhotoUrl('');
+        if (!backgroundConfig[bgValue]) setBgValue('default_1');
     }
 
     return (
@@ -113,9 +125,18 @@ export default function Beautifier() {
                         <div ref={boxRef} className={cn(
                             'relative overflow-hidden w-full md:w-[600px]',
                             getBackground(bgValue),
-                        )} style={{ aspectRatio: ratio, ...boxStyle }}>
+                        )} style={{
+                            aspectRatio: ratio,
+                            ...boxStyle
+                        }}>
                             {bgValue.includes('_img_') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
-                            <Watermark rootClassName="w-full md:w-[600px] h-full" content={useWater ? waterCont : ''} font={{color: waterColor}} rotate={direction} zIndex={waterIndex}>
+                            <Watermark
+                                rootClassName="w-full md:w-[600px] h-full"
+                                content={useWater ? waterCont : ''}
+                                font={{ color: waterColor }}
+                                rotate={direction}
+                                zIndex={waterIndex}
+                            >
                                 <div className="absolute inset-0 flex items-center justify-center z-10">
                                     {!photoUrl && <Dragger
                                         accept={supportImg.join(',')}
@@ -127,18 +148,31 @@ export default function Beautifier() {
                                         <p className="text-2xl"><Icon name="ImagePlus" /></p>
                                         <p className="text-sm px-4">Click or Drag image to this area<br/>or Paste image</p>
                                     </Dragger>}
-                                    {(photoUrl && frame === 'macbookPro') && <MacbookPro width={600 - marginValue} img={photoUrl} fit={fit} style={{
-                                            padding: `${ paddingValue }px`,
-                                            backgroundColor: paddingBg
-                                        }}
-                                    />}
-                                    {(photoUrl && frame === 'iphonePro') && <IphonePro height={600/ratio - marginValue} img={photoUrl} shadow={shadowValue} fit={fit} style={{
-                                            padding: `${ paddingValue }px`,
-                                            backgroundColor: paddingBg
-                                        }}
-                                    />}
+                                    {(photoUrl && frame === 'macbookPro') &&
+                                        <MacbookPro
+                                            width={600 - marginValue}
+                                            img={photoUrl}
+                                            fit={fit}
+                                            style={{
+                                                padding: `${ paddingValue }px`,
+                                                backgroundColor: paddingBg
+                                            }}
+                                        />
+                                    }
+                                    {(photoUrl && frame === 'iphonePro') &&
+                                        <IphonePro
+                                            height={600 / ratio - marginValue}
+                                            img={photoUrl}
+                                            shadow={shadowValue}
+                                            fit={fit}
+                                            style={{
+                                                padding: `${ paddingValue }px`,
+                                                backgroundColor: paddingBg
+                                            }}
+                                        />
+                                    }
                                     {(photoUrl && !modelFrame.includes(frame)) && <div className={cn(
-                                        "overflow-hidden translate-x-0",
+                                        "overflow-hidden translate-x-0 transition-all opacity-100",
                                         shadowValue === 0 && 'shadow-none',
                                         shadowValue === 1 && 'shadow',
                                         shadowValue === 2 && 'shadow-sm',
@@ -149,7 +183,7 @@ export default function Beautifier() {
                                         frame === 'light' && 'bg-white/40 p-1.5',
                                         frame === 'dark' && 'bg-black/30 p-1.5',
                                     )} style={{
-                                        width: `${ 600 - marginValue }px`,
+                                        width: `${ imgwidth }px`,
                                         borderRadius: `${ roundValue }px`,
                                     }}>
                                         {frame.includes('sBar') && <div className={cn(

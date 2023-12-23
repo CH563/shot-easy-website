@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
+import ColorThief from 'colorthief';
 import backgroundConfig from './backgroundConfig';
 
 export function cn(...inputs) {
@@ -103,101 +104,6 @@ export const getImageData = (image, w, h, scale) => {
     return ref.data;
 };
 
-// 获取使用颜色最多的像素点
-export const getCounts = function (data, ignore) {
-    const countMap = {};
-
-    for (let i = 0; i < data.length; i += 4) {
-        // 3个点是一个色值, 第4个点是alpha
-        const alpha = data[i + 3];
-        if (alpha === 0) continue;
-
-        const rgbComponents = Array.from(data.subarray(i, i + 3));
-
-        if (rgbComponents.indexOf(undefined) !== -1) continue;
-
-        const colorArr = alpha && alpha !== 255 ? rgbComponents.concat([alpha]) : rgbComponents;
-
-        if (ignore.indexOf(`rgb(${ colorArr.join(',') })`) !== -1) continue;
-        
-        if (countMap[colorArr.join('_')]) {
-            countMap[colorArr.join('_')].count++;
-        } else {
-            countMap[colorArr.join('_')] = {
-                color: colorArr,
-                count: 1
-            };
-        }
-    }
-
-    const counts = Object.values(countMap);
-    return counts.sort(function (a, b) { return b.count - a.count; });
-};
-
-function kMeans(pixels, k) {
-    let centroids = initializeCentroids(pixels, k);
-    let assignments = [];
-    let iterations = 0;
-    let maxIterations = 100;
-
-    while (iterations < maxIterations) {
-        assignments = assignPixelsToCentroids(pixels, centroids, k);
-        centroids = calculateNewCentroids(pixels, assignments, k);
-        iterations++;
-    }
-
-    return { centroids, assignments };
-}
-
-function initializeCentroids(pixels, k) {
-    let centroids = [];
-    for (let i = 0; i < k; i++) {
-        const idx = (Math.floor(Math.random() * (pixels.length / 4))) * 4;
-        centroids.push([pixels[idx], pixels[idx + 1], pixels[idx + 2]]);
-    }
-    return centroids;
-}
-
-function assignPixelsToCentroids(pixels, centroids, k) {
-    let assignments = new Array(pixels.length / 4).fill(0);
-    for (let i = 0; i < pixels.length; i += 4) {
-        let minDist = Infinity;
-        let assignment = 0;
-        for (let j = 0; j < k; j++) {
-            const dist = euclideanDistance(pixels, i, centroids[j]);
-            if (dist < minDist) {
-                minDist = dist;
-                assignment = j;
-            }
-        }
-        assignments[i / 4] = assignment;
-    }
-    return assignments;
-}
-
-function calculateNewCentroids(pixels, assignments, k) {
-    let sums = Array.from({ length: k }, () => [0, 0, 0]);
-    let counts = new Array(k).fill(0);
-
-    for (let i = 0; i < assignments.length; i++) {
-        const centroidIndex = assignments[i];
-        sums[centroidIndex][0] += pixels[i * 4];
-        sums[centroidIndex][1] += pixels[i * 4 + 1];
-        sums[centroidIndex][2] += pixels[i * 4 + 2];
-        counts[centroidIndex]++;
-    }
-
-    return sums.map((sum, i) => sum.map(s => s / counts[i]));
-}
-
-function euclideanDistance(pixels, idx, centroid) {
-    const rDiff = pixels[idx] - centroid[0];
-    const gDiff = pixels[idx + 1] - centroid[1];
-    const bDiff = pixels[idx + 2] - centroid[2];
-    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-}
-
-
 export const getImgColor = async (img) => {
     let colors = [];
     let width = 0;
@@ -207,30 +113,36 @@ export const getImgColor = async (img) => {
         const image = await getImage(img);
         width = image.width;
         height = image.height;
-        const w = 20;
-        const imageData = getImageData(image, w, w*image.height/image.width);
-        const { centroids } = kMeans(imageData, 5);
+        const colorThief = new ColorThief();
+        const centroids = await colorThief.getPalette(image, 8);
         centroids.map(e => {
             if (e.some(i => isNaN(i))) return e;
-            colors.push(`rgb(${ e.map(i => parseInt(i)).join(',') })`);
+            colors.push(e.map(i => parseInt(i)));
         });
+        colors.sort(function (a, b) { return  (b[0] * 0.299 + b[1] * 0.587 + b[2] * 0.114)-(a[0] * 0.299 + a[1] * 0.587 + a[2] * 0.114); })
     } catch (error) {
         console.log(error)
     }
     return {colors, width, height};
 };
 
-export const scatterArray = (arr, chunkSize = 4) => {
+export const scatterArray = (arr) => {
     const scattered = [];
-    // const arrLength = arr.length;
-
-    while (scattered.length < 7) {
-        const chunk = [];
-        for (let i = 0; i < chunkSize; i++) {
-            chunk.push(arr[Math.floor(Math.random() * arr.length)]);
+    const a = [];
+    const b = [];
+    const c = [];
+    const reversedArr = arr.toReversed();
+    const max = arr.length > 6 ? 6 : arr.length;
+    for (let i = 0; i < max; i++) {
+        const secend = i + 1 > arr.length - 1 ? arr.length - 1 : i + 1;
+        const third = secend + 1 > arr.length - 1 ? arr.length - 1 : secend + 1;
+        if (i < 2) {
+            a.push(`linear-gradient(140deg, rgb(${arr[i].join(',')}) 25%, rgb(${reversedArr[i].join(',')}) 90%)`);
         }
-        scattered.push(chunk);
+        b.push(`url("data:image/svg+xml,${ encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1440 900" fill="none" style="background: rgb(${ arr[i].join(',') });"><path fill="rgb(${ arr[secend].join(',') })" d="M999.7 129.2c180.6-46 277.6-156.1 461-123.1 424.7 76.4 369.8 882.1 0 1104.5-222.4 133.8-426.7 103.7-664.7 0C563.8 1009.4 474 921 345.5 702.7 298.8 623.4 244 474.5 273 367.8c33-121.6 127.4-178 251-203 127.2-25.7 251.5 21.6 475.6-35.6Z" style="filter: blur(300px);"></path><path fill="rgb(${ reversedArr[secend].join(',') })" d="M1108.4 282.7c154.7-39.5 237.9-133.8 395-105.5 363.8 65.5 316.8 756 0 946.5-190.5 114.7-365.6 88.9-569.5 0C735 1037 658 961.2 548 774.2c-40-68-86.8-195.6-62-287 28.4-104.2 109.2-152.6 215-174 109-22 215.5 18.5 407.5-30.5Z" style="filter: blur(200px);"></path><ellipse fill="rgb(${ reversedArr[i].join(',') })" cx="1319.7" cy="799.3" rx="556.5" ry="379" transform="rotate(22 1319.7 799.3)" style="filter: blur(200px);"></ellipse></svg>`) }")`);
+        c.push(`url("data:image/svg+xml,${ encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1440 900" fill="none" style="background: rgb(${ arr[i].join(',') });"><path fill="rgb(${ arr[secend].join(',') })" d="M831 745S643.7 567 688.5 467.8c55.8-123.9 340.5 34.9 340.5 34.9S1528.6 841 1587.8 925c93.7 133.2 119.6 266.3 0 326.4C1490.5 1300 831 745 831 745Z" style="filter: blur(325px);"></path><path fill="rgb(${ arr[third].join(',') })" d="M1423.9 180c192.6 34.2 292 162.4 419.2 311 196 229 316.2 609 32.3 709.7-258.9 91.9-267.8-422.3-541.2-449.3-97.2-9.7-158.3 62-249 25.5-114.4-46-162.3-144.3-168-267.5-5.8-126.9 44.6-219.7 152-287.7 115.5-73.2 220-65.4 354.7-41.6Z" style="filter: blur(325px);"></path><path fill="rgb(${ reversedArr[secend].join(',') })" d="M975.8 1560.6c225.6 216.5 133.2 620 442.3 667.3 63.2 9.7 100.7 10.8 163.7 0 367.2-63 184.2-630.2 0-954-96.7-170-177.7-247-327.8-372.5-134.9-112.7-219.3-202-384.5-261.9-135-48.9-237-74.8-372.8-28.7-123.2 41.8-210.4 99.8-245.6 225-37.4 132.8-17.7 225.3 53.1 343.8C450 1423.3 771 1364 975.8 1560.6Z" style="filter: blur(325px);"></path><circle cx="1061.6" cy="899.1" r="124.9" fill="rgb(${ reversedArr[i].join(',') })" style="filter: blur(225px);"></circle></svg>`) }")`);
     }
+    scattered.push(...a, ...b, ...c);
 
     return scattered;
 }
