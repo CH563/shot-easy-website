@@ -80,7 +80,7 @@ export default function Beautifier() {
         setLoading(true);
         toPng(boxRef.current, {
             cacheBust: false,
-            pixelRatio: 1
+            pixelRatio: 2
         }).then((dataUrl) => {
             toDownloadFile(dataUrl, 'shotEasy.png');
             messageApi.success('Download Success!');

@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Remover from '../../components/Remover';
+---
+
+<Layout title="Background Remover" description="Remove image backgrounds automatically just one click. Background remover tool can process your images FAST & FREE--no signup required. Upload your photo now & see the magic.">
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Background Remover</h1>
+            <p class="text-slate-600 text-center mb-2">Upload an image to remove the background or replace to Any Background</p>
+            <div class="pb-12">
+                <Remover client:only="react" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <section class="mb-3 rounded-md p-4 bg-green-100/40 text-xs">
+                    <div class="mb-1 text-sm">✨</div>
+                    <h2 class="text-lg font-bold mb-2">How to remove image background?</h2>
+                    <p>Just upload your image, Background Remover is automatically to remove image backgrounds.</p>
+                </section>
+                <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs">
+                    <div class="mb-1 text-sm">🏙️</div>
+                    <h2 class="text-lg font-bold mb-2">Fully Automated Background Remover</h2>
+                    <p>Instantly get transparent background image in almost no time. Fully automated and free.</p>
+                </section>
+                <section class="mb-3 rounded-md p-4 bg-pink-100/40 text-xs">
+                    <div class="mb-1 text-sm">🤩</div>
+                    <h2 class="text-lg font-bold mb-2">Replace to Any Background</h2>
+                    <p>Easily replace the distracting background with solid background colors or use any other images as the background.</p>
+                </section>
+                <section class="mb-3 rounded-md p-4 bg-yellow-100/40 text-xs">
+                    <div class="mb-1 text-sm">🎉</div>
+                    <h2 class="text-lg font-bold mb-2">Design the way you want</h2>
+                    <p>Get a transparent image then easily yet effectively create stunning banners just in a matter of minutes.</p>
+                </section>
+            </div>
+            <section class="py-8">
+                <h2 class="text-xl font-extrabold mb-2 text-center">Your privacy is important</h2>
+                <p class="text-slate-600 text-center">Your photos are not uploaded, image editing happens in your browser.</p>
+            </section>
+            <section class="text-center text-xs text-slate-400 [&_a]:underline">
+                Remove API by <a href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer">remove.bg</a>
+            </section>
+        </div>
+        <Footer />
+    </main>
+</Layout>

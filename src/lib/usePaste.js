@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { supportImg } from './utils';
 
-export default function usePaste(toPaste) {
+export default function usePaste(toPaste, dependencies = []) {
     useEffect(() => {
         const getPaste = async (e) => {
             const data = e.clipboardData;
@@ -15,5 +15,5 @@ export default function usePaste(toPaste) {
         return (() => {
             document.removeEventListener('paste', getPaste);
         })
-    }, [document]);
+    }, [document, ...dependencies]);
 };
