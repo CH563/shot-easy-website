@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { ColorPicker, Button, message } from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
+import { ColorPicker, Button, message, Spin } from 'antd';
 import { Icon } from './Icons'
 import { DownBtn } from './DownBtn';
 import { UploadDragger } from './UploadDragger';
 import { cn, fileToDataURL, url2Blob, copyAsBlob, toDownloadFile, computedSize } from '../lib/utils';
+import { generateSignature } from '../lib/auth';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
 
@@ -13,9 +14,11 @@ export default function Remover() {
     const [loading, setLoading] = useState(false);
     const [bgColor, setBgColor] = useState('rgba(255,255,255, 0)');
     const [photoUrl, setPhotoUrl] = useState('');
+    const [transparentUrl, setTransparentUrl] = useState('');
     const [photoData, setPhotoData] = useState('');
     const [isGrid, setIsGrid] = useState(false);
     const [showOrigin, setShowOrigin] = useState(false);
+    const [controller, setController] = useState(null);
 
     usePaste(async (file) => {
         if (loading) return messageApi.info('Working hard, please wait!');
@@ -25,7 +28,51 @@ export default function Remover() {
         }).catch(error => console.error(error));
     }, [loading]);
 
-    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoUrl, loading]);
+    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [transparentUrl, loading]);
+
+    useEffect(() => {
+        const removeReq = async () => {
+            if (photoUrl) {
+                const controllerSignal = new AbortController()
+                setController(controllerSignal);
+                setLoading(true);
+                const timestamp = Date.now()
+                const formData = new FormData();
+                const file = await url2Blob(photoUrl);
+                const sign = await generateSignature({ t: timestamp, m: file.size });
+                formData.append('image', file);
+                formData.append('time', timestamp);
+                formData.append('sign', sign);
+                try {
+                    const response = await fetch('/api/remove-bg', {
+                        method: 'POST',
+                        body: formData,
+                        signal: controllerSignal.signal,
+                    });
+                    const resFile = await response.blob();
+                    const image = await fileToDataURL(resFile);
+                    const canvas = canvasRef.current;
+                    const ctx = canvas.getContext('2d');
+                    const { width, height } = image;
+                    const reSize = computedSize(width, height);
+                    canvas.width = reSize.width;
+                    canvas.height = reSize.height;
+                    ctx.drawImage(image, 0, 0, reSize.width, reSize.height);
+                    // 导出图片
+                    const imgbase64 = canvas.toDataURL("image/png");
+                    setTransparentUrl(imgbase64);
+                } catch (error) {
+                    messageApi.error('Remove error!');
+                }
+                setLoading(false);
+                setController(null);
+            }
+        }
+        removeReq();
+        return (() => {
+            if (controller && controller.abort) controller.abort();
+        })
+    }, [photoUrl]);
 
     const beforeUpload = async (file) => {
         const img = await fileToDataURL(file);
@@ -49,13 +96,13 @@ export default function Remover() {
 
     const toDownload = () => {
         if (loading) return messageApi.info('Working hard, please wait!');
-        toDownloadFile(photoUrl, 'shotEasy.png');
+        toDownloadFile(transparentUrl, 'shotEasy.png');
         messageApi.success('Download Success!');
     }
     const toCopy = () => {
         if (loading) return messageApi.info('Working hard, please wait!');
         setLoading(true);
-        url2Blob(photoUrl).then(value => {
+        url2Blob(transparentUrl).then(value => {
             copyAsBlob(value).then(() => {
                 messageApi.success('Copied Success!');
             }).catch(() => {
@@ -72,6 +119,7 @@ export default function Remover() {
         if (loading) return messageApi.info('Working hard, please wait!');
         setPhotoUrl('');
         setPhotoData('');
+        setTransparentUrl('')
     }
 
     return (
@@ -88,14 +136,20 @@ export default function Remover() {
                     </div>
                     <div className="flex gap-3 items-center justify-center">
                         {photoData && <div className="text-xs opacity-60">{photoData.width} x {photoData.height} px</div>}
-                        <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
-                        <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
+                        <DownBtn disabled={!transparentUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
+                        <Button type="text" disabled={!transparentUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
                     </div>
                 </div>
                 <div className="relative min-h-[200px] p-10">
-                    <div className="flex w-full items-center justify-center z-10">
+                    <div className="flex w-full items-center justify-center relative z-10">
                         {!photoUrl && <UploadDragger beforeUpload={beforeUpload} />}
-                        {photoUrl && <div className="overflow-hidden w-auto"><img src={photoUrl} className="w-full" /></div>}
+                        <Spin spinning={loading} delay={500}>
+                            {photoUrl && <div className={cn("overflow-hidden w-auto", transparentUrl && 'opacity-0 absolute top-0 left-0 transition-all z-10', showOrigin && 'opacity-100')}><img src={photoUrl} className="w-full object-cover" /></div>}
+                            {transparentUrl && <div className="overflow-hidden w-auto relative z-[9]"><img src={transparentUrl} className="w-full" /></div>}
+                            {transparentUrl && <div className="absolute z-0 w-full h-full top-0 left-0" style={{
+                                background: bgColor
+                            }}></div>}
+                        </Spin>
                     </div>
                 </div>
             </div>
