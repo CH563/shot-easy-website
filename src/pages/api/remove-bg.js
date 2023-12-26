@@ -8,7 +8,6 @@ export const POST = async ({ request }) => {
     const time = formData.get('time');
     const sign = formData.get('sign');
     const isOk = await verifySignature({ t: time, m: image.size }, sign);
-    // await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
     if (!isOk) return new Response(JSON.stringify({
         error: {
             message: 'Invalid signature.',
@@ -25,5 +24,5 @@ export const POST = async ({ request }) => {
         body: reqFormData,
     });
     const data = await response.blob();
-    return new Response(data)
+    return new Response(data);
 }

@@ -23,12 +23,13 @@ export default function Remover() {
     usePaste(async (file) => {
         if (loading) return messageApi.info('Working hard, please wait!');
         fileToDataURL(file).then(img => {
-            toDraw(img);
+            const imgbase64 = toDraw(img);
+            setPhotoUrl(imgbase64);
             setPhotoData(img);
         }).catch(error => console.error(error));
     }, [loading]);
 
-    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [transparentUrl, loading]);
+    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoData, bgColor, loading]);
 
     useEffect(() => {
         const removeReq = async () => {
@@ -51,15 +52,8 @@ export default function Remover() {
                     });
                     const resFile = await response.blob();
                     const image = await fileToDataURL(resFile);
-                    const canvas = canvasRef.current;
-                    const ctx = canvas.getContext('2d');
-                    const { width, height } = image;
-                    const reSize = computedSize(width, height);
-                    canvas.width = reSize.width;
-                    canvas.height = reSize.height;
-                    ctx.drawImage(image, 0, 0, reSize.width, reSize.height);
-                    // 导出图片
-                    const imgbase64 = canvas.toDataURL("image/png");
+                    setPhotoData(image);
+                    const imgbase64 = toDraw(image, bgColor);
                     setTransparentUrl(imgbase64);
                 } catch (error) {
                     messageApi.error('Remove error!');
@@ -76,33 +70,45 @@ export default function Remover() {
 
     const beforeUpload = async (file) => {
         const img = await fileToDataURL(file);
-        toDraw(img);
         setPhotoData(img);
+        const imgbase64 = toDraw(img);
+        setPhotoUrl(imgbase64);
         return Promise.reject();
     }
 
-    const toDraw = (image) => {
+    const toDraw = (image, bgColor) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const { width, height } = image;
         const reSize = computedSize(width, height);
         canvas.width = reSize.width;
         canvas.height = reSize.height;
+        if (bgColor) {
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, reSize.width, reSize.height);
+        }
         ctx.drawImage(image, 0, 0, reSize.width, reSize.height);
         // 导出图片
         const imgbase64 = canvas.toDataURL("image/png");
-        setPhotoUrl(imgbase64);
+        return imgbase64;
+    }
+
+    const onBgChange = (e) => {
+        const color = e.toRgbString();
+        setBgColor(color);
     }
 
     const toDownload = () => {
         if (loading) return messageApi.info('Working hard, please wait!');
-        toDownloadFile(transparentUrl, 'shotEasy.png');
+        const imgbase64 = toDraw(photoData, bgColor);
+        toDownloadFile(imgbase64, 'shotEasy.png');
         messageApi.success('Download Success!');
     }
     const toCopy = () => {
         if (loading) return messageApi.info('Working hard, please wait!');
         setLoading(true);
-        url2Blob(transparentUrl).then(value => {
+        const imgbase64 = toDraw(photoData, bgColor);
+        url2Blob(imgbase64).then(value => {
             copyAsBlob(value).then(() => {
                 messageApi.success('Copied Success!');
             }).catch(() => {
@@ -128,7 +134,7 @@ export default function Remover() {
             <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isGrid ? 'tr':'polka')}>
                 <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
                     <div className="flex items-center justify-center gap-3">
-                        <ColorPicker allowClear size="small" value={bgColor} onChange={(e) => setBgColor(e.toRgbString())} />
+                        <ColorPicker allowClear size="small" value={bgColor} onChange={onBgChange} />
                         <Button type="text" shape="circle" className={isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => setIsGrid(!isGrid)}></Button>
                         <div className="active:[&_.ant-btn:not(:disabled)]:bg-[#1677ff]/20">
                             <Button type="text" shape="circle" className="[&_span]:active:text-[#1677ff]" icon={<Icon name="SplitSquareHorizontal" />} onMouseDown={() => setShowOrigin(true)} onMouseLeave={() => setShowOrigin(false)} onMouseUp={() => setShowOrigin(false)}></Button>
