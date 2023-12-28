@@ -1,12 +1,36 @@
 ---
 import Logo from '../components/Logo.astro';
+const { pathname } = Astro.url;
+const navList = [
+    {
+        pathname: '/',
+        title: 'Photo Editor',
+        name: 'Editor'
+    },
+    {
+        pathname: '/screenshot-beautifier',
+        title: 'Screenshot Beautifier',
+        name: 'Beautifier'
+    },
+    {
+        pathname: '/photo-to-rounded',
+        title: 'Photo to Rounded',
+        name: 'Rounded'
+    },
+    {
+        pathname: '/background-remover',
+        title: 'Background Remover',
+        name: 'Remover'
+    },
+];
 ---
 
-<header class="container flex flex-col gap-3 items-center justify-center p-4 relative z-10 md:flex-row md:justify-between">
+<header class="container flex flex-col gap-3 items-center justify-center p-4 relative z-10 select-none md:flex-row md:justify-between">
     <a href="/" class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
-    <nav class="flex gap-3 text-sm text-slate-600 hover:[&_a]:underline">
-        <a href="/screenshot-beautifier" title="Screenshot Beautifier">Beautifier</a>
-        <a href="/photo-to-rounded" title="Photo to Rounded">Rounded</a>
-        <a href="/background-remover" title="Photo to Rounded">Remover</a>
+    <nav class="flex gap-2 text-sm text-slate-600 bg-white rounded-3xl p-1 [&_span]:rounded-xl [&_span]:px-2 [&_span]:bg-blue-600 [&_span]:text-white [&_a]:rounded-xl [&_a]:px-2 hover:[&_a]:bg-sky-50 hover:[&_a]:text-blue-600">
+        {navList.map(item => {
+            if (pathname === item.pathname) return (<span>{item.name}</span>)
+            return (<a href={item.pathname} title={item.title}>{item.name}</a>)
+        })}
     </nav>
 </header>

@@ -28,6 +28,7 @@
     "js-sha256": "^0.10.1",
     "lucide-react": "^0.298.0",
     "react": "^18.0.0",
+    "react-compare-image": "^3.4.0",
     "react-dom": "^18.0.0",
     "react-filerobot-image-editor": "^4.6.3",
     "tailwind-merge": "^2.1.0",

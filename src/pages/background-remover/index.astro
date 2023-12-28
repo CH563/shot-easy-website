@@ -3,9 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Remover from '../../components/Remover';
+import CompareImage from '../../components/CompareImage'
 ---
 
-<Layout title="Background Remover" description="Remove image backgrounds automatically just one click. Background remover tool can process your images FAST & FREE--no signup required. Upload your photo now & see the magic.">
+<Layout title="Background Remover" description="Remove image backgrounds automatically just one click. Background remover tool can process your images FAST & FREE--no signup required. Upload your photo now.">
     <main class="relative overflow-hidden min-h-screen flex flex-col">
         <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
         <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
@@ -14,10 +15,10 @@ import Remover from '../../components/Remover';
         <div class="container py-8 relative z-10 flex-1">
             <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Background Remover</h1>
             <p class="text-slate-600 text-center mb-2">Upload an image to remove the background or replace to Any Background</p>
-            <div class="pb-12">
+            <div class="pb-8 min-h-[388px]">
                 <Remover client:only="react" />
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
                 <section class="mb-3 rounded-md p-4 bg-green-100/40 text-xs">
                     <div class="mb-1 text-sm">✨</div>
                     <h2 class="text-lg font-bold mb-2">How to remove image background?</h2>
@@ -39,6 +40,17 @@ import Remover from '../../components/Remover';
                     <p>Get a transparent image then easily yet effectively create stunning banners just in a matter of minutes.</p>
                 </section>
             </div>
+            <section class="py-8 text-center">
+                <div class="text-purple-500 text-xs">BEFORE & AFTER</div>
+                <h2 class="text-2xl font-extrabold mb-2">Just one click to remove background with AI</h2>
+                <p class="relative inline-block">
+                    Check it. Pretty Cool Eh?
+                    <svg class="absolute -right-12 top-1 opacity-80" xmlns="http://www.w3.org/2000/svg" version="1.1" width="54" height="54" x="0" y="0" viewBox="0 0 100 100"><g><path d="m74.3 66.8-5.8 5.8c-.6-20.7-8.9-27.8-13.6-30.1-.1-.4-.1-.8-.2-1.2-1-4.1-5.9-17.3-29.5-17.3h-.1v2h.1C47 26 51.7 37.9 52.6 41.7c-4.1-1.2-8-.2-9.7 2.4-1.5 2.3-1 5.2 1.4 8.1 3 3.6 5.7 2.8 6.7 2.3 2.6-1.3 4.2-5.2 4-9.5 5.7 3.4 10.9 12 11.4 27.6l-5.7-5.7-1.4 1.4 8.2 8.2 8.2-8.2zM50.1 52.7c-1.6.8-3.2-.5-4.3-1.8-1.8-2.1-2.2-4.2-1.2-5.7.9-1.3 2.6-2 4.6-2 .9 0 1.9.1 2.9.4l.9.3c.4 4.3-1 7.8-2.9 8.8z" fill="#888888" opacity="1"></path></g></svg>
+                </p>
+                <div class="py-4 h-[407px]">
+                    <CompareImage client:only="react" />
+                </div>
+            </section>
             <section class="py-8">
                 <h2 class="text-xl font-extrabold mb-2 text-center">Your privacy is important</h2>
                 <p class="text-slate-600 text-center">Your photos are not uploaded, image editing happens in your browser.</p>
