@@ -131,7 +131,11 @@ export const scatterArray = (arr) => {
     const a = [];
     const b = [];
     const c = [];
-    const reversedArr = arr.toReversed();
+    const reversedArr = [];
+    for (let i = 0; i < arr.length; i++) {
+        const index = arr.length - i;
+        if (arr[index]) reversedArr.push(arr[index]);
+    }
     const max = arr.length > 6 ? 6 : arr.length;
     for (let i = 0; i < max; i++) {
         const secend = i + 1 > arr.length - 1 ? arr.length - 1 : i + 1;
