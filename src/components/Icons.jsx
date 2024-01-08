@@ -15,5 +15,17 @@ export const Icons = {
     ),
     transparent: (props) => (
         <svg {...props} width="1em" height="1em" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0H32V32H0V0Z" fill="white"></path><path d="M0 0H8V8H0V0Z" fill="#D9D9D9"></path><path d="M8 0H16V8H8V0Z" fill="white"></path><path d="M16 0H24V8H16V0Z" fill="#D9D9D9"></path><path d="M32 0H40V8H32V0Z" fill="#D9D9D9"></path><path d="M24 0H32V8H24V0Z" fill="white"></path><path d="M0 32H8V40H0V32Z" fill="#D9D9D9"></path><path d="M8 32H16V40H8V32Z" fill="white"></path><path d="M16 32H24V40H16V32Z" fill="#D9D9D9"></path><path d="M32 32H40V40H32V32Z" fill="#D9D9D9"></path><path d="M24 32H32V40H24V32Z" fill="white"></path><path d="M0 16H8V24H0V16Z" fill="#D9D9D9"></path><path d="M32 16H40V24H32V16Z" fill="#D9D9D9"></path><path d="M8 16H16V24H8V16Z" fill="white"></path><path d="M16 16H24V24H16V16Z" fill="#D9D9D9"></path><path d="M24 16H32V24H24V16Z" fill="white"></path><path d="M8 24H16V32H8V24Z" fill="#D9D9D9"></path><path d="M16 24H24V32H16V24Z" fill="white"></path><path d="M24 24H32V32H24V24Z" fill="#D9D9D9"></path><path d="M0 24H8V32H0V24Z" fill="white"></path><path d="M32 24H40V32H32V24Z" fill="white"></path><path d="M8 8H16V16H8V8Z" fill="#D9D9D9"></path><path d="M16 8H24V16H16V8Z" fill="white"></path><path d="M24 8H32V16H24V8Z" fill="#D9D9D9"></path><path d="M0 8H8V16H0V8Z" fill="white"></path><path d="M32 8H40V16H32V8Z" fill="white"></path></svg>
+    ),
+    x: (props) => (
+        <svg {...props} fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg>
+    ),
+    reddit: (props) => (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>   <path d="M12 8c2.648 0 5.028 .826 6.675 2.14a2.5 2.5 0 0 1 2.326 4.36c0 3.59 -4.03 6.5 -9 6.5c-4.875 0 -8.845 -2.8 -9 -6.294l-1 -.206a2.5 2.5 0 0 1 2.326 -4.36c1.646 -1.313 4.026 -2.14 6.674 -2.14z"></path>   <path d="M12 8l1 -5l6 1"></path>   <path d="M19 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>   <circle cx="9" cy="13" r=".5" fill="currentColor"></circle>   <circle cx="15" cy="13" r=".5" fill="currentColor"></circle>   <path d="M10 17c.667 .333 1.333 .5 2 .5s1.333 -.167 2 -.5"></path> </svg>
+    ),
+    productHunt: (props) => (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>   <path d="M10 16v-8h2.5a2.5 2.5 0 1 1 0 5h-2.5"></path>   <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path> </svg>
+    ),
+    appStore: (props) => (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>   <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>   <path d="M8 16l1.106 -1.99m1.4 -2.522l2.494 -4.488"></path>   <path d="M7 14h5m2.9 0h2.1"></path>   <path d="M16 16l-2.51 -4.518m-1.487 -2.677l-1 -1.805"></path> </svg>
     )
 }

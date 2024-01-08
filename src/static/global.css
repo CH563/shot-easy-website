@@ -101,6 +101,9 @@ html.dark {
 .ant-btn-primary.bg-black:disabled{
     background: rgba(0, 0, 0, 0.04);
 }
+html .ant-drawer-right>.ant-drawer-content-wrapper {
+    box-shadow: none;
+}
 
 .iphone .sd .layer.layer-1 {
     --ratio: 1;
