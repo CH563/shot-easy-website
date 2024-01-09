@@ -1,5 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { toPng, toBlob } from 'html-to-image';
+import { toCanvas } from 'html-to-image';
+import { Stage, Layer, Line, Text } from 'react-konva';
 import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Drawer, message } from 'antd';
 import { Icons } from '../components/Icons';
@@ -48,6 +49,11 @@ export default function Beautifier() {
     const [showMore, setShowMore] = useState(false);
     const { imgColors, imgSize } = useImageColor(photoUrl);
     const [imgwidth, setImgWidth] = useState(600 - marginValue);
+    const [tool, setTool] = useState('');
+    const isDrawing = useRef(false);
+    const [lines, setLines] = useState([]);
+    const [annotateColor, setAnnotateColor] = useState('#df4b26');
+    const canvasRef = useRef(null);
 
     const boxStyle = useMemo(() => {
         let style = {};
@@ -97,13 +103,26 @@ export default function Beautifier() {
         setWaterColor(typeof color === 'string' ? color : color.toRgbString());
     }
 
-    const toDownload = () => {
-        setLoading(true);
-        toPng(boxRef.current, {
+    const mergeCanvas = () => new Promise((resolve, reject) => {
+        toCanvas(boxRef.current, {
             cacheBust: false,
             canvasWidth: ratioSize.key === 'auto' ? imgSize.width : ratioSize.width,
             canvasHeight: ratioSize.key === 'auto' ? imgSize.height : ratioSize.height,
-        }).then((dataUrl) => {
+            filter: (node) => !node.classList?.contains('konvajs-content')
+        }).then((canvas) => {
+            const ctx = canvas.getContext('2d');
+            const annotate = canvasRef.current.toCanvas({
+                pixelRatio: (ratioSize.key === 'auto' ? imgSize.width : ratioSize.width) / 600
+            });
+            ctx.drawImage(annotate, 0, 0);
+            resolve(canvas);
+        }).catch(reject);
+    })
+
+    const toDownload = () => {
+        setLoading(true);
+        mergeCanvas().then(canvas => {
+            const dataUrl = canvas.toDataURL();
             toDownloadFile(dataUrl, 'shotEasy.png');
             messageApi.success('Download Success!');
         }).catch(error => {
@@ -116,16 +135,14 @@ export default function Beautifier() {
 
     const toCopy = () => {
         setLoading(true);
-        toBlob(boxRef.current, {
-            cacheBust: false,
-            width: ratioSize.key === 'auto' ? imgSize.width : ratioSize.width,
-            height: ratioSize.key === 'auto' ? imgSize.height : ratioSize.height,
-        }).then((value) => {
-            copyAsBlob(value).then(() => {
-                messageApi.success('Copied Success!');
-            }).catch(() => {
-                messageApi.error('Copy Failed!');
-            });
+        mergeCanvas().then(canvas => {
+            canvas.toBlob((value) => {
+                copyAsBlob(value).then(() => {
+                    messageApi.success('Copied Success!');
+                }).catch(() => {
+                    messageApi.error('Copy Failed!');
+                });
+            }, 'image/png');
         }).catch(error => {
             console.log(error);
             messageApi.error('Copy Failed!');
@@ -136,6 +153,8 @@ export default function Beautifier() {
 
     const toRefresh = () => {
         setPhotoUrl('');
+        setLines([]);
+        setTool('');
         if (!backgroundConfig[bgValue]) setBgValue('default_1');
     }
 
@@ -148,12 +167,53 @@ export default function Beautifier() {
         }
     }
 
+    const toSelect = (type) => {
+        if (tool === type) return setTool('');
+        setTool(type);
+    }
+
+    const handleMouseDown = (e) => {
+        if (tool !== 'pencil') return;
+        isDrawing.current = true;
+        const pos = e.target.getStage().getPointerPosition();
+        setLines([...lines, { points: [pos.x, pos.y], color: annotateColor }]);
+    };
+    const handleMouseMove = (e) => {
+        if (tool !== 'pencil') return;
+        if (!isDrawing.current) return;
+        const stage = e.target.getStage();
+        const point = stage.getPointerPosition();
+        let lastLine = lines[lines.length - 1];
+        lastLine.points = lastLine.points.concat([point.x, point.y]);
+        // replace last
+        lines.splice(lines.length - 1, 1, lastLine);
+        setLines(lines.concat());
+    };
+    const handleMouseUp = () => {
+        if (isDrawing.current) isDrawing.current = false;
+    };
+    const onAnnotateChange = (e) => {
+        const color = e.toHexString();
+        setAnnotateColor(color);
+    }
+
     return (
         <>
             {contextHolder}
             <div className={cn("polka flex flex-col rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isFull ? "w-full h-full fixed z-10 top-0 left-0": "min-h-[680px]")}>
-                <div className="flex shrink-0 bg-white p-2 border-b border-b-gray-50 shadow-sm relative z-0">
-                <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => setIsFull(!isFull)}></Button>
+                <div className="flex items-center shrink-0 gap-1 bg-white p-2 border-b border-b-gray-50 shadow-sm relative z-0">
+                    <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => setIsFull(!isFull)}></Button>
+                    <Button
+                        type="text"
+                        shape="circle"
+                        disabled={!photoUrl}
+                        className={tool === 'pencil' && 'text-[#1677ff] bg-sky-100/50 hover:bg-sky-100 hover:text-[#1677ff]'}
+                        icon={<Icon name="Pencil" />}
+                        onClick={() => toSelect('pencil')}
+                    ></Button>
+                    <div className="px-3 mx-1 border-l flex gap-1 items-center">
+                        <ColorPicker disabledAlpha size="small" value={annotateColor} onChange={onAnnotateChange} />
+                    </div>
                     <div className="flex flex-1 gap-4 justify-end items-center">
                         {ratioSize.key === 'auto' && <div className="px-2 text-xs opacity-80">{imgSize.width} x {imgSize.height} px</div>}
                         {ratioSize.key !== 'auto' && <div className="px-2 text-xs opacity-80">{ratioSize.width} x {ratioSize.height} px</div>}
@@ -167,6 +227,7 @@ export default function Beautifier() {
                             <div ref={boxRef} className={cn(
                                 'relative overflow-hidden w-full md:w-[600px]',
                                 getBackground(bgValue),
+                                tool === 'pencil' ? 'pencil' : ''
                             )} style={{
                                 aspectRatio: ratio,
                                 ...boxStyle
@@ -249,6 +310,33 @@ export default function Beautifier() {
                                         </div>}
                                     </div>
                                 </Watermark>
+                                {photoUrl &&
+                                    <Stage
+                                        className="w-full h-full absolute top-0 left-0 z-10 overflow-hidden"
+                                        width={600}
+                                        height={600 / ratio}
+                                        onMouseDown={handleMouseDown}
+                                        onMousemove={handleMouseMove}
+                                        onMouseup={handleMouseUp}
+                                        ref={canvasRef}
+                                    >
+                                        <Layer>
+                                        {lines.map((line, i) => (
+                                            <Line
+                                                key={i}
+                                                points={line.points}
+                                                stroke={line.color}
+                                                strokeWidth={4}
+                                                tension={0.5}
+                                                lineCap="round"
+                                                lineJoin="round"
+                                                draggable={true}
+                                                globalCompositeOperation={'source-over'}
+                                            />
+                                        ))}
+                                        </Layer>
+                                    </Stage>
+                                }
                             </div>
                         </div>
                     </div>

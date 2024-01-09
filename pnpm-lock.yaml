@@ -53,6 +53,9 @@ dependencies:
   js-sha256:
     specifier: ^0.10.1
     version: 0.10.1
+  konva:
+    specifier: ^9.3.0
+    version: 9.3.0
   lucide-react:
     specifier: ^0.298.0
     version: 0.298.0(react@18.2.0)
@@ -68,6 +71,9 @@ dependencies:
   react-filerobot-image-editor:
     specifier: ^4.6.3
     version: 4.6.3(@types/react@18.2.42)(react-dom@18.2.0)(react-konva@18.2.10)(react@18.2.0)(styled-components@5.3.11)
+  react-konva:
+    specifier: ^18.2.10
+    version: 18.2.10(konva@9.3.0)(react-dom@18.2.0)(react@18.2.0)
   tailwind-merge:
     specifier: ^2.1.0
     version: 2.1.0
@@ -3345,8 +3351,8 @@ packages:
     resolution: {integrity: sha512-ARqdgAbdNIougRlOKvkQwHlGhXPRBV4KvhCP+qoPpGoVQwwiJe4Hkdu4HHdRPb9rGUp04jDTAxBzEwBsE272pg==}
     dev: false
 
-  /konva@9.2.3:
-    resolution: {integrity: sha512-oQ6VQ6kUL9IlhOGuEKKhxqnv6g/t8jZpVuWahQQ6hCqAsO8Ydi1zFGv7ef4EOq5GoPNq/d6Fyj/3i5Y/a5NooA==}
+  /konva@9.3.0:
+    resolution: {integrity: sha512-qLTW06GRwb+WMMUXJcGIb0qP4uO0mZLAwgRI82zuCkRmCH1lFsVPmrPzqqHnjKCMu4Jzw6d/R8JxkPw7gkVnuw==}
     dev: false
 
   /lilconfig@2.1.0:
@@ -5090,7 +5096,7 @@ packages:
       prop-types: 15.7.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-konva: 18.2.10(konva@9.2.3)(react-dom@18.2.0)(react@18.2.0)
+      react-konva: 18.2.10(konva@9.3.0)(react-dom@18.2.0)(react@18.2.0)
       styled-components: 5.3.11(@babel/core@7.23.5)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
@@ -5123,7 +5129,7 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-konva@18.2.10(konva@9.2.3)(react-dom@18.2.0)(react@18.2.0):
+  /react-konva@18.2.10(konva@9.3.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-ohcX1BJINL43m4ynjZ24MxFI1syjBdrXhqVxYVDw2rKgr3yuS0x/6m1Y2Z4sl4T/gKhfreBx8KHisd0XC6OT1g==}
     peerDependencies:
       konva: ^8.0.1 || ^7.2.5 || ^9.0.0
@@ -5132,7 +5138,7 @@ packages:
     dependencies:
       '@types/react-reconciler': 0.28.8
       its-fine: 1.1.1(react@18.2.0)
-      konva: 9.2.3
+      konva: 9.3.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-reconciler: 0.29.0(react@18.2.0)

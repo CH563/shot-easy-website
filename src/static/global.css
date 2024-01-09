@@ -122,6 +122,10 @@ html .ant-drawer-right>.ant-drawer-content-wrapper {
     --ratio: 6;
 }
 
+.pencil .konvajs-content {
+    cursor: url(./pencil.png) 1 1,crosshair;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
