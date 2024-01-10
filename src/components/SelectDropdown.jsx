@@ -37,6 +37,13 @@ const items = [
         height: 675
     },
     {
+        label: <div className="flex items-center justify-between"><span>小红书</span><span className="text-xs opacity-60">960 x 1280</span></div>,
+        key: 'xhs',
+        icon: <span className="anticon fill-red-600"><Icons.xhs className="text-[16px]" /></span>,
+        width: 960,
+        height: 1280
+    },
+    {
         label: <div className="flex items-center justify-between"><span>Facebook Post</span><span className="text-xs opacity-60">1200 x 630</span></div>,
         key: 'facebook_post',
         icon: <Icon name="Facebook" size={16} />,

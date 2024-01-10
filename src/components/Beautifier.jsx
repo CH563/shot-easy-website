@@ -1,17 +1,20 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { toCanvas } from 'html-to-image';
-import { Stage, Layer, Line, Text } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
+import { ShapeLine } from './Shape';
 import { Icon } from './Icons';
-import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Drawer, message } from 'antd';
+import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
 import { Icons } from '../components/Icons';
 import { cn, supportImg, toDownloadFile, copyAsBlob, getBackground } from '../lib/utils';
 import backgroundConfig from '../lib/backgroundConfig';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
 import { SelectDropdown } from './SelectDropdown';
+import { WidthDropdown } from './WidthDropdown';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
 import useImageColor from '../lib/useImageColor';
+import useAnnotate from '../lib/useAnnotate';
 import { DrawerSide } from './DrawerSide';
 import { DownBtn } from './DownBtn';
 
@@ -49,11 +52,22 @@ export default function Beautifier() {
     const [showMore, setShowMore] = useState(false);
     const { imgColors, imgSize } = useImageColor(photoUrl);
     const [imgwidth, setImgWidth] = useState(600 - marginValue);
-    const [tool, setTool] = useState('');
-    const isDrawing = useRef(false);
-    const [lines, setLines] = useState([]);
-    const [annotateColor, setAnnotateColor] = useState('#df4b26');
-    const canvasRef = useRef(null);
+    const {
+        canvasRef,
+        lines,
+        annotateWidth,
+        setAnnotateWidth,
+        tool,
+        toSelect,
+        toClearAll,
+        annotateColor,
+        onAnnotateChange,
+        setSelectedId,
+        selectedId,
+        handleMouseDown,
+        handleMouseMove,
+        handleMouseUp
+    } = useAnnotate();
 
     const boxStyle = useMemo(() => {
         let style = {};
@@ -153,8 +167,7 @@ export default function Beautifier() {
 
     const toRefresh = () => {
         setPhotoUrl('');
-        setLines([]);
-        setTool('');
+        toClearAll();
         if (!backgroundConfig[bgValue]) setBgValue('default_1');
     }
 
@@ -167,56 +180,30 @@ export default function Beautifier() {
         }
     }
 
-    const toSelect = (type) => {
-        if (tool === type) return setTool('');
-        setTool(type);
-    }
-
-    const handleMouseDown = (e) => {
-        if (tool !== 'pencil') return;
-        isDrawing.current = true;
-        const pos = e.target.getStage().getPointerPosition();
-        setLines([...lines, { points: [pos.x, pos.y], color: annotateColor }]);
-    };
-    const handleMouseMove = (e) => {
-        if (tool !== 'pencil') return;
-        if (!isDrawing.current) return;
-        const stage = e.target.getStage();
-        const point = stage.getPointerPosition();
-        let lastLine = lines[lines.length - 1];
-        lastLine.points = lastLine.points.concat([point.x, point.y]);
-        // replace last
-        lines.splice(lines.length - 1, 1, lastLine);
-        setLines(lines.concat());
-    };
-    const handleMouseUp = () => {
-        if (isDrawing.current) isDrawing.current = false;
-    };
-    const onAnnotateChange = (e) => {
-        const color = e.toHexString();
-        setAnnotateColor(color);
-    }
-
     return (
         <>
             {contextHolder}
             <div className={cn("polka flex flex-col rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isFull ? "w-full h-full fixed z-10 top-0 left-0": "min-h-[680px]")}>
-                <div className="flex items-center shrink-0 gap-1 bg-white p-2 border-b border-b-gray-50 shadow-sm relative z-0">
-                    <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => setIsFull(!isFull)}></Button>
-                    <Button
-                        type="text"
-                        shape="circle"
-                        disabled={!photoUrl}
-                        className={tool === 'pencil' && 'text-[#1677ff] bg-sky-100/50 hover:bg-sky-100 hover:text-[#1677ff]'}
-                        icon={<Icon name="Pencil" />}
-                        onClick={() => toSelect('pencil')}
-                    ></Button>
-                    <div className="px-3 mx-1 border-l flex gap-1 items-center">
-                        <ColorPicker disabledAlpha size="small" value={annotateColor} onChange={onAnnotateChange} />
+                <div className="flex flex-col md:flex-row md:justify-between items-center shrink-0 gap-1 bg-white p-2 border-b border-b-gray-50 shadow-sm relative z-0">
+                    <div className="flex items-center">
+                        <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => setIsFull(!isFull)}></Button>
+                        <Button
+                            type="text"
+                            shape="circle"
+                            disabled={!photoUrl}
+                            className={tool === 'pencil' && 'text-[#1677ff] bg-sky-100/50 hover:bg-sky-100 hover:text-[#1677ff]'}
+                            icon={<Icon name="Pencil" />}
+                            onClick={() => toSelect('pencil')}
+                        ></Button>
+                        <div className="px-3 mx-1 border-l flex gap-1 items-center">
+                            <ColorPicker disabledAlpha size="small" presets={[{ label: 'Recommended', colors: ['#ffffff', '#444444', '#df4b26', '#1677ff', '#52C41A', '#FA8C16', '#FADB14', '#EB2F96', '#722ED1'] }]} value={annotateColor} onChange={onAnnotateChange} />
+                            <WidthDropdown defaultValue={annotateWidth} onClick={setAnnotateWidth} />
+                        </div>
                     </div>
-                    <div className="flex flex-1 gap-4 justify-end items-center">
-                        {ratioSize.key === 'auto' && <div className="px-2 text-xs opacity-80">{imgSize.width} x {imgSize.height} px</div>}
-                        {ratioSize.key !== 'auto' && <div className="px-2 text-xs opacity-80">{ratioSize.width} x {ratioSize.height} px</div>}
+                    <div className="flex gap-1 md:gap-4 justify-center items-center">
+                        <div className="px-0 text-xs opacity-80 md:px-2">
+                            {ratioSize.key === 'auto' ? `${imgSize.width} x ${imgSize.height}`:`${ratioSize.width} x ${ratioSize.height}`} px
+                        </div>
                         <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
                     </div>
@@ -322,16 +309,13 @@ export default function Beautifier() {
                                     >
                                         <Layer>
                                         {lines.map((line, i) => (
-                                            <Line
+                                            <ShapeLine
                                                 key={i}
-                                                points={line.points}
-                                                stroke={line.color}
-                                                strokeWidth={4}
-                                                tension={0.5}
-                                                lineCap="round"
-                                                lineJoin="round"
-                                                draggable={true}
-                                                globalCompositeOperation={'source-over'}
+                                                line={line}
+                                                isSelected={line.id === selectedId}
+                                                onSelect={() => {
+                                                    setSelectedId(line.id);
+                                                }}
                                             />
                                         ))}
                                         </Layer>
