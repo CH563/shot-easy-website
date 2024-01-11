@@ -10,7 +10,7 @@ import backgroundConfig from '../lib/backgroundConfig';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
 import { SelectDropdown } from './SelectDropdown';
-import { WidthDropdown } from './WidthDropdown';
+import { Toolbar } from './Toolbar';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
 import useImageColor from '../lib/useImageColor';
@@ -54,11 +54,13 @@ export default function Beautifier() {
     const [imgwidth, setImgWidth] = useState(600 - marginValue);
     const {
         canvasRef,
-        lines,
+        shapes,
+        setShapes,
         annotateWidth,
-        setAnnotateWidth,
+        onAnnotateWidthChange,
         tool,
         toSelect,
+        toRest,
         toClearAll,
         annotateColor,
         onAnnotateChange,
@@ -118,6 +120,7 @@ export default function Beautifier() {
     }
 
     const mergeCanvas = () => new Promise((resolve, reject) => {
+        toRest();
         toCanvas(boxRef.current, {
             cacheBust: false,
             canvasWidth: ratioSize.key === 'auto' ? imgSize.width : ratioSize.width,
@@ -167,6 +170,7 @@ export default function Beautifier() {
 
     const toRefresh = () => {
         setPhotoUrl('');
+        toRest();
         toClearAll();
         if (!backgroundConfig[bgValue]) setBgValue('default_1');
     }
@@ -185,21 +189,17 @@ export default function Beautifier() {
             {contextHolder}
             <div className={cn("polka flex flex-col rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isFull ? "w-full h-full fixed z-10 top-0 left-0": "min-h-[680px]")}>
                 <div className="flex flex-col md:flex-row md:justify-between items-center shrink-0 gap-1 bg-white p-2 border-b border-b-gray-50 shadow-sm relative z-0">
-                    <div className="flex items-center">
-                        <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => setIsFull(!isFull)}></Button>
-                        <Button
-                            type="text"
-                            shape="circle"
-                            disabled={!photoUrl}
-                            className={tool === 'pencil' && 'text-[#1677ff] bg-sky-100/50 hover:bg-sky-100 hover:text-[#1677ff]'}
-                            icon={<Icon name="Pencil" />}
-                            onClick={() => toSelect('pencil')}
-                        ></Button>
-                        <div className="px-3 mx-1 border-l flex gap-1 items-center">
-                            <ColorPicker disabledAlpha size="small" presets={[{ label: 'Recommended', colors: ['#ffffff', '#444444', '#df4b26', '#1677ff', '#52C41A', '#FA8C16', '#FADB14', '#EB2F96', '#722ED1'] }]} value={annotateColor} onChange={onAnnotateChange} />
-                            <WidthDropdown defaultValue={annotateWidth} onClick={setAnnotateWidth} />
-                        </div>
-                    </div>
+                    <Toolbar
+                        disabled={!photoUrl}
+                        tool={tool}
+                        toSelect={toSelect}
+                        isFull={isFull}
+                        onFullChange={setIsFull}
+                        annotateColor={annotateColor}
+                        onAnnotateChange={onAnnotateChange}
+                        annotateWidth={annotateWidth}
+                        onWidthChange={onAnnotateWidthChange}
+                    />
                     <div className="flex gap-1 md:gap-4 justify-center items-center">
                         <div className="px-0 text-xs opacity-80 md:px-2">
                             {ratioSize.key === 'auto' ? `${imgSize.width} x ${imgSize.height}`:`${ratioSize.width} x ${ratioSize.height}`} px
@@ -214,7 +214,7 @@ export default function Beautifier() {
                             <div ref={boxRef} className={cn(
                                 'relative overflow-hidden w-full md:w-[600px]',
                                 getBackground(bgValue),
-                                tool === 'pencil' ? 'pencil' : ''
+                                tool === 'pencil' ? 'pencil' : !tool ? '' : 'cursor-crosshair'
                             )} style={{
                                 aspectRatio: ratio,
                                 ...boxStyle
@@ -308,13 +308,18 @@ export default function Beautifier() {
                                         ref={canvasRef}
                                     >
                                         <Layer>
-                                        {lines.map((line, i) => (
+                                        {shapes.map((shape, i) => (
                                             <ShapeLine
                                                 key={i}
-                                                line={line}
-                                                isSelected={line.id === selectedId}
+                                                shape={shape}
+                                                isSelected={shape.id === selectedId}
                                                 onSelect={() => {
-                                                    setSelectedId(line.id);
+                                                    setSelectedId(shape.id);
+                                                }}
+                                                onChange={(newShape) => {
+                                                    const newShapes = shapes.slice();
+                                                    newShapes[i] = newShape;
+                                                    setShapes(newShapes);
                                                 }}
                                             />
                                         ))}
