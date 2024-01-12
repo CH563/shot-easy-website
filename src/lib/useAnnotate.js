@@ -65,8 +65,8 @@ export default function useAnnotate() {
         if (tool === 'arrow') {
             newShape.x = pos.x;
             newShape.y = pos.y;
-            newShape.pointerLength = 10;
-            newShape.pointerWidth = 10;
+            newShape.pointerLength = 12;
+            newShape.pointerWidth = 12;
         }
         setShapes([...shapes, newShape]);
         // setSelectedId(id);

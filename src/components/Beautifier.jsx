@@ -5,7 +5,7 @@ import { ShapeLine } from './Shape';
 import { Icon } from './Icons';
 import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
 import { Icons } from '../components/Icons';
-import { cn, supportImg, toDownloadFile, copyAsBlob, getBackground } from '../lib/utils';
+import { cn, supportImg, toDownloadFile, copyAsBlob, getBackground, captureScreen } from '../lib/utils';
 import backgroundConfig from '../lib/backgroundConfig';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
@@ -105,6 +105,9 @@ export default function Beautifier() {
     }, [isFull])
 
     usePaste((file) => {
+        toRest();
+        toClearAll();
+        if (!backgroundConfig[bgValue]) setBgValue('default_1');
         setPhotoUrl(window.URL.createObjectURL(file));
     });
 
@@ -184,6 +187,19 @@ export default function Beautifier() {
         }
     }
 
+    const toCapture = () => {
+        captureScreen().then((screenshot) => {
+            if (!screenshot) {
+                messageApi.error('Capture screen Failed!');
+                return;
+            }
+            toRest();
+            toClearAll();
+            if (!backgroundConfig[bgValue]) setBgValue('default_1');
+            setPhotoUrl(screenshot);
+        });
+    }
+
     return (
         <>
             {contextHolder}
@@ -199,6 +215,7 @@ export default function Beautifier() {
                         onAnnotateChange={onAnnotateChange}
                         annotateWidth={annotateWidth}
                         onWidthChange={onAnnotateWidthChange}
+                        toCapture={toCapture}
                     />
                     <div className="flex gap-1 md:gap-4 justify-center items-center">
                         <div className="px-0 text-xs opacity-80 md:px-2">

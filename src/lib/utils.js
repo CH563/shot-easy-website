@@ -141,7 +141,7 @@ export const scatterArray = (arr) => {
         const secend = i + 1 > arr.length - 1 ? arr.length - 1 : i + 1;
         const third = secend + 1 > arr.length - 1 ? arr.length - 1 : secend + 1;
         if (i < 2) {
-            a.push(`linear-gradient(140deg, rgb(${arr[i].join(',')}) 25%, rgb(${reversedArr[i].join(',')}) 90%)`);
+            a.push(`linear-gradient(140deg, rgb(${ arr[i].join(',') }) 25%, rgb(${ reversedArr[i].join(',') }) 90%)`);
         }
         b.push(`url("data:image/svg+xml,${ encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1440 900" fill="none" style="background: rgb(${ arr[i].join(',') });"><path fill="rgb(${ arr[secend].join(',') })" d="M999.7 129.2c180.6-46 277.6-156.1 461-123.1 424.7 76.4 369.8 882.1 0 1104.5-222.4 133.8-426.7 103.7-664.7 0C563.8 1009.4 474 921 345.5 702.7 298.8 623.4 244 474.5 273 367.8c33-121.6 127.4-178 251-203 127.2-25.7 251.5 21.6 475.6-35.6Z" style="filter: blur(300px);"></path><path fill="rgb(${ reversedArr[secend].join(',') })" d="M1108.4 282.7c154.7-39.5 237.9-133.8 395-105.5 363.8 65.5 316.8 756 0 946.5-190.5 114.7-365.6 88.9-569.5 0C735 1037 658 961.2 548 774.2c-40-68-86.8-195.6-62-287 28.4-104.2 109.2-152.6 215-174 109-22 215.5 18.5 407.5-30.5Z" style="filter: blur(200px);"></path><ellipse fill="rgb(${ reversedArr[i].join(',') })" cx="1319.7" cy="799.3" rx="556.5" ry="379" transform="rotate(22 1319.7 799.3)" style="filter: blur(200px);"></ellipse></svg>`) }")`);
         c.push(`url("data:image/svg+xml,${ encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1440 900" fill="none" style="background: rgb(${ arr[i].join(',') });"><path fill="rgb(${ arr[secend].join(',') })" d="M831 745S643.7 567 688.5 467.8c55.8-123.9 340.5 34.9 340.5 34.9S1528.6 841 1587.8 925c93.7 133.2 119.6 266.3 0 326.4C1490.5 1300 831 745 831 745Z" style="filter: blur(325px);"></path><path fill="rgb(${ arr[third].join(',') })" d="M1423.9 180c192.6 34.2 292 162.4 419.2 311 196 229 316.2 609 32.3 709.7-258.9 91.9-267.8-422.3-541.2-449.3-97.2-9.7-158.3 62-249 25.5-114.4-46-162.3-144.3-168-267.5-5.8-126.9 44.6-219.7 152-287.7 115.5-73.2 220-65.4 354.7-41.6Z" style="filter: blur(325px);"></path><path fill="rgb(${ reversedArr[secend].join(',') })" d="M975.8 1560.6c225.6 216.5 133.2 620 442.3 667.3 63.2 9.7 100.7 10.8 163.7 0 367.2-63 184.2-630.2 0-954-96.7-170-177.7-247-327.8-372.5-134.9-112.7-219.3-202-384.5-261.9-135-48.9-237-74.8-372.8-28.7-123.2 41.8-210.4 99.8-245.6 225-37.4 132.8-17.7 225.3 53.1 343.8C450 1423.3 771 1364 975.8 1560.6Z" style="filter: blur(325px);"></path><circle cx="1061.6" cy="899.1" r="124.9" fill="rgb(${ reversedArr[i].join(',') })" style="filter: blur(225px);"></circle></svg>`) }")`);
@@ -149,4 +149,33 @@ export const scatterArray = (arr) => {
     scattered.push(...a, ...b, ...c);
 
     return scattered;
-}
+};
+
+export const captureScreen = async () => {
+    try {
+        const mediaStream = await navigator.mediaDevices.getDisplayMedia();
+        const video = document.createElement('video');
+        video.srcObject = mediaStream;
+        video.play();
+
+        // 等待视频帧稳定
+        await new Promise(resolve => video.onplaying = resolve);
+
+        // 创建canvas并绘制当前视频帧
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0);
+
+        // 获取屏幕截图
+        const screenshot = canvas.toDataURL('image/png');
+
+        // 停止媒体流
+        video.srcObject.getTracks().forEach(track => track.stop());
+
+        return screenshot;
+    } catch (err) {
+        console.error('Error capturing screen:', err);
+    }
+};

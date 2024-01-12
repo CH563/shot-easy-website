@@ -1,9 +1,9 @@
 import React from 'react';
 import { Icon, Icons } from './Icons';
-import { Button, ColorPicker } from 'antd';
+import { Button, ColorPicker, Tooltip } from 'antd';
 import { WidthDropdown } from './WidthDropdown';
 
-export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotateColor, onAnnotateChange, annotateWidth, onWidthChange}) => {
+export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotateColor, onAnnotateChange, annotateWidth, onWidthChange, toCapture}) => {
     return (
         <div className="flex items-center">
             <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => onFullChange(!isFull)}></Button>
@@ -60,6 +60,16 @@ export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotat
             <div className="px-3 border-l flex gap-1 items-center">
                 <ColorPicker size="small" presets={[{ label: 'Recommended', colors: ['#ffffff', '#444444', '#df4b26', '#1677ff', '#52C41A', '#FA8C16', '#FADB14', '#EB2F96', '#722ED1'] }]} value={annotateColor} onChange={onAnnotateChange} />
                 <WidthDropdown defaultValue={annotateWidth} onClick={onWidthChange} />
+            </div>
+            <div className="px-3 border-l flex gap-1 items-center">
+                <Tooltip placement="bottom" title="Use webRTC to capture screen">
+                    <Button
+                        type="text"
+                        shape="circle"
+                        icon={<Icon name="Scissors" />}
+                        onClick={toCapture}
+                    ></Button>
+                </Tooltip>
             </div>
         </div>
     )
