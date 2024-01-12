@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Konva from 'konva';
 import { Line, Rect, Circle, Arrow, Text, Transformer } from 'react-konva';
 
 export const ShapeLine = ({ shape, isSelected, onSelect, onChange, ...props }) => {
@@ -108,6 +109,35 @@ export const ShapeLine = ({ shape, isSelected, onSelect, onChange, ...props }) =
                 draggable={true}
                 onClick={onSelect}
                 onTap={onSelect}
+            />
+            }
+            {shape.type === 'emoji' &&
+            <Text
+                {...props}
+                ref={shapeRef}
+                x={shape.x}
+                y={shape.y}
+                text={shape.text}
+                scale={shape.scale}
+                fontSize={shape.fontSize}
+                fontFamily="Arial"
+                id={shape.id}
+                draggable={true}
+                onClick={onSelect}
+                onTap={onSelect}
+                onDragEnd={(e) => {
+                    onChange({
+                        ...shape,
+                        x: e.target.x(),
+                        y: e.target.y()
+                    });
+                }}
+                onTransformEnd={(e) => {
+                    onChange({
+                        ...shape,
+                        scale: e.target.scale()
+                    });
+                }}
             />
             }
             {isSelected &&

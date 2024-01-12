@@ -103,15 +103,20 @@ export default function useAnnotate() {
         setAnnotateColor(color);
         if (selectedId) {
             const currentShaps = shapes.find(e => e.id === selectedId);
-            if (currentShaps) currentShaps.color = color;
+            if (currentShaps && currentShaps.color) currentShaps.color = color;
         }
     }
     const onAnnotateWidthChange = (e) => {
         setAnnotateWidth(e);
         if (selectedId) {
             const currentShaps = shapes.find(e => e.id === selectedId);
-            if (currentShaps) currentShaps.strokeWidth = e;
+            if (currentShaps && currentShaps.strokeWidth) currentShaps.strokeWidth = e;
         }
+    }
+    const onEmojiSelect = (emoji) => {
+        const x = canvasRef.current.width() / 2 - 90;
+        const y = canvasRef.current.height() / 2 - 90;
+        setShapes([...shapes, { id: `emoji-${new Date().getTime()}`, text: emoji, fontSize: 960, type: 'emoji', x, y, scale: {x: 0.1875, y: 0.1875} }])
     }
     const toClearAll = () => {
         setShapes([]);
@@ -137,6 +142,7 @@ export default function useAnnotate() {
         selectedId,
         handleMouseDown,
         handleMouseMove,
-        handleMouseUp
+        handleMouseUp,
+        onEmojiSelect
     }
 }

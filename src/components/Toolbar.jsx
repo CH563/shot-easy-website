@@ -2,8 +2,9 @@ import React from 'react';
 import { Icon, Icons } from './Icons';
 import { Button, ColorPicker, Tooltip } from 'antd';
 import { WidthDropdown } from './WidthDropdown';
+import { EmojiSelect } from './EmojiSelect';
 
-export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotateColor, onAnnotateChange, annotateWidth, onWidthChange, toCapture}) => {
+export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotateColor, onAnnotateChange, annotateWidth, onWidthChange, toCapture, onEmojiSelect}) => {
     return (
         <div className="flex items-center">
             <Button type="text" shape="circle" icon={isFull ? <Icon name="Minimize" /> : <Icon name="Maximize" />} onClick={() => onFullChange(!isFull)}></Button>
@@ -56,6 +57,10 @@ export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotat
                     icon={<Icon name="Pencil" />}
                     onClick={() => toSelect('pencil')}
                 ></Button>
+                <EmojiSelect
+                    disabled={disabled}
+                    toSelect={onEmojiSelect}
+                />
             </div>
             <div className="px-3 border-l flex gap-1 items-center">
                 <ColorPicker size="small" presets={[{ label: 'Recommended', colors: ['#ffffff', '#444444', '#df4b26', '#1677ff', '#52C41A', '#FA8C16', '#FADB14', '#EB2F96', '#722ED1'] }]} value={annotateColor} onChange={onAnnotateChange} />

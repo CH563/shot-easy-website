@@ -68,7 +68,8 @@ export default function Beautifier() {
         selectedId,
         handleMouseDown,
         handleMouseMove,
-        handleMouseUp
+        handleMouseUp,
+        onEmojiSelect
     } = useAnnotate();
 
     const boxStyle = useMemo(() => {
@@ -216,6 +217,7 @@ export default function Beautifier() {
                         annotateWidth={annotateWidth}
                         onWidthChange={onAnnotateWidthChange}
                         toCapture={toCapture}
+                        onEmojiSelect={onEmojiSelect}
                     />
                     <div className="flex gap-1 md:gap-4 justify-center items-center">
                         <div className="px-0 text-xs opacity-80 md:px-2">
