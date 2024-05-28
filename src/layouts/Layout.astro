@@ -49,19 +49,28 @@ const headDesc = description || "Photo edit online for free, resize, and filter 
             }}
         />
         <!-- <ViewTransitions /> -->
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PJLMDWMFVH"></script>
+        <!-- Google Tag Manager -->
         <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(...args: (string | Date)[]){
-            window.dataLayer.push(args);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-PJLMDWMFVH');
+        (function(l,i){
+            var w = window;
+            var d = document;
+            w.dataLayer = w.dataLayer||[];
+            w.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName('script')[0];
+            var j=d.createElement('script');
+            var dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;
+            j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode?.insertBefore(j,f);
+        })('dataLayer','GTM-N69NVBDF');
+        </script>
+        <!-- End Google Tag Manager -->
         </script>
     </head>
     <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N69NVBDF" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
         <slot />
     </body>
 </html>
