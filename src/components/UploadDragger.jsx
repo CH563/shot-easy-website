@@ -5,14 +5,15 @@ import { supportImg, modKey } from '../lib/utils';
 
 const { Dragger } = Upload;
 
-export const UploadDragger = ({beforeUpload, desc}) => {
+export const UploadDragger = ({beforeUpload, accept, desc, ...props}) => {
     const key = modKey();
     return (
         <Dragger
-            accept={supportImg.join(',')}
+            accept={accept || supportImg.join(',')}
             name="file"
             showUploadList={false}
             beforeUpload={beforeUpload}
+            {...props}
             rootClassName="p-4 rounded-md bg-white shadow-md"
         >
             <p className="text-2xl"><Icon name="ImagePlus" size={32} className="opacity-60" /></p>

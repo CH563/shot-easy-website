@@ -1,39 +1,92 @@
 import React, { useState, useRef } from 'react';
 import { InputNumber, Button, message } from 'antd';
-import { RadiusUpleftOutlined, RadiusUprightOutlined, RadiusBottomleftOutlined, RadiusBottomrightOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react-lite'
 import { Icon } from './Icons'
 import { DownBtn } from './DownBtn';
-import { UploadDragger } from './UploadDragger';
-import { cn, fileToDataURL, url2Blob, copyAsBlob, toDownloadFile, computedSize } from '../lib/utils';
+import { UploadCard } from './UploadCard';
+import { FormatTag } from './FormatTag';
+import { cn, formatSize, fileToDataURL, url2Blob, copyAsBlob, toDownloadFile, computedSize } from '../lib/utils';
 import useKeyboardShortcuts from '../lib/useKeyboardShortcuts';
 import usePaste from '../lib/usePaste';
+import { compressorState } from "../states/compressor";
 
-export default function Compressor() {
+const Compressor = observer(() => {
     const [messageApi, contextHolder] = message.useMessage();
-    const canvasRef = useRef(null);
     const [loading, setLoading] = useState(false);
-    const [photoUrl, setPhotoUrl] = useState('');
-    const [photoData, setPhotoData] = useState('');
 
-    const beforeUpload = async (file) => {
-        const img = await fileToDataURL(file);
-        setPhotoData(img);
-        return Promise.reject();
+    let listComponent = <UploadCard />;
+    if (compressorState.list.size) {
+        listComponent = (
+            <div className="w-full bg-white shadow-md p-4 rounded-md grid gap-6">
+                {Array.from(compressorState.list.values()).map(info => {
+                    return (
+                        <div className="flex items-center justify-between pb-5 relative after:block after:absolute after:bottom-0 after:left-16 after:right-0 after:h-[1px] after:bg-slate-200">
+                            <div className="flex items-center max-w-[50%]">
+                                <img src={info.src} className="w-[48px] h-[48px] flex-shrink-0 object-cover mr-4 shadow-sm rounded-sm aspect-[1/1]" />
+                                <div className="flex-1 w-full">
+                                    <div className="font-semibold mb-1.5 truncate">{info.name}</div>
+                                    <div className="text-xs flex gap-1">
+                                        {info.blob?.type && <span><FormatTag type={info.blob.type.replace('image/', '').toLocaleUpperCase()} /></span>}
+                                        <span className="text-xs">{!info.compress?.width && !info.compress?.height ? "-" : `${info.compress.width}*${info.compress.height}`}</span>
+                                        <span className="text-xs">{formatSize(info.blob.size)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {info.compress && 
+                                <div className="flex items-center">
+                                    <div className="px-1 text-right">
+                                        <div className="flex justify-end gap-1">
+                                            <span
+                                                className="font-semibold text-sm mb-1"
+                                            >{(Math.abs((row.compress.blob.size - row.blob.size) / row.blob.size) * 100).toFixed(2)}%</span>
+                                            <Icon name={"ArrowDown"} className={cn(info.blob > info.compress.blob.size ? "text-green-600" : "text-red-600")} />
+                                        </div>
+                                        <div className="text-xs">
+                                            <span
+                                                className={cn(info.blob > info.compress.blob.size ? "text-green-600" : "text-red-600")}
+                                            >{formatSize(info.compress.blob.size)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="p-1">
+                                        <Button
+                                            type="primary"
+                                            className="bg-black"
+                                            icon={<Icon name="Download" />}
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    )
+                })}
+            </div>
+        );
     }
 
     return (
         <>
             {contextHolder}
             <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased polka")}>
-                {/* <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
-                    <div className="flex gap-3 items-center justify-center"></div>
-                </div> */}
+                {compressorState.list.size > 0 &&
+                    <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
+                        <div className="flex gap-3 items-center justify-center">
+                            <Button icon={<Icon name="Plus" />}>Add Files</Button>
+                            <Button icon={<Icon name="Folder" />}>Add Folder</Button>
+                        </div>
+                        <div className="flex gap-3 items-center justify-center">
+                            <DownBtn />
+                            <Button type="text" icon={<Icon name="Eraser" />}></Button>
+                        </div>
+                    </div>
+                }
                 <div className="relative min-h-[200px] p-10">
-                    <div className="flex w-full items-center justify-center z-10">
-                        {!photoUrl && <UploadDragger desc={"JPG/JPEG/PNG/WEBP/GIF/SVG/AVIF"} beforeUpload={beforeUpload} />}
+                    <div className="flex w-full justify-center z-10">
+                        {listComponent}
                     </div>
                 </div>
             </div>
         </>
     )
-}
+})
+
+export default Compressor;

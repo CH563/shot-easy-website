@@ -2,9 +2,24 @@ import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 import ColorThief from 'colorthief';
 import backgroundConfig from './backgroundConfig';
+import { filesize } from 'filesize';
+
+/**
+ * Globaly uniqid in browser session lifecycle
+ */
+let __UniqIdIndex = 0;
+export function uniqId() {
+    __UniqIdIndex += 1;
+    return __UniqIdIndex;
+}
 
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
+}
+
+export function formatSize(num) {
+const result = filesize(num, { standard: "jedec", output: "array" });
+return result[0] + " " + result[1];
 }
 
 export const isAppleDevice = () => {
