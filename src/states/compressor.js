@@ -62,7 +62,8 @@ class CompressorState {
         let loadedNum = 0;
         let originSize = 0;
         let outputSize = 0;
-        for (const [_, info] in this.list) {
+        for (const [_, info] of this.list) {
+            if (!info?.blob) continue;
             originSize += info.blob.size;
             if (info.compress) {
                 loadedNum++;

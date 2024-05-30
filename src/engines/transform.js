@@ -112,12 +112,10 @@ export function createMessageData(item) {
 }
 
 export function createCompressTask(item) {
-    console.log(workerC)
     workerC?.postMessage(createMessageData(item));
 }
 
 export function createPreviewTask(item) {
-    console.log(workerP)
     workerP?.postMessage(createMessageData(item));
 }
 
