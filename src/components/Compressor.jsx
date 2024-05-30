@@ -138,7 +138,7 @@ const Compressor = observer(() => {
                             loading={loading}
                             icon={<Icon name="Download" />}
                             onClick={toDownloadZip}
-                        >Download</Button>
+                        >Download All</Button>
                         <Button
                             type="text"
                             loading={loading}

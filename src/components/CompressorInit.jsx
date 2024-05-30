@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 
 export default function CompressorInit() {
     const loading = (
-        <div className="flex items-center justify-center h-full min-h-[178px]">
+        <div className="flex items-center justify-center min-h-[250px]">
             <Spin />
         </div>
     );
