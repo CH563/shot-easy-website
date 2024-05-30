@@ -112,10 +112,12 @@ export function createMessageData(item) {
 }
 
 export function createCompressTask(item) {
+    console.log(workerC)
     workerC?.postMessage(createMessageData(item));
 }
 
 export function createPreviewTask(item) {
+    console.log(workerP)
     workerP?.postMessage(createMessageData(item));
 }
 
@@ -147,4 +149,8 @@ export async function createImage(file) {
     }
 
     compressorState.list.set(info.key, info);
+
+    createPreviewTask(info);
+    createCompressTask(info);
+
 }

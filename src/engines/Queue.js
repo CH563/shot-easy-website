@@ -1,4 +1,4 @@
-class Queue {
+export class Queue {
     constructor(max = 1) {
         // Current task list
         this.list = [];

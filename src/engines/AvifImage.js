@@ -1,5 +1,6 @@
 import { avif } from './AvifWasmModule';
 import { Mimes } from '../lib/mimes';
+import { ImageBase } from './ImageBase'
 
 export class AvifImage extends ImageBase {
     /**
