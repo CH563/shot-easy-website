@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import Compressor from '../../components/Compressor';
+import CompressorInit from '../../components/CompressorInit';
 ---
 
 <Layout title="Image Compressor" description="Free online image compressor for faster websites! Reduce the file size of your WEBP, JPEG, and PNG images with compression implementation based on Webassembly.">
@@ -15,7 +15,7 @@ import Compressor from '../../components/Compressor';
             <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">Image Compressor</h1>
             <p class="text-slate-600 text-center mb-2">Not uploaded, compress in browser with Webassembly</p>
             <div class="pb-12 min-h-[320px]">
-                <Compressor client:only="react" />
+                <CompressorInit client:only="react" />
             </div>
             <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs [&>p]:mb-1">
                 <div class="mb-1 text-sm">🏙️</div>

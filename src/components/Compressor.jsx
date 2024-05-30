@@ -122,39 +122,37 @@ const Compressor = observer(() => {
     return (
         <>
             {contextHolder}
-            <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased polka")}>
-                {compressorState.list.size > 0 &&
-                    <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
-                        <div className="flex gap-3 items-center justify-center">
-                            <Upload name='file' beforeUpload={beforeUpload} showUploadList={false}>
-                                <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
-                            </Upload>
-                            {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
-                        </div>
-                        <div className="flex gap-3 items-center justify-center">
-                            <Button
-                                type="primary"
-                                className="bg-black"
-                                disabled={disabled}
-                                loading={loading}
-                                icon={<Icon name="Download" />}
-                                onClick={toDownloadZip}
-                            >Download</Button>
-                            <Button
-                                type="text"
-                                loading={loading}
-                                icon={<Icon name="Eraser" />}
-                                onClick={() => {
-                                    compressorState.list.clear();
-                                }}
-                            ></Button>
-                        </div>
+            {compressorState.list.size > 0 &&
+                <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
+                    <div className="flex gap-3 items-center justify-center">
+                        <Upload name='file' beforeUpload={beforeUpload} showUploadList={false}>
+                            <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
+                        </Upload>
+                        {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
                     </div>
-                }
-                <div className="relative min-h-[200px] p-5">
-                    <div className="flex w-full justify-center z-10">
-                        {listComponent}
+                    <div className="flex gap-3 items-center justify-center">
+                        <Button
+                            type="primary"
+                            className="bg-black"
+                            disabled={disabled}
+                            loading={loading}
+                            icon={<Icon name="Download" />}
+                            onClick={toDownloadZip}
+                        >Download</Button>
+                        <Button
+                            type="text"
+                            loading={loading}
+                            icon={<Icon name="Eraser" />}
+                            onClick={() => {
+                                compressorState.list.clear();
+                            }}
+                        ></Button>
                     </div>
+                </div>
+            }
+            <div className="relative min-h-[200px] p-5">
+                <div className="flex w-full justify-center z-10">
+                    {listComponent}
                 </div>
             </div>
         </>
