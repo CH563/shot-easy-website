@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spin, Button, message, Upload } from 'antd';
+import { Spin, Button, message, Upload, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { Icon } from './Icons';
 import { UploadCard } from './UploadCard';
@@ -131,22 +131,36 @@ const Compressor = observer(() => {
                         {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
                     </div>
                     <div className="flex gap-3 items-center justify-center">
-                        <Button
-                            type="primary"
-                            className="bg-black"
-                            disabled={disabled}
-                            loading={loading}
-                            icon={<Icon name="Download" />}
-                            onClick={toDownloadZip}
-                        >Download All</Button>
-                        <Button
-                            type="text"
-                            loading={loading}
-                            icon={<Icon name="Eraser" />}
-                            onClick={() => {
-                                compressorState.list.clear();
-                            }}
-                        ></Button>
+                        <Tooltip placement="top" title="Recompress">
+                            <Button
+                                disabled={disabled}
+                                loading={loading}
+                                icon={<Icon name="RotateCw" />}
+                                onClick={() => {
+                                    compressorState.reCompress();
+                                }}
+                            ></Button>
+                        </Tooltip>
+                        <Tooltip placement="top" title="Download all using zip">
+                            <Button
+                                type="primary"
+                                className="bg-black"
+                                disabled={disabled}
+                                loading={loading}
+                                icon={<Icon name="Download" />}
+                                onClick={toDownloadZip}
+                            >Download All</Button>
+                        </Tooltip>
+                        <Tooltip placement="top" title="Clear all">
+                            <Button
+                                type="text"
+                                loading={loading}
+                                icon={<Icon name="Eraser" />}
+                                onClick={() => {
+                                    compressorState.list.clear();
+                                }}
+                            ></Button>
+                        </Tooltip>
                     </div>
                 </div>
             }

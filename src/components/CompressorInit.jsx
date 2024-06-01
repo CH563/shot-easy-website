@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
+import { avifCheck } from "../engines/support";
 
 export default function CompressorInit() {
     const loading = (
@@ -9,6 +10,8 @@ export default function CompressorInit() {
     );
     const [component, setComponent] = useState(loading);
     useEffect(() => {
+        const modules = import.meta.glob("./*.jsx")
+        const importIcon = modules[`./Icons.jsx`]();
         const loadList = [
             import("jszip"),
             fetch(new URL("../engines/png.wasm", import.meta.url)),
@@ -16,13 +19,13 @@ export default function CompressorInit() {
             fetch(new URL("../engines/avif.wasm", import.meta.url)),
             import("../engines/WorkerPreview?worker"),
             import("../engines/WorkerCompress?worker"),
+            importIcon,
+            avifCheck(),
         ];
-        Promise.all(loadList).then(async () => {
-            console.log(33)
-            const modules = import.meta.glob("./*.jsx")
+        Promise.all(loadList).finally(async() => {
             const importer = modules[`./Compressor.jsx`]();
             const result = await importer;
-            setComponent(<result.default />);
+            setComponent(<result.default />)
         });
     }, []);
     return (

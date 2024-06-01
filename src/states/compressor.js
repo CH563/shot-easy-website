@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { createCompressTask } from '../engines/transform';
 
 const DefaultCompressOption = {
     preview: {
@@ -44,7 +45,7 @@ class CompressorState {
         this.list.forEach(info => {
             URL.revokeObjectURL(info.compress?.src);
             info.compress = undefined;
-            // createCompressTask(info);
+            createCompressTask(info);
         })
     }
 
