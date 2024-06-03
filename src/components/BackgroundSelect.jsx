@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Radio } from 'antd';
-import backgroundConfig from '../lib/backgroundConfig';
+import backgroundConfig from '@lib/backgroundConfig';
 import { Icons } from './Icons';
-import { cn } from '../lib/utils';
+import { cn } from '@lib/utils';
 
 const isImg = ['cosmic', 'desktop'];
 

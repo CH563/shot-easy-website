@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
-import { avifCheck } from "../engines/support";
+import { avifCheck } from "@engines/support";
 
 export default function CompressorInit() {
     const loading = (

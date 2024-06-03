@@ -1,10 +1,10 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { UploadDragger } from './UploadDragger';
-import { Mimes } from '../lib/mimes';
-import { createImage } from '../engines/transform';
-import usePaste from '../lib/usePaste';
-import { getFilesFromEntry, getFilesFromHandle } from '../lib/utils';
+import { Mimes } from '@lib/mimes';
+import { createImage } from '@engines/transform';
+import usePaste from '@lib/usePaste';
+import { getFilesFromEntry, getFilesFromHandle } from '@lib/utils';
 
 export const UploadCard = observer(() => {
     usePaste(async (file) => {

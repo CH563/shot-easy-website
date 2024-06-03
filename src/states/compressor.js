@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { createCompressTask } from '../engines/transform';
+import { createCompressTask } from '@engines/transform';
 
 const DefaultCompressOption = {
     preview: {

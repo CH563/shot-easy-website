@@ -1,0 +1,67 @@
+---
+import Chrome from '@components/Chrome.astro';
+import EditBox from '@components/EditBox.jsx';
+import Privacy from '@components/Privacy.astro';
+import {getLang} from '@i18n/index';
+const { locale } = Astro.params;
+const l = getLang(locale);
+const t = l.editor;
+---
+
+<div class="container py-8 relative z-10 flex-1">
+    <h1 class="text-4xl text-center leading-[42px] font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{t.feature}</h1>
+    <p class="text-center"><span>{t.noSign}</span><span>{t.online} </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">{t.free} ✨</span></p>
+    <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
+        <button disabled class="py-2 flex gap-1 items-center px-4 rounded-full text-sm border-0 bg-slate-500 text-white mt-4 relative">
+            <Chrome width={16} height={16} />
+            <span>{t.extension}</span>
+            <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">{t.coming}</div>
+        </button>
+        <p class="text-xs opacity-80 text-center">{t.capture}</p>
+        <p class="text-xs opacity-80">{t.instantly}</p>
+    </div>
+    <div class="flex flex-col gap-3 justify-center text-xs hover:[&_a]:bg-blue-600 hover:[&_a]:text-white [&_a]:py-1 [&_a]:px-3 [&_a]:inline-block [&_a]:rounded-full [&_a]:bg-white [&_a]:text-blue-600 [&_a]:border [&_a]:border-blue-600 md:flex-row">
+        <div class="text-center"><a href="/screenshot-beautifier" title="Screenshot Beautifier">🏞️ {l.nav.beautifier.title}</a></div>
+        <div class="text-center"><a href="/photo-to-rounded" title="Photo to Rounded">🛟 {l.nav.rounded.title}</a></div>
+        <div class="text-center"><a href="/image-compressor" title="Photo to Rounded">⬇️ {l.nav.compressor.title}</a></div>
+    </div>
+    <div class="pt-4 pb-12 min-h-[716px]">
+        <EditBox client:only="react" />
+    </div>
+    <section id="how-to-take-a-screenshot">
+        <h2 class="text-xl font-extrabold mb-2 text-center">{t.how}</h2>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 mb-3">
+            <div class="rounded-md bg-green-50/50 p-3">
+                <div class="mb-1 text-center">📸</div>
+                <h3 class="text-sm mb-1 text-center">{t.take}</h3>
+                <p class="text-xs text-slate-400 mt-1">{t.use}</p>
+            </div>
+            <div class="rounded-md bg-indigo-50/50 p-3">
+                <div class="mb-1 text-center">🪄</div>
+                <h3 class="text-sm mb-1 text-center">{t.more}</h3>
+                <p class="text-xs text-slate-400 mt-1">{t.moreUse}</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-3 mb-3">
+            <div class="rounded-md bg-blue-50/50 p-3">
+                <div class="mb-1 text-center">🖼️</div>
+                <h3 class="text-sm mb-1 text-center">{t.corp}</h3>
+                <p class="text-xs text-slate-400 mt-1">{t.corpCont}</p>
+            </div>
+            <div class="rounded-md bg-purple-50/50 p-3">
+                <div class="mb-1 text-center">🌊</div>
+                <h3 class="text-sm mb-1 text-center">{t.add}</h3>
+                <p class="text-xs text-slate-400 mt-1">{t.addCont}</p>
+            </div>
+            <div class="rounded-md bg-orange-50/50 p-3">
+                <div class="mb-1 text-center">🎯</div>
+                <h3 class="text-sm mb-1 text-center">{t.annotate}</h3>
+                <p class="text-xs text-slate-400 mt-1">{t.annotateCont}</p>
+            </div>
+        </div>
+    </section>
+    <Privacy />
+    <section class="text-center text-xs text-slate-400 [&_a]:underline">
+        Image Editor by <a href="https://github.com/scaleflex/filerobot-image-editor" target="_blank" rel="noopener noreferrer">Filerobot Image Editor</a>
+    </section>
+</div>

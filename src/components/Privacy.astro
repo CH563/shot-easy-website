@@ -1,0 +1,11 @@
+---
+import {getLang} from '@i18n/index';
+const { locale } = Astro.params;
+const l = getLang(locale);
+const t = l.editor;
+---
+
+<section class="py-8">
+    <h2 class="text-xl font-extrabold mb-2 text-center">{t.privacy}</h2>
+    <p class="text-slate-600 text-center">{t.privacyCont}</p>
+</section>

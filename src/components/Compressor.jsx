@@ -5,9 +5,9 @@ import { Icon } from './Icons';
 import { UploadCard } from './UploadCard';
 import { ProgressHint } from './ProgressHint';
 import { FormatTag } from './FormatTag';
-import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesFromHandle } from '../lib/utils';
-import { compressorState } from '../states/compressor';
-import { useWorkerHandler, createImage } from '../engines/transform';
+import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesFromHandle } from '@lib/utils';
+import { compressorState } from '@states/compressor';
+import { useWorkerHandler, createImage } from '@engines/transform';
 
 const Compressor = observer(() => {
     const [messageApi, contextHolder] = message.useMessage();

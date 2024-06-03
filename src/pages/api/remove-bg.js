@@ -1,4 +1,4 @@
-import { verifySignature } from '../../lib/auth';
+import { verifySignature } from '@lib/auth';
 
 const apiKey = import.meta.env.REMOVE_API_KEY
 

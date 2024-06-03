@@ -1,33 +1,40 @@
 ---
 // import { ViewTransitions } from 'astro:transitions';
 import { SEO } from 'astro-seo';
-import '../static/global.css';
+import '@static/global.css';
+import { CONFIG } from '@lib/config';
+import { getLocale, getLang } from '@i18n/index';
 interface Props {
     title: string;
     description?: string;
 }
-
 const resolvedImageWithDomain = `${Astro.url.origin}/image.png`;
 const canonicalURL = Astro.url.toString();
-
+const { locale } = Astro.params;
+const lang = getLocale(locale);
+const alternates = CONFIG.locals.map(item => {
+    return {href: new URL(Astro.url.pathname.replace(lang, item === 'en' ? '': item), CONFIG.website).toString(), hrefLang: item};
+})
+const t = getLang(locale)
 const { title, description } = Astro.props;
-const headTitle = `${title} | photo editor online for free`;
-const headDesc = description || "Photo edit online for free, resize, and filter any photos, edit photo on browser, convert image to jpg/png/jpeg/webp, easy to screenshot area or full page"
+const headTitle = `${title} | ${t.title}`;
+const headDesc = description || t.description
 ---
 
 <!doctype html>
-<html lang='en'>
+<html lang={lang} dir="ltr">
     <head>
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width' />
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
         <link rel="sitemap" href="/sitemap-index.xml" />
-        <meta name="keywords" content="Shot Easy, easy shot, screenshot, edit photo, photo converter, image converter, editor online, change image format online, convert image to jpg, jpg to webp, jpg to png">
+        <meta name="keywords" content={t.keywords}>
         <SEO
             title={headTitle}
             description={headDesc}
             canonical={canonicalURL}
+            languageAlternates={alternates}
             twitter={{
                 creator: '@LiWen563',
                 site: '@LiWen563',

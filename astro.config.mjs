@@ -4,10 +4,18 @@ import vercel from "@astrojs/vercel/serverless";
 import react from "@astrojs/react";
 
 import sitemap from "@astrojs/sitemap";
+import { CONFIG } from "./src/lib/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://shoteasy.fun',
+  site: CONFIG.website,
+  i18n: {
+    defaultLocale: "en",
+    locales: CONFIG.locals,
+    routing: {
+        prefixDefaultLocale: false
+    }
+  },
   integrations: [tailwind(), react(), sitemap()],
   output: "server",
   adapter: vercel({
