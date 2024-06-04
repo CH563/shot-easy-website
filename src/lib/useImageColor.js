@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getImgColor } from '@lib/utils';
+import { getImgColor } from './utils';
 
 export default function useImageColor(imgUrl) {
     const [imgColors, setImgColors] = useState([]);

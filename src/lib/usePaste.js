@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { supportImg } from '@lib/utils';
+import { supportImg } from './utils';
 
 export default function usePaste(toPaste, dependencies = []) {
     useEffect(() => {

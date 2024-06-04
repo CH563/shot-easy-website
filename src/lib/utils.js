@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import ColorThief from 'colorthief';
 import backgroundConfig from './backgroundConfig';
 import { filesize } from 'filesize';
-import { Mimes } from '@lib/mimes';
+import { Mimes } from './mimes';
 
 /**
  * Globaly uniqid in browser session lifecycle
