@@ -20,17 +20,17 @@ const navList = [
         name: nav.beautifier.name
     },
     {
-        pathname: '/photo-to-rounded',
+        pathname: getRelativeLocaleUrl(lang, '/photo-to-rounded'),
         title: nav.rounded.title,
         name: nav.rounded.name
     },
     {
-        pathname: '/background-remover',
+        pathname: getRelativeLocaleUrl(lang, '/background-remover'),
         title: nav.remover.title,
         name: nav.remover.name
     },
     {
-        pathname: '/image-compressor',
+        pathname: getRelativeLocaleUrl(lang, '/image-compressor'),
         title: nav.compressor.title,
         name: nav.compressor.name
     },
@@ -41,7 +41,7 @@ const navList = [
     <a href={index} class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
     <nav class="flex gap-2 text-sm text-slate-600 bg-white rounded-3xl p-1 px-2 [&_span]:rounded-xl [&_span]:px-2 [&_span]:bg-blue-600 [&_span]:text-white [&_a]:rounded-xl [&_a]:px-2 hover:[&_a]:bg-sky-50 hover:[&_a]:text-blue-600">
         {navList.map(item => {
-            if (pathname === item.pathname) return (<span>{item.name}</span>)
+            if (pathname.toLocaleLowerCase() === item.pathname.toLocaleLowerCase()) return (<span>{item.name}</span>)
             return (<a href={item.pathname} title={item.title}>{item.name}</a>)
         })}
     </nav>

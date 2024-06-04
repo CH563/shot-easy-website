@@ -1,0 +1,69 @@
+---
+import Remover from '@components/Remover';
+import CompareImage from '@components/CompareImage'
+import Privacy from '@components/Privacy.astro';
+import { getLang } from '@i18n/index';
+const { locale } = Astro.params;
+const l = getLang(locale);
+const nav = l.nav;
+const t = l.remover;
+---
+
+<div class="container py-8 relative z-10 flex-1">
+    <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">{nav.remover.title}</h1>
+    <p class="text-slate-600 text-center mb-2">{t.tips}</p>
+    <div class="pb-8 min-h-[388px]">
+        <Remover client:only="react" />
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+        <section class="mb-3 rounded-md p-4 bg-green-100/40 text-xs">
+            <div class="mb-1 text-sm">✨</div>
+            <h2 class="text-lg font-bold mb-2">{t.how}</h2>
+            <p>{t.howCont}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs">
+            <div class="mb-1 text-sm">🏙️</div>
+            <h2 class="text-lg font-bold mb-2">{t.fully}</h2>
+            <p>{t.fullyCont}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-pink-100/40 text-xs">
+            <div class="mb-1 text-sm">🤩</div>
+            <h2 class="text-lg font-bold mb-2">{t.replace}</h2>
+            <p>{t.easily}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-yellow-100/40 text-xs">
+            <div class="mb-1 text-sm">🎉</div>
+            <h2 class="text-lg font-bold mb-2">{t.desgin}</h2>
+            <p>{t.desginCont}</p>
+        </section>
+    </div>
+    <section class="py-8 text-center">
+        <div class="text-purple-500 text-xs">{t.compare}</div>
+        <h2 class="text-2xl font-extrabold mb-2">{t.compareTip}</h2>
+        <p class="relative inline-block">
+            {t.check}
+            <svg class="absolute -right-12 top-1 opacity-80" xmlns="http://www.w3.org/2000/svg" version="1.1" width="54" height="54" x="0" y="0" viewBox="0 0 100 100"><g><path d="m74.3 66.8-5.8 5.8c-.6-20.7-8.9-27.8-13.6-30.1-.1-.4-.1-.8-.2-1.2-1-4.1-5.9-17.3-29.5-17.3h-.1v2h.1C47 26 51.7 37.9 52.6 41.7c-4.1-1.2-8-.2-9.7 2.4-1.5 2.3-1 5.2 1.4 8.1 3 3.6 5.7 2.8 6.7 2.3 2.6-1.3 4.2-5.2 4-9.5 5.7 3.4 10.9 12 11.4 27.6l-5.7-5.7-1.4 1.4 8.2 8.2 8.2-8.2zM50.1 52.7c-1.6.8-3.2-.5-4.3-1.8-1.8-2.1-2.2-4.2-1.2-5.7.9-1.3 2.6-2 4.6-2 .9 0 1.9.1 2.9.4l.9.3c.4 4.3-1 7.8-2.9 8.8z" fill="#888888" opacity="1"></path></g></svg>
+        </p>
+        <div class="py-4 h-[407px]">
+            <CompareImage client:only="react" />
+        </div>
+    </section>
+    <Privacy />
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": t.title,
+    "description": t.description,
+    "browserRequirements": "requires HTML5 support",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.6",
+        "ratingCount": "164",
+        "bestRating": "50"
+    },
+    "offers": {
+        "@type": "Offer",
+        "price": "0"
+    }
+})}/>

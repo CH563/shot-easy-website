@@ -12,9 +12,15 @@ const resolvedImageWithDomain = `${Astro.url.origin}/image.png`;
 const canonicalURL = Astro.url.toString();
 const { locale } = Astro.params;
 const lang = getLocale(locale);
+const reg = new RegExp(`/${lang}`, 'i');
 const alternates = CONFIG.locals.map(item => {
-    return {href: new URL(Astro.url.pathname.replace(lang, item === 'en' ? '': item), CONFIG.website).toString(), hrefLang: item};
+    const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), CONFIG.website).toString();
+    return {href, hrefLang: item};
 })
+alternates.push({
+    href: new URL(Astro.url.pathname.replace(reg, ''), CONFIG.website).toString(),
+    hrefLang: 'x-default'
+});
 const t = getLang(locale)
 const { title, description } = Astro.props;
 const headTitle = `${title} | ${t.title}`;
