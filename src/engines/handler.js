@@ -4,7 +4,7 @@ import { PngImage } from './PngImage';
 import { AvifImage } from './AvifImage';
 import { SvgImage } from './SvgImage';
 import { getSvgDimension } from './svgParse';
-import { Mimes } from '@lib/mimes';
+import { Mimes } from '../lib/mimes';
 
 export async function convert(data, method = 'compress') {
     const mime = data.info.blob.type.toLowerCase();

@@ -1,0 +1,78 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+---
+
+<Layout title='Privacy Policy'>
+    <Header />
+    <article
+        class='prose prose-zinc mx-auto container py-12 dark:prose-invert'
+    >
+        <div class='space-y-2 not-prose'>
+            <h1
+                class='text-4xl font-extrabold tracking-tight lg:text-5xl lg:leading-[3.5rem]'
+            >
+                Privacy Policy
+            </h1>
+            <p class='text-zinc-500 dark:text-zinc-400'>
+                Posted on November 11, 2023
+            </p>
+        </div>
+        <div class='mt-6'>
+            <p>We take user privacy very seriously.</p>
+            <h2>Data Collection</h2>
+            <p>
+                This website only uses <a href='https://vercel.com/'>vercel</a
+                > for simple anonymous analytics and does not collect any
+                personally identifiable information.
+            </p>
+            <p>
+                vercel is a privacy-friendly web analytics tool that complies
+                with GDPR, CCPA, PECR and other data privacy regulations. It
+                does not use cookies or any 3rd party tracking scripts and
+                cannot uniquely identify individual users.
+            </p>
+            <p>Information collected by vercel includes:</p>
+            <ul>
+                <li>Your IP address (displayed anonymized)</li>
+                <li>Date and time of visit</li>
+                <li>Pages visited</li>
+                <li>Browser and operating system info</li>
+                <li>Referring website</li>
+            </ul>
+            <p>
+                This information is used to generate anonymous analytics about
+                website visits, traffic sources, etc.
+            </p>
+            <h2>Use of Data</h2>
+            <p>
+                The analytics data collected is only used to improve this
+                website and not for any commercial purpose.
+            </p>
+            <h2>Data Sharing</h2>
+            <p>
+                No data collected by this website is shared with any 3rd
+                parties.
+            </p>
+            <h2>Data Retention</h2>
+            <p>
+                Visit logs in vercel are anonymized and deleted automatically
+                after 90 days.
+            </p>
+            <h2>Your Rights</h2>
+            <p>
+                You have the right to access, rectify or erase any personal data
+                stored by this website. You can also contact the website
+                administrator to opt out of website analytics.
+            </p>
+            <p>
+                This privacy policy may be updated from time to time and it is
+                advised to check back periodically.
+            </p>
+        </div>
+
+        <!--AFTER-CONTENT-->
+    </article>
+    <Footer />
+</Layout>

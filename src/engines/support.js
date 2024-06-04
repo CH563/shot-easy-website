@@ -1,4 +1,4 @@
-import { Mimes } from '@lib/mimes';
+import { Mimes } from '../lib/mimes';
 
 const MimeAvif = 'image/avif';
 

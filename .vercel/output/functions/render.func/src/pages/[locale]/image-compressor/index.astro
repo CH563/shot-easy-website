@@ -1,0 +1,21 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import CompressorPage from '@components/CompressorPage.astro';
+import { getLang } from '@i18n/index';
+const { locale } = Astro.params;
+const t = getLang(locale)
+const { title, description } = t.compressor;
+---
+
+<Layout title={title} description={description}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <CompressorPage />
+        <Footer />
+    </main>
+</Layout>

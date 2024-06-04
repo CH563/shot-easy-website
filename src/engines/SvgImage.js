@@ -1,4 +1,4 @@
-import { Mimes } from '@lib/mimes';
+import { Mimes } from '../lib/mimes';
 import { ImageBase } from "./ImageBase";
 import { optimize } from "svgo";
 
