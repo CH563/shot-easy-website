@@ -1100,6 +1100,7 @@ function preMain() {
 function exitRuntime() {
   callRuntimeCallbacks(__ATEXIT__);
   runtimeExited = true;
+  console.log(runtimeExited)
 }
 function postRun() {
   if (Module["postRun"]) {
