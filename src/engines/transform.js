@@ -2,8 +2,8 @@ import WorkerC from './WorkerCompress?worker';
 import WorkerP from './WorkerPreview?worker';
 import { useEffect } from 'react';
 import { toJS } from 'mobx';
-import { uniqId } from '@lib/utils';
-import { compressorState } from '@states/compressor';
+import { uniqId } from '../lib/utils';
+import { compressorState } from '../states/compressor';
 import { Mimes } from '../lib/mimes';
 import { AvifImage } from "./AvifImage";
 
