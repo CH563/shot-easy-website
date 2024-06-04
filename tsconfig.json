@@ -4,6 +4,7 @@
     "baseUrl": "src",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "noUnusedLocals": false,
     "paths" : {
       "@components/*": ["components/*"],
       "@layouts/*": ["layouts/*"],
