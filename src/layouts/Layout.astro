@@ -2,7 +2,7 @@
 // import { ViewTransitions } from 'astro:transitions';
 import { SEO } from 'astro-seo';
 import '@static/global.css';
-import { CONFIG } from '@lib/config';
+import { CONFIG, LANGUAGES_CODE } from '@lib/config';
 import { getLocale, getLang } from '@i18n/index';
 interface Props {
     title: string;
@@ -13,9 +13,10 @@ const canonicalURL = Astro.url.toString();
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const reg = new RegExp(`/${lang}`, 'i');
+const languagesCode = LANGUAGES_CODE as {[key: string]: string};
 const alternates = CONFIG.locals.map(item => {
     const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), CONFIG.website).toString();
-    return {href, hrefLang: item};
+    return {href, hrefLang: languagesCode[item] || item};
 })
 alternates.push({
     href: new URL(Astro.url.pathname.replace(reg, ''), CONFIG.website).toString(),
@@ -28,7 +29,7 @@ const headDesc = description || t.description
 ---
 
 <!doctype html>
-<html lang={lang} dir="ltr">
+<html lang={languagesCode[lang] || lang} dir="ltr">
     <head>
         <meta charset='UTF-8' />
         <meta name='viewport' content='width=device-width' />
