@@ -3,6 +3,9 @@ export const LANGUAGES = {
     es: 'español',
     fr: 'Français',
     ja: '日本語',
+    in: 'English(India)',
+    vn: 'Tiếng Việt',
+    ru: 'Русский',
     'zh-CN': '简体中文'
 };
 export const LANGUAGES_CODE = {
@@ -10,6 +13,9 @@ export const LANGUAGES_CODE = {
     es: 'es-ES',
     fr: 'fr-FR',
     ja: 'ja-JP',
+    in: 'en-IN',
+    vn: 'vi-VN',
+    ru: 'ru-RU',
     'zh-CN': 'zh-CN'
 };
 
