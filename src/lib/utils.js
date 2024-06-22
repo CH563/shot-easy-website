@@ -342,11 +342,15 @@ export async function getFilesHandleFromHandle(handle) {
 export async function creatImageBatch(handle, cb, dir) {
      for (const item of handle) {
         if (item.kind === 'file') {
-            if (dir == '') {
-                cb(await item.getFile())
-            } else {
-                if (dir.charAt(dir.length - 1) != '/') dir += '/'
-                cb(await item.getFile(), dir)
+            const file = await item.getFile()
+            const types = Object.values(Mimes);
+            if (types.includes(file.type)) {
+                if (dir == '') {
+                    cb(file)
+                } else {
+                    if (dir.charAt(dir.length - 1) != '/') dir += '/'
+                    cb(file, dir)
+                }
             }
         }
         if (item.kind === 'directory') {
