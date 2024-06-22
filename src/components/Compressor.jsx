@@ -5,7 +5,7 @@ import { Icon } from './Icons';
 import { UploadCard } from './UploadCard';
 import { ProgressHint } from './ProgressHint';
 import { FormatTag } from './FormatTag';
-import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesHandleFromHandle, creatImageBatch } from '@lib/utils';
+import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesHandleFromHandle, createImageBatch } from '@lib/utils';
 import { compressorState } from '@states/compressor';
 import { useWorkerHandler, createImage } from '@engines/transform';
 
@@ -60,7 +60,7 @@ const Compressor = observer(() => {
         const handle = await window.showDirectoryPicker();
         await getFilesHandleFromHandle(handle)
         if (!handle.children || !handle.children[0]) return;
-        creatImageBatch(handle.children, createImage, handle.name)
+        createImageBatch(handle.children, createImage, handle.name)
     }
 
     let listComponent = <UploadCard />;

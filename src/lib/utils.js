@@ -339,18 +339,22 @@ export async function getFilesHandleFromHandle(handle) {
     }
 }
 
-export async function creatImageBatch(handle, cb, dir) {
-     for (const item of handle) {
+export async function createImageBatch(handle, cb, dir) {
+    // if dir is empty and not end of /
+    if (dir != '' && dir.charAt(dir.length - 1) != '/') {
+        dir += '/';
+    }
+
+    for (const item of handle) {
         if (item.kind === 'file') {
-            if (dir == '') {
-                cb(await item.getFile())
-            } else {
-                if (dir.charAt(dir.length - 1) != '/') dir += '/'
-                cb(await item.getFile(), dir)
-            }
+            const file = await item.getFile();
+            const types = Object.values(Mimes);
+            if (!types.includes(file.type)) continue;
+            cb(file, dir);
         }
         if (item.kind === 'directory') {
-            await creatImageBatch(item.children, cb, item.name)
+            dir += item.name;
+            await createImageBatch(item.children, cb, dir);
         }
     }
 }
