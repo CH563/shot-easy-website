@@ -339,7 +339,7 @@ export async function getFilesHandleFromHandle(handle) {
     }
 }
 
-export async function creatImageBatch(handle, cb, dir) {
+export async function createImageBatch(handle, cb, dir) {
     // if dir is empty and not end of /
     if (dir != '' && dir.charAt(dir.length - 1) != '/') {
         dir += '/';
@@ -354,7 +354,7 @@ export async function creatImageBatch(handle, cb, dir) {
         }
         if (item.kind === 'directory') {
             dir += item.name;
-            await creatImageBatch(item.children, cb, dir);
+            await createImageBatch(item.children, cb, dir);
         }
     }
 }
