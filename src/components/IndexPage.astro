@@ -12,11 +12,16 @@ const t = l.editor;
     <h1 class="text-4xl text-center leading-[42px] font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{t.feature}</h1>
     <p class="text-center"><span>{t.noSign}</span><span>{t.online} </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">{t.free} ✨</span></p>
     <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
-        <button disabled class="py-2 flex gap-1 items-center px-4 rounded-full text-sm border-0 bg-slate-500 text-white mt-4 relative">
-            <Chrome width={16} height={16} />
+        <a
+            href="https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh"
+            title="ShotEasy chrome extension"
+            target="_blank"
+            class="py-3 flex gap-2 items-center px-4 rounded-full text-sm mt-4 mb-2 bg-slate-800 text-white select-none hover:bg-slate-600"
+        >
+            <Chrome width={20} height={20} />
             <span>{t.extension}</span>
-            <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">{t.coming}</div>
-        </button>
+            <!-- <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">{t.coming}</div> -->
+        </a>
         <p class="text-xs opacity-80 text-center">{t.capture}</p>
         <p class="text-xs opacity-80">{t.instantly}</p>
     </div>
@@ -76,8 +81,8 @@ const t = l.editor;
     "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.6",
-        "ratingCount": "5",
-        "bestRating": "2948"
+        "ratingCount": "2948",
+        "bestRating": "5"
     },
     "offers": {
         "@type": "Offer",
