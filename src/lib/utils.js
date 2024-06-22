@@ -353,8 +353,8 @@ export async function createImageBatch(handle, cb, dir) {
             cb(file, dir);
         }
         if (item.kind === 'directory') {
-            dir += item.name;
-            await createImageBatch(item.children, cb, dir);
+            const currnetDir = `${dir}${item.name}`;
+            await createImageBatch(item.children, cb, currnetDir);
         }
     }
 }
