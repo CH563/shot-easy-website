@@ -119,10 +119,14 @@ export function createPreviewTask(item) {
     workerP?.postMessage(createMessageData(item));
 }
 
-export async function createImage(file) {
+export async function createImage(file, dirName) {
+    let name = file.name
+    if (typeof dirName != 'undefined') {
+        name = dirName + name;
+    }
     const info = {
         key: uniqId(),
-        name: file.name,
+        name,
         blob: file,
         width: 0,
         height: 0,

@@ -323,3 +323,34 @@ export async function getFilesFromHandle(handle) {
 
     return [];
 }
+
+// get handle
+export async function getFilesHandleFromHandle(handle) {
+     // If handle is a file
+     if (handle.kind === 'file') {
+        return ;
+    }
+    const iter = await handle.entries()
+    handle.children = []
+    for await (const entry of iter) {
+        const subHandle = entry[1]
+        handle.children.push(subHandle)
+        getFilesHandleFromHandle(subHandle)
+    }
+}
+
+export async function creatImageBatch(handle, cb, dir) {
+     for (const item of handle) {
+        if (item.kind === 'file') {
+            if (dir == '') {
+                cb(await item.getFile())
+            } else {
+                if (dir.charAt(dir.length - 1) != '/') dir += '/'
+                cb(await item.getFile(), dir)
+            }
+        }
+        if (item.kind === 'directory') {
+            await creatImageBatch(item.children, cb, item.name)
+        }
+    }
+}

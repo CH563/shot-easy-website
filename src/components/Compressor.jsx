@@ -5,7 +5,7 @@ import { Icon } from './Icons';
 import { UploadCard } from './UploadCard';
 import { ProgressHint } from './ProgressHint';
 import { FormatTag } from './FormatTag';
-import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesFromHandle } from '@lib/utils';
+import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesHandleFromHandle, creatImageBatch } from '@lib/utils';
 import { compressorState } from '@states/compressor';
 import { useWorkerHandler, createImage } from '@engines/transform';
 
@@ -58,11 +58,9 @@ const Compressor = observer(() => {
 
     const addFolder = async () => {
         const handle = await window.showDirectoryPicker();
-        const result = await getFilesFromHandle(handle);
-        if (!result?.length) return;
-        result.map(file => {
-            createImage(file);
-        })
+        await getFilesHandleFromHandle(handle)
+        if (!handle.children || !handle.children[0]) return;
+        creatImageBatch(handle.children, createImage, handle.name)
     }
 
     let listComponent = <UploadCard />;
@@ -85,7 +83,7 @@ const Compressor = observer(() => {
                                         </div>
                                     </div>
                                 </div>
-                                {info.compress && 
+                                {info.compress &&
                                     <div className="flex items-center">
                                         <div className="px-1 text-right">
                                             <div className="flex justify-end items-center gap-1">
@@ -110,7 +108,7 @@ const Compressor = observer(() => {
                                         </div>
                                     </div>
                                 }
-                                {!info.compress && <div className="px-3"><Spin/></div>}
+                                {!info.compress && <div className="px-3"><Spin /></div>}
                             </div>
                         )
                     })}
@@ -122,25 +120,15 @@ const Compressor = observer(() => {
     return (
         <>
             {contextHolder}
-            {compressorState.list.size > 0 &&
-                <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
+            <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
+                <div className="flex gap-3 items-center justify-center">
+                    <Upload name='file' beforeUpload={beforeUpload} showUploadList={false}>
+                        <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
+                    </Upload>
+                    {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
+                </div>
+                {compressorState.list.size > 0 &&
                     <div className="flex gap-3 items-center justify-center">
-                        <Upload name='file' beforeUpload={beforeUpload} showUploadList={false}>
-                            <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
-                        </Upload>
-                        {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
-                    </div>
-                    <div className="flex gap-3 items-center justify-center">
-                        <Tooltip placement="top" title="Recompress">
-                            <Button
-                                disabled={disabled}
-                                loading={loading}
-                                icon={<Icon name="RotateCw" />}
-                                onClick={() => {
-                                    compressorState.reCompress();
-                                }}
-                            ></Button>
-                        </Tooltip>
                         <Tooltip placement="top" title="Download all using zip">
                             <Button
                                 type="primary"
@@ -162,8 +150,8 @@ const Compressor = observer(() => {
                             ></Button>
                         </Tooltip>
                     </div>
-                </div>
-            }
+                }
+            </div>
             <div className="relative min-h-[200px] p-5">
                 <div className="flex w-full justify-center z-10">
                     {listComponent}
