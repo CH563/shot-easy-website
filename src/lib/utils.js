@@ -255,6 +255,34 @@ export const captureScreen = async () => {
     }
 };
 
+export function splitFileName(fileName) {
+    const index = fileName.lastIndexOf(".");
+    const name = fileName.substring(0, index);
+    const suffix = fileName.substring(index + 1).toLowerCase();
+    return { name, suffix };
+}
+
+export function getOutputFileName(item, option) {
+    if (item.blob.type === item.compress?.blob.type) {
+        return item.name;
+    }
+
+    const { name, suffix } = splitFileName(item.name);
+    let resultSuffix = suffix;
+    for (const key in Mimes) {
+        if (item.compress?.blob.type === Mimes[key]) {
+            resultSuffix = key;
+            break;
+        }
+    }
+
+    if (['jpg', 'jpeg'].includes(resultSuffix)) {
+        resultSuffix = option.format.target?.toLowerCase() || resultSuffix;
+    }
+
+    return name + '.' + resultSuffix;
+}
+
 export function getUniqNameOnNames(names, name) {
     const getName = (checkName) => {
         if (names.has(checkName)) {
