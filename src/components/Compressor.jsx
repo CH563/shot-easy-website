@@ -34,7 +34,7 @@ const Compressor = observer(() => {
         const zip = new jszip.default();
         const names = new Set();
         for (const [_, info] of compressorState.list) {
-            const fileName = info.name;
+            const fileName = getOutputFileName(info, compressorState.option);
             const uniqName = getUniqNameOnNames(names, fileName);
             names.add(uniqName);
             if (info.compress?.blob) {
