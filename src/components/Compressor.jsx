@@ -9,6 +9,7 @@ import { cn, formatSize, toDownloadFile, getOutputFileName, getUniqNameOnNames, 
 import { compressorState } from '@states/compressor';
 import { useWorkerHandler, createImage } from '@engines/transform';
 import Setting from './Setting';
+import Compare from './Compare';
 
 const Compressor = observer(() => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -77,9 +78,14 @@ const Compressor = observer(() => {
                                 <div className="flex items-center max-w-[50%]">
                                     <div className="overflow-hidden w-[48px] h-[48px] mr-4 rounded-md relative cursor-pointer [&_div]:hover:flex select-none">
                                         <img src={info.preview?.src || info.src} className="w-full h-full flex-shrink-0 object-cover aspect-[1/1] relative z-0" />
-                                        <div className="absolute hidden top-0 left-0 right-0 bottom-0 bg-[#00000050] items-center justify-center text-white">
-                                            <Icons.comparer />
-                                        </div>
+                                        {info.compress?.src && 
+                                            <div
+                                                className="absolute hidden top-0 left-0 right-0 bottom-0 bg-[#00000050] items-center justify-center text-white"
+                                                onClick={() => compressorState.setCompareId(info.key)}
+                                            >
+                                                <Icons.comparer />
+                                            </div>
+                                        }
                                     </div>
                                     <div className="flex-1 w-full">
                                         <div className="font-semibold mb-1.5 truncate">{info.name}</div>
@@ -183,6 +189,7 @@ const Compressor = observer(() => {
                     {listComponent}
                 </div>
             </div>
+            {compressorState.compareId!== null && <Compare />}
         </>
     )
 })

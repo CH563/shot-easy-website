@@ -40,6 +40,10 @@ class CompressorState {
         makeAutoObservable(this);
     }
 
+    setCompareId(id) {
+        this.compareId = id;
+    }
+
     resetOption() {
         this.option = DefaultCompressOption;
     }
