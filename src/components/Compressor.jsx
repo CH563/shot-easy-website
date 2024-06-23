@@ -14,7 +14,7 @@ import Compare from './Compare';
 const Compressor = observer(() => {
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
-    const [showSetting, setShowSetting] = useState(true);
+    const [showSetting, setShowSetting] = useState(false);
     const disabled = compressorState.hasTaskRunning();
 
     useWorkerHandler();
