@@ -34,11 +34,14 @@ const DefaultCompressOption = {
 class CompressorState {
     list = new Map();
     option = DefaultCompressOption;
-    tempOption = DefaultCompressOption;
     compareId = null;
 
     constructor () {
         makeAutoObservable(this);
+    }
+
+    resetOption() {
+        this.option = DefaultCompressOption;
     }
 
     reCompress() {
@@ -47,6 +50,43 @@ class CompressorState {
             info.compress = undefined;
             createCompressTask(info);
         })
+    }
+
+    setQuality(value) {
+        const percent = value / 100;
+        this.option.jpeg = percent;
+        const num = parseInt(256 * percent);
+        this.option.png.colors = num < 2 ? 2 : num;
+        this.option.gif.colors = num < 2 ? 2 : num;
+        this.option.avif.quality = value;
+    }
+
+    setFormat(value, color) {
+        if (value !== 'auto') {
+            this.option.format.target = value;
+            if (['jpg', 'jpeg'].includes(value)) {
+                this.option.format.transparentFill = color || DefaultCompressOption.format.transparentFill;
+            }
+        } else {
+            this.option.format.target = undefined;
+        }
+    }
+
+    setSizeType(type, value) {
+        this.option.resize.method = type;
+        if (!value) {
+            this.option.resize.width = undefined;
+            this.option.resize.height = undefined;
+            return;
+        }
+        if (type === 'fitWidth') {
+            this.option.resize.width = value;
+            this.option.resize.height = undefined;
+        }
+        if (type === 'fitHeight') {
+            this.option.resize.width = undefined;
+            this.option.resize.height = value;
+        }
     }
 
     hasTaskRunning() {

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Spin, Button, message, Upload, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { Icon } from './Icons';
+import { Icon, Icons } from './Icons';
 import { UploadCard } from './UploadCard';
 import { ProgressHint } from './ProgressHint';
 import { FormatTag } from './FormatTag';
-import { cn, formatSize, toDownloadFile, getUniqNameOnNames, getFilesHandleFromHandle, createImageBatch } from '@lib/utils';
+import { cn, formatSize, toDownloadFile, getOutputFileName, getUniqNameOnNames, getFilesHandleFromHandle, createImageBatch } from '@lib/utils';
 import { compressorState } from '@states/compressor';
 import { useWorkerHandler, createImage } from '@engines/transform';
+import Setting from './Setting';
 
 const Compressor = observer(() => {
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
+    const [showSetting, setShowSetting] = useState(true);
     const disabled = compressorState.hasTaskRunning();
 
     useWorkerHandler();
@@ -73,7 +75,12 @@ const Compressor = observer(() => {
                         return (
                             <div key={info.key} className="flex items-center justify-between pb-5 relative after:block after:absolute after:bottom-0 after:left-16 after:right-0 after:h-[1px] after:bg-slate-200">
                                 <div className="flex items-center max-w-[50%]">
-                                    <img src={info.preview?.src || info.src} className="w-[48px] h-[48px] flex-shrink-0 object-cover mr-4 rounded-sm aspect-[1/1]" />
+                                    <div className="overflow-hidden w-[48px] h-[48px] mr-4 rounded-md relative cursor-pointer [&_div]:hover:flex select-none">
+                                        <img src={info.preview?.src || info.src} className="w-full h-full flex-shrink-0 object-cover aspect-[1/1] relative z-0" />
+                                        <div className="absolute hidden top-0 left-0 right-0 bottom-0 bg-[#00000050] items-center justify-center text-white">
+                                            <Icons.comparer />
+                                        </div>
+                                    </div>
                                     <div className="flex-1 w-full">
                                         <div className="font-semibold mb-1.5 truncate">{info.name}</div>
                                         <div className="text-xs flex gap-1">
@@ -103,7 +110,10 @@ const Compressor = observer(() => {
                                                 type="primary"
                                                 className="bg-black"
                                                 icon={<Icon name="Download" />}
-                                                onClick={() => toDownload(info.compress.src, info.name)}
+                                                onClick={() => {
+                                                    const fileName = getOutputFileName(info, compressorState.option);
+                                                    toDownload(info.compress.src, fileName);
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -120,37 +130,53 @@ const Compressor = observer(() => {
     return (
         <>
             {contextHolder}
-            <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
-                <div className="flex gap-3 items-center justify-center">
-                    <Upload name='file' beforeUpload={beforeUpload} showUploadList={false}>
-                        <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
-                    </Upload>
-                    {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
-                </div>
-                {compressorState.list.size > 0 &&
+            <div className="bg-white border-b shadow-md">
+                <div className="flex gap-4 p-2 justify-center flex-col-reverse md:flex-row md:justify-between">
                     <div className="flex gap-3 items-center justify-center">
-                        <Tooltip placement="top" title="Download all using zip">
-                            <Button
-                                type="primary"
-                                className="bg-black"
-                                disabled={disabled}
-                                loading={loading}
-                                icon={<Icon name="Download" />}
-                                onClick={toDownloadZip}
-                            >Download All</Button>
-                        </Tooltip>
-                        <Tooltip placement="top" title="Clear all">
-                            <Button
-                                type="text"
-                                loading={loading}
-                                icon={<Icon name="Eraser" />}
-                                onClick={() => {
-                                    compressorState.list.clear();
-                                }}
-                            ></Button>
-                        </Tooltip>
+                        <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false}>
+                            <Button disabled={disabled} icon={<Icon name="ImagePlus" />}>Add Images</Button>
+                        </Upload>
+                        {!!window.showDirectoryPicker && <Button disabled={disabled} icon={<Icon name="FolderPlus" />} onClick={addFolder}>Add Folder</Button>}
+                        <Button
+                            type={showSetting ? "primary" : "text"}
+                            icon={<Icon name="Settings2" />}
+                            onClick={() => setShowSetting(!showSetting)}
+                        ></Button>
+                        {(showSetting && compressorState.list.size > 0) && <span className="text-xs text-slate-500">Use Recompress to apply the new settings</span>}
                     </div>
-                }
+                    {compressorState.list.size > 0 &&
+                        <div className="flex gap-3 items-center justify-center">
+                            <Tooltip placement="top" title="Recompress">
+                                <Button
+                                    type="text"
+                                    icon={<Icon name="RotateCw" />}
+                                    onClick={() => compressorState.reCompress()}
+                                ></Button>
+                            </Tooltip>
+                            <Tooltip placement="top" title="Download all using zip">
+                                <Button
+                                    type="primary"
+                                    className="bg-black"
+                                    disabled={disabled}
+                                    loading={loading}
+                                    icon={<Icon name="Download" />}
+                                    onClick={toDownloadZip}
+                                >Download All</Button>
+                            </Tooltip>
+                            <Tooltip placement="top" title="Clear all">
+                                <Button
+                                    type="text"
+                                    loading={loading}
+                                    icon={<Icon name="Eraser" />}
+                                    onClick={() => {
+                                        compressorState.list.clear();
+                                    }}
+                                ></Button>
+                            </Tooltip>
+                        </div>
+                    }
+                </div>
+                {showSetting && <Setting />}
             </div>
             <div className="relative min-h-[200px] p-5">
                 <div className="flex w-full justify-center z-10">
