@@ -1,7 +1,7 @@
 export default {
-    title: '图片压缩',
-    description: '免费在线图片压缩,为更快的网站!基于 Webassembly 的压缩实现,可减小您的 WEBP、JPEG 和 PNG 图片的文件大小。',
-    tip: '未上传,使用 Webassembly 在浏览器中压缩',
+    title: '在线压缩图片',
+    description: '免费在线图片压缩,图片格式转换!基于 Webassembly 的压缩实现,可减小您的 WEBP、JPEG 和 PNG 图片的文件大小。',
+    tip: '不会上传,使用 Webassembly 在浏览器中压缩',
     online: '在线压缩图片',
     onlineCont1: '免费在线图片压缩器,为更快的网站!基于 Webassembly 的压缩实现,可减小您的 WEBP、JPEG 和 PNG 图片的文件大小。批量图片压缩,支持 JPG/JPEG/PNG/WEBP/GIF/SVG/AVIF 格式。',
     onlineCont2: '这是纯粹的本地压缩,不涉及任何服务器端逻辑,完全安全。',
