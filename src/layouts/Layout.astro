@@ -24,7 +24,7 @@ alternates.push({
 });
 const t = getLang(locale)
 const { title, description } = Astro.props;
-const headTitle = `${title} | ${t.title}`;
+const headTitle = title || t.title;
 const headDesc = description || t.description
 ---
 

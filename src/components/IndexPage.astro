@@ -1,11 +1,13 @@
 ---
-import Chrome from '@components/Chrome.astro';
+import BrowserIcon from '@components/BrowserIcon.astro';
 import EditBox from '@components/EditBox.jsx';
 import Privacy from '@components/Privacy.astro';
-import {getLang} from '@i18n/index';
+import {getLang, getBrowserType} from '@i18n/index';
 const { locale } = Astro.params;
+// console.log(Astro.request.headers.get('User-Agent'));
 const l = getLang(locale);
 const t = l.editor;
+const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -13,12 +15,12 @@ const t = l.editor;
     <p class="text-center"><span>{t.noSign}</span><span>{t.online} </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">{t.free} ✨</span></p>
     <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
         <a
-            href="https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh"
+            href={browserType === "Firefox" ? "https://addons.mozilla.org/zh-CN/firefox/addon/shoteasy/" : "https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh"}
             title="ShotEasy chrome extension"
             target="_blank"
             class="py-3 flex gap-2 items-center px-4 rounded-full text-sm mt-4 mb-2 bg-slate-800 text-white select-none hover:bg-slate-600"
         >
-            <Chrome width={20} height={20} />
+            <BrowserIcon type={browserType} width={20} height={20} />
             <span>{t.extension}</span>
             <!-- <div class="text-white rounded-full bg-rose-500 text-xs absolute px-2 -top-2 -right-8">{t.coming}</div> -->
         </a>

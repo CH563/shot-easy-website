@@ -1,5 +1,5 @@
 export default {
-    title: 'Trình Nén Ảnh',
+    title: 'Nén Ảnh Trực Tuyến',
     description: 'Trình nén ảnh trực tuyến miễn phí cho website nhanh hơn! Giảm kích thước tệp của hình ảnh WEBP, JPEG và PNG của bạn với việc triển khai nén dựa trên Webassembly.',
     tip: 'Không tải lên, nén trong trình duyệt với Webassembly',
     online: 'Nén Ảnh Trực Tuyến',

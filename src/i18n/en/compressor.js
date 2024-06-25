@@ -1,5 +1,5 @@
 export default {
-    title: 'Image Compressor',
+    title: 'Compress Images Online',
     description: 'Free online image compressor for faster websites! Reduce the file size of your WEBP, JPEG, and PNG images with compression implementation based on Webassembly.',
     tip: 'Not uploaded, compress in browser with Webassembly',
     online: 'Compress Images Online',

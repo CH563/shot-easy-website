@@ -1,5 +1,5 @@
 export default {
-    title: '画像圧縮ツール',
+    title: 'オンラインで画像を圧縮する',
     description: 'ウェブサイトの高速化に役立つ無料のオンライン画像圧縮ツール!WebAssemblyベースの圧縮実装により、WEBP、JPEG、およびPNG画像のファイルサイズを縮小できます。',
     tip: 'アップロードされていません。WebAssemblyでブラウザ内で圧縮します',
     online: 'オンラインで画像を圧縮する',
