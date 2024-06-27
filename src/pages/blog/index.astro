@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -21,7 +20,7 @@ const lists = await getPostLists(1);
                     {lists.map(item =>(
                         <div class="overflow-hidden flex flex-col gap-2">
                             <a href={`/blog/${item.path_url}`} class="block w-full rounded-md shadow-md overflow-hidden aspect-[11/7] bg-slate-50" title={item.title}>
-                                <Image src={item.cover_img} alt={item.title} width={440} height={280} class="h-full w-full float-left object-cover transition-all hover:scale-110" />
+                                <img src={item.cover_img} alt={item.title} class="h-full w-full float-left object-cover transition-all hover:scale-110" />
                             </a>
                             <div class="flex justify-between items-center text-xs text-slate-400 pt-1">
                                 <div class="flex gap-1">

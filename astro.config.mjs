@@ -9,9 +9,6 @@ import { CONFIG, LANGUAGES_CODE } from "./src/lib/config";
 // https://astro.build/config
 export default defineConfig({
   site: CONFIG.website,
-  image: {
-    remotePatterns: [{ protocol: "https" }],
-  },
   i18n: {
     defaultLocale: "en",
     locales: CONFIG.locals,
