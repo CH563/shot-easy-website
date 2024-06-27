@@ -13,6 +13,7 @@ export default {
         'Shot Easy, easy shot, chụp ảnh màn hình, chỉnh sửa ảnh, bộ chuyển đổi ảnh, bộ chuyển đổi hình ảnh, trình chỉnh sửa trực tuyến, thay đổi định dạng hình ảnh trực tuyến, chuyển đổi hình ảnh sang jpg, jpg sang webp, jpg sang png',
     privacy: 'Quyền riêng tư',
     terms: 'Điều khoản',
+    blog: 'Blog',
     nav,
     editor,
     beautifier,

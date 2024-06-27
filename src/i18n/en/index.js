@@ -11,6 +11,7 @@ export default {
     keywords: 'ShotEasy, easy to screenshot, edit photo, photo converter, image converter, editor online, convert image format online, convert image to jpg, jpg to webp, jpg to png',
     privacy: 'Privacy',
     terms: 'Terms',
+    blog: 'Blog',
     nav,
     editor,
     beautifier,

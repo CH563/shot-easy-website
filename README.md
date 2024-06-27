@@ -14,6 +14,26 @@ Photo edit online for free, resize, and filter any photos, edit photo on browser
 
 [😬 Image Compressor](https://shoteasy.fun/image-compressor/)
 
+## Blog
+
+Use GitHub issues as blog storage
+
+need create github access token
+
+## Environment variables
+
+```
+// request secret key
+PUBLIC_SECRET_KEY=
+// removeBG apikey
+REMOVE_API_KEY=
+// github access token
+GITHUB_CLIENT_SECRET=
+// github name
+GITHUB_OWNER=
+// github repository
+GITHUB_REPO=
+```
 
 ## 🧞 Commands
 

@@ -13,6 +13,7 @@ export default {
         'ShotEasy,截图,长页面,编辑照片,照片转换器,图像转换器,在线编辑器,在线更改图像格式,将图像转换为jpg,jpg转webp,jpg转png',
     privacy: '隐私',
     terms: '条款',
+    blog: '博客',
     nav,
     editor,
     beautifier,

@@ -7,6 +7,7 @@ import { getLocale, getLang } from '@i18n/index';
 interface Props {
     title: string;
     description?: string;
+    image?: string;
 }
 const resolvedImageWithDomain = `${Astro.url.origin}/image.png`;
 const canonicalURL = Astro.url.toString();
@@ -23,9 +24,10 @@ alternates.push({
     hrefLang: 'x-default'
 });
 const t = getLang(locale)
-const { title, description } = Astro.props;
+const { title, description, image } = Astro.props;
 const headTitle = title || t.title;
-const headDesc = description || t.description
+const headDesc = description || t.description;
+const ogImage = image || resolvedImageWithDomain;
 ---
 
 <!doctype html>
@@ -47,7 +49,7 @@ const headDesc = description || t.description
                 creator: '@LiWen563',
                 site: '@LiWen563',
                 card: 'summary_large_image',
-                imageAlt: 'Shot Easy',
+                imageAlt: headTitle,
                 description: headDesc,
             }}
             openGraph={{
@@ -55,11 +57,11 @@ const headDesc = description || t.description
                     url: canonicalURL,
                     type: 'website',
                     title: headTitle,
-                    image: resolvedImageWithDomain,
+                    image: ogImage,
                 },
                 image: {
-                    url: resolvedImageWithDomain,
-                    alt: 'Shot Easy',
+                    url: ogImage,
+                    alt: headTitle,
                 },
             }}
         />
