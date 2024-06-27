@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { getPostLists } from '@lib/blog';
+const lists = await getPostLists(1);
+---
+
+<Layout title='Blog' description="ShotEasy use GitHub issues as blog storage">
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <h1 class="text-2xl text-center font-extrabold">Blog</h1>
+            <p class="text-center text-xs">Use GitHub issues as blog storage</p>
+            {lists.length ?
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 p-2 pt-8">
+                    {lists.map(item =>(
+                        <div class="overflow-hidden flex flex-col gap-2">
+                            <a href={`/blog/${item.path_url}`} class="block w-full rounded-md shadow-md overflow-hidden aspect-[11/7] bg-slate-50" title={item.title}>
+                                <Image src={item.cover_img} alt={item.title} width={440} height={280} class="h-full w-full float-left object-cover transition-all hover:scale-110" />
+                            </a>
+                            <div class="flex justify-between items-center text-xs text-slate-400 pt-1">
+                                <div class="flex gap-1">
+                                    <div class="overflow-hidden h-4 w-4 rounded-full"><img src={item.user.avatar_url} alt={item.user.login} /></div>
+                                    <span>{item.user.login}</span>
+                                </div>
+                                <span>{item.format_time}</span>
+                            </div>
+                            <a href={`/blog/${item.path_url}`} class="text-xl hover:underline" title={item.title}>{item.title}</a>
+                            <p class="text-xs text-slate-400">{item.description}</p>
+                        </div>
+                        )
+                    )}
+                </div>:
+                <div class="text-2xl text-slate-400 text-center font-thin p-10">No articles yet</div>
+            }
+        </div>
+        <Footer />
+    </main>
+</Layout>
+

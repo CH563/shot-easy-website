@@ -1,0 +1,74 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { getPost, getPostLists } from '@lib/blog';
+const { path_url } = Astro.params;
+const arr = path_url?.split('-');
+const id = arr?.length ? arr[arr.length - 1] : null;
+const post = await getPost(id);
+const lists = (await getPostLists(1)).filter(e => e.number !== post?.number);
+---
+
+<Layout title={post?.title} description={post?.description} image={post?.cover_img}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <div class="flex gap-1 text-xs text-slate-400 mb-10">
+                <a href="/blog" title="blog" class="hover:underline">📖 Blog</a>
+                <span>-</span>
+                <span class="w-96 max-w-[70%] font-semibold truncate text-blue-500">{post?.title || 'not found'}</span>
+            </div>
+            {
+                post &&
+                <section>
+                    <h1 class="text-4xl font-extrabold">{post.title}</h1>
+                    <div class="flex items-center gap-4 text-xs text-slate-400 pt-4 pb-8">
+                        <div class="flex gap-1">
+                            <div class="overflow-hidden h-4 w-4 rounded-full"><img src={post.user.avatar_url} alt={post.user.login} /></div>
+                            <span>{post.user.login}</span>
+                        </div>
+                        <span>{post.format_time}</span>
+                    </div>
+                    <div class="grid grid-cols-12">
+                        <article class="prose prose-sm max-w-none col-span-12 lg:col-span-8 p-8 bg-white rounded-md [&_img]:max-w-[80%] [&_img]:mx-auto">
+                            <Fragment set:html={post.body} />
+                            <div class="text-xs mt-8 [&_a]:underline">
+                                Source: <a href={post.html_url} target="_blank" aria-label="Github issues">{post.html_url}</a>
+                            </div>
+                        </article>
+                        <div class="hidden lg:block col-span-4 pl-10">
+                            <div class="bg-white p-4 rounded-md gap-3">
+                                <h2 class="mb-4 font-semibold text-xl">Related posts</h2>
+                                {lists.map(item =>(
+                                    <div class="pb-2">
+                                        <a href={`/blog/${item.path_url}`} class="text-sm truncate block hover:underline">{item.title}</a>
+                                        <span class="text-xs text-slate-400">{item.format_time}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+        </div>
+        <Footer />
+    </main>
+</Layout>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": post?.title,
+    "image": [post?.cover_img],
+    "datePublished": post?.created_at,
+    "dateModified": post?.updated_at,
+    "author": [{
+        "@type": "Person",
+        "name": post?.user.login,
+        "url": post?.user.url
+    }]
+})}/>

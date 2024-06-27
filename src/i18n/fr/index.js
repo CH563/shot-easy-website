@@ -13,6 +13,7 @@ export default {
         "Shot Easy, easy shot, capture d'écran, éditer photo, convertisseur de photos, convertisseur d'images, éditeur en ligne, changer le format d'image en ligne, convertir une image en jpg, jpg en webp, jpg en png",
     privacy: 'Confidentialité',
     terms: 'Conditions',
+    blog: 'Blog',
     nav,
     editor,
     beautifier,
