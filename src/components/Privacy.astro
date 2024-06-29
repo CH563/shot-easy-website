@@ -1,11 +1,29 @@
 ---
-import {getLang} from '@i18n/index';
+import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const l = getLang(locale);
 const t = l.editor;
 ---
 
-<section class="py-8">
-    <h2 class="text-xl font-extrabold mb-2 text-center">{t.privacy}</h2>
-    <p class="text-slate-600 text-center">{t.privacyCont}</p>
+<section class='pt-8 pb-4'>
+    <h2 class='text-xl font-extrabold mb-2 text-center'>{t.privacy}</h2>
+    <p class='text-slate-600 text-center'>{t.privacyCont}</p>
+</section>
+<section class="py-4">
+    <script
+        async
+        src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4182383692865291'
+        crossorigin='anonymous'></script>
+    <!-- 横向 -->
+    <ins
+        class='adsbygoogle'
+        style='display:block'
+        data-ad-client='ca-pub-4182383692865291'
+        data-ad-slot='2277142840'
+        data-ad-format='auto'
+        data-full-width-responsive='true'></ins>
+    <script>
+        const adsbygoogle = (window as any).adsbygoogle || [];
+        adsbygoogle.push({});
+    </script>
 </section>
