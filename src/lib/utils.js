@@ -251,7 +251,7 @@ export const captureScreen = async () => {
 
         return screenshot;
     } catch (err) {
-        console.error('Error capturing screen:', err);
+        console.log('Error capturing screen:', err);
     }
 };
 

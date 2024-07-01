@@ -42,6 +42,7 @@
     "react": "^18.0.0",
     "react-compare-image": "^3.4.0",
     "react-dom": "^18.0.0",
+    "react-easy-crop": "^5.0.7",
     "react-filerobot-image-editor": "^4.6.3",
     "react-konva": "^18.2.10",
     "svgo": "^3.3.2",

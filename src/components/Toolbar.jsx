@@ -71,7 +71,7 @@ export const Toolbar = ({disabled, tool, toSelect, isFull, onFullChange, annotat
                     <Button
                         type="text"
                         shape="circle"
-                        icon={<Icon name="Scissors" />}
+                        icon={<Icon name="Camera" />}
                         onClick={toCapture}
                     ></Button>
                 </Tooltip>
