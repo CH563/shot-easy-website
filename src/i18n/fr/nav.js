@@ -19,4 +19,8 @@ export default {
         name: 'Compresseur',
         title: "Compresseur d'Images",
     },
+    screenshot: {
+        name: 'capture d\'écran',
+        title: 'prendre une capture d\'écran'
+    }
 };

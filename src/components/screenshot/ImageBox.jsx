@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import Cropper from 'react-easy-crop';
-import { InputNumber, Button, message } from 'antd';
-import { Icon } from '@components/Icons';
 import { cn } from '@lib/utils';
 import ToolBar from './ToolBar';
 import state from '@states/screenshot';
@@ -15,13 +13,13 @@ export default observer(() => {
         <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", state.isGrid ? 'tr' : 'polka')}>
             <ToolBar />
             <div className="relative h-[420px]">
-                {!state.isCrop ? <img src={state.imageSrc} className="w-full h-full object-contain" /> :
+                {!state.isCrop ? <img src={state.imageSrc} className="w-full h-full object-scale-down" /> :
                     <Cropper
                         image={state.imageSrc}
                         crop={state.crop}
                         rotation={state.rotation}
                         zoom={state.zoom}
-                        aspect={4 / 3}
+                        aspect={state.aspect}
                         onCropChange={(location) => state.setCrop(location)}
                         onRotationChange={(rotation) => state.setRotation(rotation)}
                         onCropComplete={onCropComplete}

@@ -4,6 +4,7 @@ import beautifier from './beautifier';
 import rounded from './rounded';
 import remover from './remover';
 import compressor from './compressor';
+import screenshot from './screenshot';
 
 export default {
     title: 'editor de fotos en línea gratis',
@@ -19,5 +20,6 @@ export default {
     beautifier,
     rounded,
     remover,
-    compressor
+    compressor,
+    screenshot
 };

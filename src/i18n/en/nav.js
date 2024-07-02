@@ -18,5 +18,9 @@ export default {
     compressor: {
         name: 'Compressor',
         title: 'Image Compressor'
+    },
+    screenshot: {
+        name: 'Screenshot',
+        title: 'Take a screenshot'
     }
 }

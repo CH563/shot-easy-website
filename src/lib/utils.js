@@ -121,6 +121,22 @@ export const getImage = (src) => {
     });
 };
 
+export const getRadianAngle = (degreeValue) => {
+    return (degreeValue * Math.PI) / 180
+}
+
+export const rotateSize = (width, height, rotation) => {
+    const rotRad = getRadianAngle(rotation);
+    return {
+        width:
+            Math.abs(Math.cos(rotRad) * width) +
+            Math.abs(Math.sin(rotRad) * height),
+        height:
+            Math.abs(Math.sin(rotRad) * width) +
+            Math.abs(Math.cos(rotRad) * height),
+    };
+}
+
 export const getImageData = (image, w, h, scale) => {
     if (scale === void 0) scale = 1;
     const width = w || image.width * scale;

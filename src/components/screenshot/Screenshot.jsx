@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { Icon } from '@components/Icons';
 import { captureScreen } from '@lib/utils';
+import UploadFile from './UploadFile';
 import state from '@states/screenshot';
 
 
@@ -31,13 +32,16 @@ export default observer(() => {
                 height: '54px'
             }} size="large" type="primary" icon={<Icon name="Camera" size={25} />} loading={loading} onClick={toCapture}>Screenshot</Button>
             <p className="text-slate-400 text-xs mt-2">* If required window can't be selected, scroll down or maximize the required window and retry</p>
+            <div className="pt-1">
+                <UploadFile />
+            </div>
         </div>
     );
     if (state.imageSrc && !loading) {
         component = imageBox.current;
     }
     return (
-        <div className="">
+        <div>
             {component}
         </div>
     )
