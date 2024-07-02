@@ -111,7 +111,7 @@ export default observer(() => {
                 />
                 {
                     sizeType !== 'auto' &&
-                    <InputNumber className="w-48" size="small" value={size} addonAfter={`px, ${sizeType == 'width' ? 'H':'W'} auto`} min={1} max={100000} onChange={onSizeChange} />
+                    <InputNumber className="w-48" size="small" value={size} addonAfter={`px, ${sizeType == 'fitWidth' ? 'H':'W'} auto`} min={1} max={100000} onChange={onSizeChange} />
                 }
             </div>
             <div className="flex-1 text-right">

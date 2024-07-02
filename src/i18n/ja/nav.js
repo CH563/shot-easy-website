@@ -19,4 +19,8 @@ export default {
         name: '圧縮機',
         title: '画像圧縮機',
     },
+    screenshot: {
+        name: 'スクリーンショット',
+        title: 'スクリーンショットを撮る'
+    }
 };

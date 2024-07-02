@@ -4,6 +4,7 @@ import beautifier from './beautifier';
 import rounded from './rounded';
 import remover from './remover';
 import compressor from './compressor';
+import screenshot from './screenshot';
 
 export default {
     title: 'Trình chỉnh sửa ảnh trực tuyến miễn phí',
@@ -20,4 +21,5 @@ export default {
     rounded,
     remover,
     compressor,
+    screenshot
 };

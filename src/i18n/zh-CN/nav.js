@@ -19,4 +19,8 @@ export default {
         name: '压缩',
         title: '图片快速压缩',
     },
+    screenshot: {
+        name: '截图',
+        title: '在线截图'
+    }
 };

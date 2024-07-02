@@ -18,5 +18,9 @@ export default {
     compressor: {
         name: 'Nén',
         title: 'Nén Ảnh'
+    },
+    screenshot: {
+        name: 'ảnh chụp màn hình',
+        title: 'chụp ảnh màn hình'
     }
 }
