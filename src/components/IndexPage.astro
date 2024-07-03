@@ -7,6 +7,11 @@ const { locale } = Astro.params;
 // console.log(Astro.request.headers.get('User-Agent'));
 const l = getLang(locale);
 const t = l.editor;
+const extLink = {
+    'Edge': 'https://microsoftedge.microsoft.com/addons/detail/kncmnbknmjfaejmkcogljhkehippifho',
+    'Firefox': 'https://addons.mozilla.org/zh-CN/firefox/addon/shoteasy/',
+    'Chrome': 'https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh'
+} as {[key: string]: string}
 const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
 ---
 
@@ -15,7 +20,7 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
     <p class="text-center"><span>{t.noSign}</span><span>{t.online} </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">{t.free} ✨</span></p>
     <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
         <a
-            href={browserType === "Firefox" ? "https://addons.mozilla.org/zh-CN/firefox/addon/shoteasy/" : "https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh"}
+            href={extLink[browserType] || extLink.Chrome}
             title="ShotEasy chrome extension"
             target="_blank"
             class="py-3 flex gap-2 items-center px-4 rounded-full text-sm mt-4 mb-2 bg-slate-800 text-white select-none hover:bg-slate-600"
