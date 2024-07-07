@@ -23,6 +23,9 @@ export const POST = async ({ request }) => {
         },
         body: reqFormData,
     });
+    if (!response.ok) {
+        return response;
+    }
     const data = await response.blob();
     return new Response(data);
 }

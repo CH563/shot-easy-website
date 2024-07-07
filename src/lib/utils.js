@@ -28,7 +28,7 @@ export const isAppleDevice = () => {
     return /Mac|iPod|iPhone|iPad/.test(PLATFORM);
 };
 
-export const modKey = () => (isAppleDevice ? '⌘' : 'Ctrl');
+export const modKey = () => (isAppleDevice() ? '⌘' : 'Ctrl');
 
 export const supportImg = [
     'image/jpeg',
