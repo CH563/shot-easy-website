@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ColorPicker, Button, message, Spin } from 'antd';
+import { ColorPicker, Button, message, Spin, Modal } from 'antd';
 import { Icon } from './Icons'
 import { DownBtn } from './DownBtn';
 import { UploadDragger } from './UploadDragger';
@@ -50,11 +50,18 @@ export default function Remover() {
                         body: formData,
                         signal: controllerSignal.signal,
                     });
-                    const resFile = await response.blob();
-                    const image = await fileToDataURL(resFile);
-                    setPhotoData(image);
-                    const imgbase64 = toDraw(image, bgColor);
-                    setTransparentUrl(imgbase64);
+                    if (response.ok) {
+                        const resFile = await response.blob();
+                        const image = await fileToDataURL(resFile);
+                        setPhotoData(image);
+                        const imgbase64 = toDraw(image, bgColor);
+                        setTransparentUrl(imgbase64);
+                    } else {
+                        Modal.warning({
+                            title: response.statusText,
+                            content: <>The API usage limit. Please go to <a className="underline text-blue-600" href="https://www.remove.bg/" target="_blank" referrerPolicy="no-referrer">RemoveBg</a> to use</>,
+                        });
+                    }
                 } catch (error) {
                     messageApi.error('Remove error!');
                 }
