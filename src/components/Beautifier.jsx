@@ -51,7 +51,8 @@ export default function Beautifier() {
     const [fit, setFit] = useState('cover');
     const [showMore, setShowMore] = useState(false);
     const { imgColors, imgSize } = useImageColor(photoUrl);
-    const [imgwidth, setImgWidth] = useState(600 - marginValue);
+    const [boxWidth, setBoxWidth] = useState(600);
+    const [imgwidth, setImgWidth] = useState(boxWidth - marginValue);
     const {
         canvasRef,
         shapes,
@@ -84,14 +85,31 @@ export default function Beautifier() {
     }, [bgValue]);
 
     useEffect(() => {
-        setImgWidth(600 - marginValue);
+        const getBoxSize = () => {
+            if (!boxRef.current) return;
+            const w = boxRef.current.getBoundingClientRect()?.width;
+            if (w && w < 600) {
+                setBoxWidth(w);
+            } else {
+                setBoxWidth(600);
+            }
+        }
+        window.addEventListener('resize', getBoxSize);
+        getBoxSize();
+        return (() => {
+            window.removeEventListener('resize', getBoxSize);
+        })
+    }, []);
+
+    useEffect(() => {
+        setImgWidth(boxWidth - marginValue);
         if (!imgSize?.width) return;
         if (imgSize.width > imgSize.height) {
             return;
         }
-        const height = 600 / ratio - marginValue;
+        const height = boxWidth / ratio - marginValue;
         setImgWidth(height * imgSize.width / imgSize.height);
-    }, [marginValue, imgSize, ratio]);
+    }, [marginValue, imgSize, ratio, boxWidth]);
 
     useEffect(() => {
         if (ratioSize.key === 'auto' && imgSize.width) setRatio(imgSize.width / imgSize.height);
@@ -133,7 +151,7 @@ export default function Beautifier() {
         }).then((canvas) => {
             const ctx = canvas.getContext('2d');
             const annotate = canvasRef.current.toCanvas({
-                pixelRatio: (ratioSize.key === 'auto' ? imgSize.width : ratioSize.width) / 600
+                pixelRatio: (ratioSize.key === 'auto' ? imgSize.width : ratioSize.width) / boxWidth
             });
             ctx.drawImage(annotate, 0, 0);
             resolve(canvas);
@@ -259,7 +277,7 @@ export default function Beautifier() {
                                         </Dragger>}
                                         {(photoUrl && frame === 'macbookPro') &&
                                             <MacbookPro
-                                                width={600 - marginValue}
+                                                width={boxWidth - marginValue}
                                                 img={photoUrl}
                                                 fit={fit}
                                                 style={{
@@ -270,7 +288,7 @@ export default function Beautifier() {
                                         }
                                         {(photoUrl && frame === 'iphonePro') &&
                                             <IphonePro
-                                                height={600 / ratio - marginValue}
+                                                height={boxWidth / ratio - marginValue}
                                                 img={photoUrl}
                                                 shadow={shadowValue}
                                                 fit={fit}
@@ -319,8 +337,8 @@ export default function Beautifier() {
                                 {photoUrl &&
                                     <Stage
                                         className="w-full h-full absolute top-0 left-0 z-10 overflow-hidden"
-                                        width={600}
-                                        height={600 / ratio}
+                                        width={boxWidth}
+                                        height={boxWidth / ratio}
                                         onMouseDown={handleMouseDown}
                                         onMousemove={handleMouseMove}
                                         onMouseup={handleMouseUp}
