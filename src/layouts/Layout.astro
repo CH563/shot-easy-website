@@ -9,18 +9,19 @@ interface Props {
     description?: string;
     image?: string;
 }
-const resolvedImageWithDomain = `${Astro.url.origin}/image.png`;
-const canonicalURL = Astro.url.toString();
+const { pathname, origin } = Astro.url;
 const { locale } = Astro.params;
+const resolvedImageWithDomain = `${origin}/image.png`;
+const canonicalURL = new URL(pathname, origin);
 const lang = getLocale(locale);
 const reg = new RegExp(`/${lang}`, 'i');
 const languagesCode = LANGUAGES_CODE as {[key: string]: string};
 const alternates = CONFIG.locals.map(item => {
-    const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), CONFIG.website).toString();
+    const href = new URL((lang === 'en' && item !== 'en' ? item : '') + pathname.replace(reg, item === 'en' ? '': item), CONFIG.website).toString();
     return {href, hrefLang: languagesCode[item] || item};
 })
 alternates.push({
-    href: new URL(Astro.url.pathname.replace(reg, ''), CONFIG.website).toString(),
+    href: new URL(pathname.replace(reg, ''), CONFIG.website).toString(),
     hrefLang: 'x-default'
 });
 const t = getLang(locale)

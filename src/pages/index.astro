@@ -3,6 +3,8 @@ import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import IndexPage from '@components/IndexPage.astro';
+const {pathname} = Astro.url;
+if (!/\/$/.test(pathname)) return Astro.redirect(`${pathname}/`, 308);
 ---
 
 <Layout title='ShotEasy - Light and easy-to-use screenshot tool'>
