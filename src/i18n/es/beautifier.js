@@ -2,6 +2,7 @@ export default {
     title: 'Embellecedor de Capturas de Pantalla en Línea',
     description: 'La herramienta Embellecedor de Capturas de Pantalla en Línea ayuda a embellecer sus capturas de pantalla con buenos fondos y marcos de Macbook Pro o iPhone 15 Pro',
     not: 'No cargado y editado en el navegador',
+    new: 'La nueva versión, desarrollada por LeaferJs, úsala ahora',
     online: 'Embellecedor de Capturas de Pantalla en Línea',
     onlineCont: 'La herramienta Embellecedor de Capturas de Pantalla ayuda a embellecer sus capturas de pantalla y fotos con una increíble colección de fondos. Seleccione su captura de pantalla y elija el tema deseado y obtenga su imagen.',
     what: '¿Qué puede hacer con la herramienta Embellecedor de Capturas de Pantalla?',
