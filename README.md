@@ -25,8 +25,6 @@ need create github access token
 ```
 // request secret key
 PUBLIC_SECRET_KEY=
-// removeBG apikey
-REMOVE_API_KEY=
 // github access token
 GITHUB_CLIENT_SECRET=
 // github name
@@ -59,6 +57,10 @@ All commands are run from the root of the project, from a terminal:
 ### If you find anything wrong, give me an Issues
 
 [Give me the bugs](https://github.com/CH563/shot-easy-website/issues)
+
+## Update
+
+- 2024-11-26: add background remover use Hugging Face model: [Xenova/modnet](https://huggingface.co/Xenova/modnet)
 
 
 ## 👀 Want to learn more?
