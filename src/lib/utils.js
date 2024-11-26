@@ -58,6 +58,10 @@ export const url2Blob = async (url) => {
     return await (await fetch(url)).blob();
 };
 
+export const canvas2Blob = async (canvasElement) => new Promise((resolve, reject) => {
+    canvasElement.toBlob((blob) => resolve(blob), 'image/png');
+});
+
 export const copyAsBlob = (value) =>
     navigator.clipboard.write([
         new ClipboardItem({

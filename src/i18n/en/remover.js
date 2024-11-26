@@ -1,7 +1,7 @@
 export default {
     title: 'Background Remover',
     description: 'Remove image backgrounds automatically just one click. Background remover tool can process your images FAST & FREE--no signup required. Upload your photo now.',
-    tips: 'Upload an image to remove the background or replace to Any Background',
+    tips: 'Add an image to remove the background or replace to Any Background',
     how: 'How to remove image background?',
     howCont: 'Just upload your image, Background Remover is automatically to remove image backgrounds.',
     fully: 'Fully Automated Background Remover',
