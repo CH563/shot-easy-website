@@ -58,7 +58,7 @@ export default function Remover() {
                 if (env.backends.onnx.wasm) {
                     env.backends.onnx.wasm.proxy = false
                 }
-                modelRef.current = await AutoModel.from_pretrained(modelId, { device: 'webgpu' });
+                modelRef.current = await AutoModel.from_pretrained(modelId, { device: 'webgpu', quantized: false });
                 processorRef.current = await AutoProcessor.from_pretrained(modelId);
                 setRemoveBgStatus(REMOVE_BACKGROUND_STATUS.LOAD_SUCCESS);
             } catch (error) {
@@ -196,7 +196,7 @@ export default function Remover() {
     return (
         <>
             {contextHolder}
-            <Spin spinning={removeBgStatus === REMOVE_BACKGROUND_STATUS.LOADING} tip="Loading the modeland run it locally...">
+            <Spin spinning={removeBgStatus === REMOVE_BACKGROUND_STATUS.LOADING} tip="Loading the model and run it locally...">
                 <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isGrid ? 'tr':'polka')}>
                     <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
                         <div className="flex items-center justify-center gap-3">
