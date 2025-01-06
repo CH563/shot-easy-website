@@ -2,6 +2,8 @@
 import BrowserIcon from '@components/BrowserIcon.astro';
 import EditBox from '@components/EditBox.jsx';
 import Privacy from '@components/Privacy.astro';
+import fakeact from '@static/fakeact.svg';
+import fakemail from '@static/fakemail.svg';
 import {getLang, getBrowserType} from '@i18n/index';
 const { locale } = Astro.params;
 // console.log(Astro.request.headers.get('User-Agent'));
@@ -76,6 +78,23 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
     <section class="text-center text-xs text-slate-400 [&_a]:underline">
         Image Editor by <a href="https://github.com/scaleflex/filerobot-image-editor" target="_blank" rel="noopener noreferrer">Filerobot Image Editor</a>
     </section>
+    <div class="container mx-auto p-4">
+        <h3 class="text-center font-semibold p-4 my-2">More Tools</h3>
+        <div class="flex flex-row gap-6 justify-center">
+            <div class="text-center">
+                <a href="https://fakeact.fun/" target="_blank" title="fakeact.fun" class="inline-block text-xs p-2 rounded-md hover:bg-gray-100">
+                    <img src={fakeact.src} class="mx-auto mb-2 w-8" />
+                    <p>Fakeact</p>
+                </a>
+            </div>
+            <div class="text-center">
+                <a href="https://mail.fakeact.fun/" target="_blank" title="mail.fakeact.fun" class="inline-block text-xs p-2 rounded-md hover:bg-gray-100">
+                    <img src={fakemail.src} class="mx-auto mb-2 w-8" />
+                    <p>FakeMail</p>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
