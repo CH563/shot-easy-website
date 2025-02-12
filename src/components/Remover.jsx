@@ -48,7 +48,7 @@ export default function Remover() {
                 if (!navigator?.gpu) {
                     setRemoveBgStatus(REMOVE_BACKGROUND_STATUS.NO_SUPPORT_WEBGPU);
                     Modal.warning({
-                        title: response.statusText,
+                        title: 'WebGPU is not supported',
                         content: <>WebGPU is not supported in this browser, to use the image segmentation function, please use the latest version of Google Chrome.</>,
                     });
                     return;
