@@ -19,6 +19,10 @@ export default {
         name: '圧縮機',
         title: '画像圧縮機',
     },
+    videoConvert: {
+        name: 'Video',
+        title: 'Video Convert',
+    },
     screenshot: {
         name: 'スクリーンショット',
         title: 'スクリーンショットを撮る'

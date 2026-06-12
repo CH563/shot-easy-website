@@ -19,6 +19,10 @@ export default {
         name: 'Компрессор',
         title: 'Компрессор изображений',
     },
+    videoConvert: {
+        name: 'Video',
+        title: 'Video Convert',
+    },
     screenshot: {
         name: 'скриншот',
         title: 'сделать скриншот'
