@@ -19,6 +19,10 @@ export default {
         name: 'Nén',
         title: 'Nén Ảnh'
     },
+    videoConvert: {
+        name: 'Video',
+        title: 'Video Convert'
+    },
     screenshot: {
         name: 'ảnh chụp màn hình',
         title: 'chụp ảnh màn hình'

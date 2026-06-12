@@ -1,0 +1,53 @@
+---
+import VideoConvert from '@components/VideoConvert';
+import Privacy from '@components/Privacy.astro';
+import { getLang } from '@i18n/index';
+const { locale } = Astro.params;
+const l = getLang(locale);
+const nav = l.nav;
+const t = l.videoConvert;
+---
+
+<div class="container py-8 relative z-10 flex-1">
+    <h1 class="text-4xl text-center leading-[42px] font-bold mb-1 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{nav.videoConvert.title}</h1>
+    <p class="text-slate-600 text-center mb-5">{t.tip}</p>
+    <div class="pb-12 min-h-[520px]">
+        <VideoConvert client:only="react" copy={t.tool} />
+    </div>
+    <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">🎬</div>
+        <h2 class="text-lg font-bold mb-2">{t.localTitle}</h2>
+        <p>{t.localCont1}</p>
+        <p>{t.localCont2}</p>
+    </section>
+    <section class="mb-3 rounded-md p-4 bg-purple-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">⚙️</div>
+        <h2 class="text-lg font-bold mb-2">{t.workflowTitle}</h2>
+        <p>{t.workflowCont1}</p>
+        <p>{t.workflowCont2}</p>
+    </section>
+    <section class="mb-3 rounded-md p-4 bg-green-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">🔒</div>
+        <h2 class="text-lg font-bold mb-2">{t.privacyTitle}</h2>
+        <p>{t.privacyCont1}</p>
+        <p>{t.privacyCont2}</p>
+    </section>
+    <Privacy />
+    <section class="text-center text-xs text-slate-400 [&_a]:underline">
+        Video conversion powered by <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" rel="noopener noreferrer">ffmpeg.wasm</a>. Interaction model adapted from <a href="https://github.com/tejaswigowda/ffmpeg-webCLI" target="_blank" rel="noopener noreferrer">ffmpeg-webCLI</a>.
+    </section>
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": t.title,
+    "description": t.description,
+    "operatingSystem": "ALL",
+    "applicationCategory": "BrowserApplication",
+    "browserRequirements": "requires HTML5, WebAssembly, and modern browser media support",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    }
+})}/>

@@ -19,6 +19,10 @@ export default {
         name: '压缩',
         title: '图片快速压缩',
     },
+    videoConvert: {
+        name: '视频',
+        title: '在线视频转换',
+    },
     screenshot: {
         name: '截图',
         title: '在线截图'

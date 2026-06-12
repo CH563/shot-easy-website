@@ -5,6 +5,7 @@ import rounded from './rounded';
 import remover from './remover';
 import compressor from './compressor';
 import screenshot from './screenshot';
+import videoConvert from './videoConvert';
 
 export default {
     title: 'éditeur de photos en ligne gratuit',
@@ -21,5 +22,6 @@ export default {
     rounded,
     remover,
     compressor,
-    screenshot
+    screenshot,
+    videoConvert
 };
