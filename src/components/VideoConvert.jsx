@@ -434,6 +434,9 @@ export default function VideoConvert({ copy = {} }) {
         download: 'Download',
         ...copy,
     };
+    const ui = t.ui || {};
+    const uiText = (key, fallback) => ui[key] || fallback;
+    const uiOption = (group, key, fallback) => ui[group]?.[key] || fallback;
 
     const addLog = (message) => {
         setLogs((items) => [...items.slice(-80), message]);
@@ -662,7 +665,7 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'convert') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Output format
+                    {uiText('outputFormat', 'Output format')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={convertFormat} onChange={(event) => setConvertFormat(event.target.value)}>
                         <option value="mp4">MP4 (H.264 + AAC)</option>
                         <option value="webm">WebM (VP9 + Opus)</option>
@@ -676,11 +679,11 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'compress') {
             return (
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    <Field label="Width" value={compress.width} onChange={(width) => setCompress((value) => ({ ...value, width }))} />
-                    <Field label="Height" value={compress.height} onChange={(height) => setCompress((value) => ({ ...value, height }))} />
+                    <Field label={uiText('width', 'Width')} value={compress.width} onChange={(width) => setCompress((value) => ({ ...value, width }))} />
+                    <Field label={uiText('height', 'Height')} value={compress.height} onChange={(height) => setCompress((value) => ({ ...value, height }))} />
                     <Range label={`CRF ${compress.crf}`} min="18" max="40" value={compress.crf} onChange={(crf) => setCompress((value) => ({ ...value, crf }))} />
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Preset
+                        {uiText('preset', 'Preset')}
                         <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={compress.preset} onChange={(event) => setCompress((value) => ({ ...value, preset: event.target.value }))}>
                             <option value="ultrafast">ultrafast</option>
                             <option value="fast">fast</option>
@@ -695,7 +698,7 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'gif') {
             return (
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    <Field label="Width" value={gif.width} onChange={(width) => setGif((value) => ({ ...value, width }))} />
+                    <Field label={uiText('width', 'Width')} value={gif.width} onChange={(width) => setGif((value) => ({ ...value, width }))} />
                     <Range label={`FPS ${gif.fps}`} min="4" max="24" value={gif.fps} onChange={(fps) => setGif((value) => ({ ...value, fps }))} />
                 </div>
             );
@@ -703,10 +706,10 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'speed') {
             return (
                 <div className="space-y-3">
-                    <Range label={`Multiplier ${speed.multiplier}x`} min="0.25" max="4" step="0.25" value={speed.multiplier} onChange={(multiplier) => setSpeed((value) => ({ ...value, multiplier }))} />
+                    <Range label={`${uiText('multiplier', 'Multiplier')} ${speed.multiplier}x`} min="0.25" max="4" step="0.25" value={speed.multiplier} onChange={(multiplier) => setSpeed((value) => ({ ...value, multiplier }))} />
                     <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                         <input type="checkbox" checked={speed.keepAudio} onChange={(event) => setSpeed((value) => ({ ...value, keepAudio: event.target.checked }))} />
-                        Preserve and retime audio
+                        {uiText('preserveAudio', 'Preserve and retime audio')}
                     </label>
                     <div className="grid grid-cols-4 gap-2">
                         {[0.5, 1, 1.5, 2].map((item) => (
@@ -719,14 +722,14 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'rotate') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Transform
+                    {uiText('transform', 'Transform')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={rotate.mode} onChange={(event) => setRotate({ mode: event.target.value })}>
-                        <option value="cw">Rotate 90 clockwise</option>
-                        <option value="ccw">Rotate 90 counter-clockwise</option>
-                        <option value="rotate180">Rotate 180</option>
-                        <option value="hflip">Flip horizontal</option>
-                        <option value="vflip">Flip vertical</option>
-                        <option value="both">Flip both axes</option>
+                        <option value="cw">{uiOption('rotateOptions', 'cw', 'Rotate 90 clockwise')}</option>
+                        <option value="ccw">{uiOption('rotateOptions', 'ccw', 'Rotate 90 counter-clockwise')}</option>
+                        <option value="rotate180">{uiOption('rotateOptions', 'rotate180', 'Rotate 180')}</option>
+                        <option value="hflip">{uiOption('rotateOptions', 'hflip', 'Flip horizontal')}</option>
+                        <option value="vflip">{uiOption('rotateOptions', 'vflip', 'Flip vertical')}</option>
+                        <option value="both">{uiOption('rotateOptions', 'both', 'Flip both axes')}</option>
                     </select>
                 </label>
             );
@@ -736,15 +739,15 @@ export default function VideoConvert({ copy = {} }) {
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <Field label="X" value={crop.x} onChange={(x) => setCrop((value) => ({ ...value, x }))} />
                     <Field label="Y" value={crop.y} onChange={(y) => setCrop((value) => ({ ...value, y }))} />
-                    <Field label="Width" value={crop.width} onChange={(width) => setCrop((value) => ({ ...value, width }))} />
-                    <Field label="Height" value={crop.height} onChange={(height) => setCrop((value) => ({ ...value, height }))} />
+                    <Field label={uiText('width', 'Width')} value={crop.width} onChange={(width) => setCrop((value) => ({ ...value, width }))} />
+                    <Field label={uiText('height', 'Height')} value={crop.height} onChange={(height) => setCrop((value) => ({ ...value, height }))} />
                 </div>
             );
         }
         if (operation === 'audio') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Audio format
+                    {uiText('audioFormat', 'Audio format')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={audioFormat} onChange={(event) => setAudioFormat(event.target.value)}>
                         <option value="mp3">MP3</option>
                         <option value="aac">AAC</option>
@@ -758,9 +761,9 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'thumbnail') {
             return (
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    <Field label="Timestamp seconds" value={thumbnail.time} onChange={(time) => setThumbnail((value) => ({ ...value, time }))} />
+                    <Field label={uiText('timestampSeconds', 'Timestamp seconds')} value={thumbnail.time} onChange={(time) => setThumbnail((value) => ({ ...value, time }))} />
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Image format
+                        {uiText('imageFormat', 'Image format')}
                         <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={thumbnail.format} onChange={(event) => setThumbnail((value) => ({ ...value, format: event.target.value }))}>
                             <option value="jpg">JPEG</option>
                             <option value="png">PNG</option>
@@ -773,7 +776,7 @@ export default function VideoConvert({ copy = {} }) {
             return (
                 <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                     <input type="checkbox" checked={reverse.keepAudio} onChange={(event) => setReverse({ keepAudio: event.target.checked })} />
-                    Reverse audio too
+                    {uiText('reverseAudio', 'Reverse audio too')}
                 </label>
             );
         }
@@ -781,44 +784,44 @@ export default function VideoConvert({ copy = {} }) {
             return (
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Fade mode
+                        {uiText('fadeMode', 'Fade mode')}
                         <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={fade.mode} onChange={(event) => setFade((value) => ({ ...value, mode: event.target.value }))}>
-                            <option value="both">Fade in and out</option>
-                            <option value="in">Fade in only</option>
-                            <option value="out">Fade out only</option>
+                            <option value="both">{uiOption('fadeOptions', 'both', 'Fade in and out')}</option>
+                            <option value="in">{uiOption('fadeOptions', 'in', 'Fade in only')}</option>
+                            <option value="out">{uiOption('fadeOptions', 'out', 'Fade out only')}</option>
                         </select>
                     </label>
-                    <Field label="Duration seconds" value={fade.duration} onChange={(duration) => setFade((value) => ({ ...value, duration }))} />
+                    <Field label={uiText('durationSeconds', 'Duration seconds')} value={fade.duration} onChange={(duration) => setFade((value) => ({ ...value, duration }))} />
                 </div>
             );
         }
         if (operation === 'adjust') {
             return (
                 <div className="space-y-3">
-                    <Range label={`Brightness ${adjust.brightness}`} min="-1" max="1" step="0.1" value={adjust.brightness} onChange={(brightness) => setAdjust((value) => ({ ...value, brightness }))} />
-                    <Range label={`Contrast ${adjust.contrast}`} min="0" max="2" step="0.1" value={adjust.contrast} onChange={(contrast) => setAdjust((value) => ({ ...value, contrast }))} />
-                    <Range label={`Saturation ${adjust.grayscale ? 0 : adjust.saturation}`} min="0" max="3" step="0.1" value={adjust.saturation} onChange={(saturation) => setAdjust((value) => ({ ...value, saturation }))} />
+                    <Range label={`${uiText('brightness', 'Brightness')} ${adjust.brightness}`} min="-1" max="1" step="0.1" value={adjust.brightness} onChange={(brightness) => setAdjust((value) => ({ ...value, brightness }))} />
+                    <Range label={`${uiText('contrast', 'Contrast')} ${adjust.contrast}`} min="0" max="2" step="0.1" value={adjust.contrast} onChange={(contrast) => setAdjust((value) => ({ ...value, contrast }))} />
+                    <Range label={`${uiText('saturation', 'Saturation')} ${adjust.grayscale ? 0 : adjust.saturation}`} min="0" max="3" step="0.1" value={adjust.saturation} onChange={(saturation) => setAdjust((value) => ({ ...value, saturation }))} />
                     <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                         <input type="checkbox" checked={adjust.grayscale} onChange={(event) => setAdjust((value) => ({ ...value, grayscale: event.target.checked }))} />
-                        Grayscale
+                        {uiText('grayscale', 'Grayscale')}
                     </label>
                 </div>
             );
         }
         if (operation === 'metadata') {
-            return <p className="text-sm text-slate-500">Removes embedded metadata while stream-copying video and audio when possible.</p>;
+            return <p className="text-sm text-slate-500">{uiText('metadataHelp', 'Removes embedded metadata while stream-copying video and audio when possible.')}</p>;
         }
         if (operation === 'volume') {
-            return <Range label={`Volume ${volume.multiplier}x`} min="0" max="4" step="0.1" value={volume.multiplier} onChange={(multiplier) => setVolume({ multiplier })} />;
+            return <Range label={`${uiText('volume', 'Volume')} ${volume.multiplier}x`} min="0" max="4" step="0.1" value={volume.multiplier} onChange={(multiplier) => setVolume({ multiplier })} />;
         }
         if (operation === 'loop') {
-            return <Range label={`Total plays ${loop.count}`} min="2" max="20" step="1" value={loop.count} onChange={(count) => setLoop({ count })} />;
+            return <Range label={`${uiText('totalPlays', 'Total plays')} ${loop.count}`} min="2" max="20" step="1" value={loop.count} onChange={(count) => setLoop({ count })} />;
         }
         if (operation === 'pad') {
             return (
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Target ratio
+                        {uiText('targetRatio', 'Target ratio')}
                         <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={pad.ratio} onChange={(event) => setPad((value) => ({ ...value, ratio: event.target.value }))}>
                             <option value="16:9">16:9</option>
                             <option value="9:16">9:16</option>
@@ -829,11 +832,11 @@ export default function VideoConvert({ copy = {} }) {
                         </select>
                     </label>
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Pad color
+                        {uiText('padColor', 'Pad color')}
                         <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={pad.color} onChange={(event) => setPad((value) => ({ ...value, color: event.target.value }))}>
-                            <option value="black">Black</option>
-                            <option value="white">White</option>
-                            <option value="gray">Gray</option>
+                            <option value="black">{uiOption('colors', 'black', 'Black')}</option>
+                            <option value="white">{uiOption('colors', 'white', 'White')}</option>
+                            <option value="gray">{uiOption('colors', 'gray', 'Gray')}</option>
                         </select>
                     </label>
                 </div>
@@ -842,7 +845,7 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'normalize') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Target loudness
+                    {uiText('targetLoudness', 'Target loudness')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={normalize.target} onChange={(event) => setNormalize({ target: event.target.value })}>
                         <option value="-14">-14 LUFS (YouTube / Spotify)</option>
                         <option value="-16">-16 LUFS (Podcast)</option>
@@ -854,11 +857,11 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'denoise') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Strength
+                    {uiText('strength', 'Strength')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={denoise.preset} onChange={(event) => setDenoise({ preset: event.target.value })}>
-                        <option value="light">Light</option>
-                        <option value="medium">Medium</option>
-                        <option value="heavy">Heavy</option>
+                        <option value="light">{uiOption('strengthOptions', 'light', 'Light')}</option>
+                        <option value="medium">{uiOption('strengthOptions', 'medium', 'Medium')}</option>
+                        <option value="heavy">{uiOption('strengthOptions', 'heavy', 'Heavy')}</option>
                     </select>
                 </label>
             );
@@ -866,10 +869,10 @@ export default function VideoConvert({ copy = {} }) {
         if (operation === 'sharpen') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
-                    Effect
+                    {uiText('effect', 'Effect')}
                     <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={sharpen.mode} onChange={(event) => setSharpen({ mode: event.target.value })}>
-                        <option value="sharpen">Sharpen</option>
-                        <option value="blur">Blur</option>
+                        <option value="sharpen">{uiOption('effectOptions', 'sharpen', 'Sharpen')}</option>
+                        <option value="blur">{uiOption('effectOptions', 'blur', 'Blur')}</option>
                     </select>
                 </label>
             );
@@ -891,20 +894,20 @@ export default function VideoConvert({ copy = {} }) {
                         ))}
                     </div>
                     <label className="space-y-1 text-xs font-semibold text-slate-500">
-                        Arguments after input
+                        {uiText('argumentsAfterInput', 'Arguments after input')}
                         <textarea className="min-h-24 w-full rounded-md border border-slate-200 bg-white p-3 font-mono text-xs text-slate-700" value={raw.args} onChange={(event) => setRaw((value) => ({ ...value, args: event.target.value }))} />
                     </label>
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <Field label="Output extension" value={raw.ext} onChange={(ext) => setRaw((value) => ({ ...value, ext }))} />
+                        <Field label={uiText('outputExtension', 'Output extension')} value={raw.ext} onChange={(ext) => setRaw((value) => ({ ...value, ext }))} />
                         <label className="flex items-center gap-2 pt-6 text-xs font-semibold text-slate-500">
                             <input type="checkbox" checked={raw.bypassTrim} onChange={(event) => setRaw((value) => ({ ...value, bypassTrim: event.target.checked }))} />
-                            Bypass trim
+                            {uiText('bypassTrim', 'Bypass trim')}
                         </label>
                     </div>
                 </div>
             );
         }
-        return <p className="text-sm text-slate-500">The output keeps the video track and removes the audio stream.</p>;
+        return <p className="text-sm text-slate-500">{uiText('muteHelp', 'The output keeps the video track and removes the audio stream.')}</p>;
     };
 
     const audioOutput = output && ['mp3', 'aac', 'wav', 'ogg', 'flac'].includes(output.ext);
@@ -960,7 +963,7 @@ export default function VideoConvert({ copy = {} }) {
                                     </div>
                                     <button type="button" onClick={clearMedia} className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-white/10 px-2.5 text-xs font-bold text-slate-200 hover:bg-white/10">
                                         <Icon name="X" size={14} />
-                                        Clear
+                                        {uiText('clear', 'Clear')}
                                     </button>
                                 </div>
                                 {isAudioInput ? (
@@ -981,34 +984,34 @@ export default function VideoConvert({ copy = {} }) {
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 md:grid-cols-4">
-                        <Info label="File" value={file?.name || '-'} />
-                        <Info label="Size" value={file ? formatBytes(file.size) : '-'} />
-                        <Info label="Duration" value={formatTime(meta.duration)} />
-                        <Info label="Resolution" value={meta.width ? `${meta.width} x ${meta.height}` : '-'} />
+                        <Info label={uiText('file', 'File')} value={file?.name || '-'} />
+                        <Info label={uiText('size', 'Size')} value={file ? formatBytes(file.size) : '-'} />
+                        <Info label={uiText('duration', 'Duration')} value={formatTime(meta.duration)} />
+                        <Info label={uiText('resolution', 'Resolution')} value={meta.width ? `${meta.width} x ${meta.height}` : '-'} />
                     </div>
 
                     {file && meta.duration > 0 && operation !== 'thumbnail' && (
                         <div className="rounded-md bg-slate-50 p-3">
                             <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
-                                <span>Trim</span>
+                                <span>{uiText('trim', 'Trim')}</span>
                                 <span>{formatTime(trim.start)} - {formatTime(trim.end || meta.duration)}</span>
                             </div>
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                <Range label="Start" min="0" max={meta.duration} step="0.1" value={trim.start} onChange={(start) => setTrim((value) => ({ ...value, start: Math.min(Number(start), value.end - 0.1) }))} />
-                                <Range label="End" min="0" max={meta.duration} step="0.1" value={trim.end || meta.duration} onChange={(end) => setTrim((value) => ({ ...value, end: Math.max(Number(end), value.start + 0.1) }))} />
+                                <Range label={uiText('start', 'Start')} min="0" max={meta.duration} step="0.1" value={trim.start} onChange={(start) => setTrim((value) => ({ ...value, start: Math.min(Number(start), value.end - 0.1) }))} />
+                                <Range label={uiText('end', 'End')} min="0" max={meta.duration} step="0.1" value={trim.end || meta.duration} onChange={(end) => setTrim((value) => ({ ...value, end: Math.max(Number(end), value.start + 0.1) }))} />
                             </div>
                         </div>
                     )}
 
                     <div className="rounded-md bg-slate-950 p-3 font-mono text-xs text-slate-300">
-                        <div className="mb-2 flex items-center gap-2 text-slate-500"><Icon name="TerminalSquare" /> Command preview</div>
+                        <div className="mb-2 flex items-center gap-2 text-slate-500"><Icon name="TerminalSquare" /> {uiText('commandPreview', 'Command preview')}</div>
                         <div className="break-all">{command}</div>
                     </div>
 
                     <div className="rounded-md bg-slate-950 p-3">
                         <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
-                            <span>FFmpeg Log</span>
-                            <button type="button" className="text-slate-300 hover:text-white" onClick={() => setLogs([])}>Clear</button>
+                            <span>{uiText('ffmpegLog', 'FFmpeg Log')}</span>
+                            <button type="button" className="text-slate-300 hover:text-white" onClick={() => setLogs([])}>{uiText('clear', 'Clear')}</button>
                         </div>
                         <div className="max-h-48 overflow-auto font-mono text-[11px] leading-5 text-slate-300">
                             {logs.map((item, index) => <div key={`${item}-${index}`}>{item}</div>)}
@@ -1018,27 +1021,30 @@ export default function VideoConvert({ copy = {} }) {
 
                 <aside className="space-y-4">
                     <div className="grid grid-cols-2 gap-1.5">
-                        {OPERATIONS.map((item) => (
-                            <button
-                                key={item.id}
-                                type="button"
-                                onClick={() => setOperation(item.id)}
-                                className={`rounded-md border px-2.5 py-2 text-left transition ${operation === item.id ? 'border-blue-500 bg-blue-600 text-white shadow-sm shadow-blue-100' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50'}`}
-                            >
-                                <span className="flex min-w-0 items-center gap-1.5">
-                                    <Icon name={item.icon} size={14} className="shrink-0" />
-                                    <span className="truncate text-sm font-bold leading-5">{item.title}</span>
-                                    {item.badge && <span className="shrink-0 text-xs leading-none" aria-label="Popular">{item.badge}</span>}
-                                </span>
-                                <span className={`mt-0.5 block truncate text-[11px] leading-4 ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{item.desc}</span>
-                            </button>
-                        ))}
+                        {OPERATIONS.map((item) => {
+                            const labels = t.operations?.[item.id] || {};
+                            return (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={() => setOperation(item.id)}
+                                    className={`rounded-md border px-2.5 py-2 text-left transition ${operation === item.id ? 'border-blue-500 bg-blue-600 text-white shadow-sm shadow-blue-100' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50'}`}
+                                >
+                                    <span className="flex min-w-0 items-center gap-1.5">
+                                        <Icon name={item.icon} size={14} className="shrink-0" />
+                                        <span className="truncate text-sm font-bold leading-5">{labels.title || item.title}</span>
+                                        {item.badge && <span className="shrink-0 text-xs leading-none" aria-label="Popular">{item.badge}</span>}
+                                    </span>
+                                    <span className={`mt-0.5 block truncate text-[11px] leading-4 ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{labels.desc || item.desc}</span>
+                                </button>
+                            );
+                        })}
                     </div>
 
                     <div className="rounded-md border border-slate-100 bg-white p-4 shadow-sm">
-                        <h3 className="mb-3 text-sm font-extrabold text-slate-700">Settings</h3>
+                        <h3 className="mb-3 text-sm font-extrabold text-slate-700">{uiText('settings', 'Settings')}</h3>
                         {renderSettings()}
-                        {estimate && <div className="mt-3 rounded-md bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">Estimated output: {estimate}</div>}
+                        {estimate && <div className="mt-3 rounded-md bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">{uiText('estimatedOutput', 'Estimated output')}: {estimate}</div>}
                     </div>
 
                     <button
@@ -1052,12 +1058,12 @@ export default function VideoConvert({ copy = {} }) {
                     </button>
 
                     <div className="rounded-md border border-slate-100 bg-white p-4 shadow-sm">
-                        <h3 className="mb-3 text-sm font-extrabold text-slate-700">Output</h3>
-                        {!output && <div className="rounded-md bg-slate-50 p-4 text-center text-xs text-slate-400">Process a file to preview the result.</div>}
+                        <h3 className="mb-3 text-sm font-extrabold text-slate-700">{uiText('output', 'Output')}</h3>
+                        {!output && <div className="rounded-md bg-slate-50 p-4 text-center text-xs text-slate-400">{uiText('outputEmpty', 'Process a file to preview the result.')}</div>}
                         {output && (
                             <div className="space-y-3">
                                 {audioOutput && <audio src={output.url} controls className="w-full" />}
-                                {imageOutput && <img src={output.url} className="max-h-52 w-full rounded-md object-contain" alt="Converted output preview" />}
+                                {imageOutput && <img src={output.url} className="max-h-52 w-full rounded-md object-contain" alt={uiText('outputPreviewAlt', 'Converted output preview')} />}
                                 {!audioOutput && !imageOutput && <video src={output.url} controls className="w-full rounded-md bg-black" />}
                                 <button type="button" onClick={download} className="flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-500">
                                     <Icon name="Download" />
