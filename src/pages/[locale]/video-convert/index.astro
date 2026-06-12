@@ -6,10 +6,10 @@ import VideoConvertPage from '@components/VideoConvertPage.astro';
 import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const t = getLang(locale);
-const { title, description } = t.videoConvert;
+const { title, description, keywords } = t.videoConvert;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} keywords={keywords}>
     <main class="relative overflow-hidden min-h-screen flex flex-col">
         <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
         <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>

@@ -9,15 +9,67 @@ const FFMPEG_DOWNLOAD_SIZE = '~31 MB';
 const OPERATIONS = [
     { id: 'convert', icon: 'Repeat2', title: 'Convert', desc: 'Change video format' },
     { id: 'compress', icon: 'Archive', title: 'Compress', desc: 'Resize and reduce size' },
-    { id: 'gif', icon: 'Clapperboard', title: 'GIF', desc: 'Create animated GIF' },
+    { id: 'gif', icon: 'Clapperboard', title: 'GIF', desc: 'Create animated GIF', badge: '🔥' },
+    { id: 'speed', icon: 'Zap', title: 'Speed', desc: 'Change playback speed' },
+    { id: 'rotate', icon: 'RotateCw', title: 'Rotate', desc: 'Rotate or flip video' },
+    { id: 'crop', icon: 'Crop', title: 'Crop', desc: 'Crop video frame' },
     { id: 'audio', icon: 'Music2', title: 'Audio', desc: 'Extract soundtrack' },
     { id: 'mute', icon: 'VolumeX', title: 'Mute', desc: 'Remove audio track' },
     { id: 'thumbnail', icon: 'Image', title: 'Frame', desc: 'Export one image' },
+    { id: 'reverse', icon: 'Rewind', title: 'Reverse', desc: 'Reverse video' },
+    { id: 'fade', icon: 'CircleDashed', title: 'Fade', desc: 'Fade in and out' },
+    { id: 'adjust', icon: 'SlidersHorizontal', title: 'Adjust', desc: 'Color adjustments' },
+    { id: 'metadata', icon: 'Ban', title: 'Metadata', desc: 'Strip metadata' },
+    { id: 'volume', icon: 'Volume2', title: 'Volume', desc: 'Change audio volume' },
+    { id: 'loop', icon: 'Repeat', title: 'Loop', desc: 'Repeat the clip' },
+    { id: 'pad', icon: 'PanelTop', title: 'Pad', desc: 'Pad or letterbox' },
+    { id: 'normalize', icon: 'AudioLines', title: 'Normalize', desc: 'Normalize loudness' },
+    { id: 'denoise', icon: 'Brush', title: 'Denoise', desc: 'Reduce video noise' },
+    { id: 'sharpen', icon: 'Eye', title: 'Sharpen', desc: 'Sharpen or blur' },
     { id: 'raw', icon: 'TerminalSquare', title: 'Raw', desc: 'Custom ffmpeg args' },
 ];
 
 function videoCodecArgs(preset = 'ultrafast') {
     return ['-threads', '1', '-c:v', 'libx264', '-preset', preset, '-pix_fmt', 'yuv420p'];
+}
+
+function decimal(value, fallback) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : fallback;
+}
+
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+}
+
+function atempoChain(multiplier) {
+    let value = clamp(decimal(multiplier, 1), 0.25, 4);
+    const filters = [];
+    while (value > 2) {
+        filters.push('atempo=2');
+        value /= 2;
+    }
+    while (value < 0.5) {
+        filters.push('atempo=0.5');
+        value /= 0.5;
+    }
+    filters.push(`atempo=${value.toFixed(3).replace(/0+$/, '').replace(/\.$/, '')}`);
+    return filters.join(',');
+}
+
+function ratioExpression(ratio) {
+    return {
+        '16:9': { w: 16, h: 9 },
+        '9:16': { w: 9, h: 16 },
+        '1:1': { w: 1, h: 1 },
+        '4:3': { w: 4, h: 3 },
+        '4:5': { w: 4, h: 5 },
+        '21:9': { w: 21, h: 9 },
+    }[ratio] || { w: 16, h: 9 };
+}
+
+function normalizeTarget(value) {
+    return ['-14', '-16', '-23'].includes(String(value)) ? String(value) : '-14';
 }
 
 const RAW_EXAMPLES = [
@@ -130,15 +182,28 @@ function buildArgs({
     gif,
     audioFormat,
     thumbnail,
+    speed,
+    rotate,
+    crop,
+    fade,
+    adjust,
+    reverse,
+    volume,
+    loop,
+    pad,
+    normalize,
+    denoise,
+    sharpen,
     raw,
 }) {
     const args = [];
-    const hasTrim = operation !== 'thumbnail' && !raw.bypassTrim && duration > 0 &&
+    const hasTrim = !['thumbnail', 'loop'].includes(operation) && !raw.bypassTrim && duration > 0 &&
         (trim.start > 0 || trim.end < duration - 0.05);
 
-    if (hasTrim) args.push('-ss', trim.start.toFixed(3));
+    if (hasTrim) {
+        args.push('-ss', trim.start.toFixed(3), '-t', Math.max(0.1, trim.end - trim.start).toFixed(3));
+    }
     args.push('-i', inputName);
-    if (hasTrim) args.push('-t', Math.max(0.1, trim.end - trim.start).toFixed(3));
 
     let outputExt = 'mp4';
 
@@ -189,6 +254,115 @@ function buildArgs({
         args.push('-an', ...videoCodecArgs());
     }
 
+    if (operation === 'speed') {
+        outputExt = 'mp4';
+        const multiplier = clamp(decimal(speed.multiplier, 1), 0.25, 4);
+        if (speed.keepAudio) {
+            args.push(
+                '-map', '0:v:0',
+                '-map', '0:a?',
+                '-vf', `setpts=${(1 / multiplier).toFixed(4)}*PTS`,
+                '-af', atempoChain(multiplier),
+                ...videoCodecArgs(),
+                '-c:a', 'aac',
+                '-b:a', '128k'
+            );
+        } else {
+            args.push('-vf', `setpts=${(1 / multiplier).toFixed(4)}*PTS`, '-an', ...videoCodecArgs());
+        }
+    }
+
+    if (operation === 'rotate') {
+        outputExt = 'mp4';
+        const filters = {
+            cw: 'transpose=1',
+            ccw: 'transpose=2',
+            rotate180: 'transpose=1,transpose=1',
+            hflip: 'hflip',
+            vflip: 'vflip',
+            both: 'hflip,vflip',
+        };
+        args.push('-vf', filters[rotate.mode] || filters.cw, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'crop') {
+        outputExt = 'mp4';
+        const width = Math.max(2, Math.round(decimal(crop.width, 0) / 2) * 2);
+        const height = Math.max(2, Math.round(decimal(crop.height, 0) / 2) * 2);
+        const x = Math.max(0, Math.round(decimal(crop.x, 0)));
+        const y = Math.max(0, Math.round(decimal(crop.y, 0)));
+        args.push('-vf', `crop=${width}:${height}:${x}:${y}`, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'reverse') {
+        outputExt = 'mp4';
+        if (reverse.keepAudio) {
+            args.push('-map', '0:v:0', '-map', '0:a?', '-vf', 'reverse', '-af', 'areverse', ...videoCodecArgs(), '-c:a', 'aac');
+        } else {
+            args.push('-vf', 'reverse', '-an', ...videoCodecArgs());
+        }
+    }
+
+    if (operation === 'fade') {
+        outputExt = 'mp4';
+        const fadeDuration = Math.max(0.1, decimal(fade.duration, 1));
+        const selectedDuration = Math.max(0.1, hasTrim ? trim.end - trim.start : duration || fadeDuration * 2);
+        const outStart = Math.max(0, selectedDuration - fadeDuration);
+        const filters = [];
+        if (fade.mode === 'in' || fade.mode === 'both') filters.push(`fade=t=in:st=0:d=${fadeDuration}`);
+        if (fade.mode === 'out' || fade.mode === 'both') filters.push(`fade=t=out:st=${outStart.toFixed(3)}:d=${fadeDuration}`);
+        args.push('-vf', filters.join(','), ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'adjust') {
+        outputExt = 'mp4';
+        const brightness = clamp(decimal(adjust.brightness, 0), -1, 1);
+        const contrast = clamp(decimal(adjust.contrast, 1), 0, 2);
+        const saturation = adjust.grayscale ? 0 : clamp(decimal(adjust.saturation, 1), 0, 3);
+        args.push('-vf', `eq=brightness=${brightness}:contrast=${contrast}:saturation=${saturation}`, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'metadata') {
+        outputExt = 'mp4';
+        args.push('-map_metadata', '-1', '-c', 'copy');
+    }
+
+    if (operation === 'volume') {
+        outputExt = 'mp4';
+        args.push('-af', `volume=${clamp(decimal(volume.multiplier, 1), 0, 4)}`, '-c:v', 'copy', '-c:a', 'aac');
+    }
+
+    if (operation === 'loop') {
+        outputExt = 'mp4';
+        args.length = 0;
+        args.push('-stream_loop', String(Math.max(1, Math.round(decimal(loop.count, 2)) - 1)), '-i', inputName, '-c', 'copy');
+    }
+
+    if (operation === 'pad') {
+        outputExt = 'mp4';
+        const ratio = ratioExpression(pad.ratio);
+        const color = pad.color || 'black';
+        const filter = `scale=w=if(gt(a\\,${ratio.w}/${ratio.h})\\,iw\\,-2):h=if(gt(a\\,${ratio.w}/${ratio.h})\\,-2\\,ih),pad=ceil(max(iw\\,ih*${ratio.w}/${ratio.h})/2)*2:ceil(max(ih\\,iw*${ratio.h}/${ratio.w})/2)*2:(ow-iw)/2:(oh-ih)/2:${color}`;
+        args.push('-vf', filter, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'normalize') {
+        outputExt = 'mp4';
+        args.push('-af', `loudnorm=I=${normalizeTarget(normalize.target)}:TP=-1.5:LRA=11`, '-c:v', 'copy', '-c:a', 'aac');
+    }
+
+    if (operation === 'denoise') {
+        outputExt = 'mp4';
+        const presets = { light: '2:2:3:3', medium: '4:4:6:6', heavy: '10:10:15:15' };
+        args.push('-vf', `hqdn3d=${presets[denoise.preset] || presets.medium}`, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
+    if (operation === 'sharpen') {
+        outputExt = 'mp4';
+        const filter = sharpen.mode === 'blur' ? 'boxblur=2:1' : 'unsharp=5:5:1.0:5:5:0.0';
+        args.push('-vf', filter, ...videoCodecArgs(), '-c:a', 'copy');
+    }
+
     if (operation === 'thumbnail') {
         outputExt = thumbnail.format;
         args.length = 0;
@@ -230,6 +404,18 @@ export default function VideoConvert({ copy = {} }) {
     const [compress, setCompress] = useState({ width: '', height: '', crf: 28, preset: 'ultrafast', format: 'mp4' });
     const [gif, setGif] = useState({ fps: 10, width: 480 });
     const [thumbnail, setThumbnail] = useState({ time: 0, format: 'jpg' });
+    const [speed, setSpeed] = useState({ multiplier: 2, keepAudio: true });
+    const [rotate, setRotate] = useState({ mode: 'cw' });
+    const [crop, setCrop] = useState({ x: 0, y: 0, width: '', height: '' });
+    const [fade, setFade] = useState({ mode: 'both', duration: 1 });
+    const [adjust, setAdjust] = useState({ brightness: 0, contrast: 1, saturation: 1, grayscale: false });
+    const [reverse, setReverse] = useState({ keepAudio: true });
+    const [volume, setVolume] = useState({ multiplier: 1.5 });
+    const [loop, setLoop] = useState({ count: 2 });
+    const [pad, setPad] = useState({ ratio: '16:9', color: 'black' });
+    const [normalize, setNormalize] = useState({ target: '-14' });
+    const [denoise, setDenoise] = useState({ preset: 'medium' });
+    const [sharpen, setSharpen] = useState({ mode: 'sharpen' });
     const [raw, setRaw] = useState({ args: '-threads 1 -vf scale=1280:-2 -c:v libx264 -crf 23 -preset ultrafast -pix_fmt yuv420p -c:a aac', ext: 'mp4', bypassTrim: false });
     const [trim, setTrim] = useState({ start: 0, end: 0 });
 
@@ -266,10 +452,22 @@ export default function VideoConvert({ copy = {} }) {
             gif,
             audioFormat,
             thumbnail,
+            speed,
+            rotate,
+            crop,
+            fade,
+            adjust,
+            reverse,
+            volume,
+            loop,
+            pad,
+            normalize,
+            denoise,
+            sharpen,
             raw,
         });
         return `ffmpeg ${args.join(' ')}`;
-    }, [audioFormat, compress, convertFormat, file, gif, meta.duration, operation, raw, thumbnail, trim]);
+    }, [adjust, audioFormat, compress, convertFormat, crop, denoise, fade, file, gif, loop, meta.duration, normalize, operation, pad, raw, reverse, rotate, sharpen, speed, thumbnail, trim, volume]);
 
     const estimate = useMemo(() => {
         if (!file || !meta.duration) return '';
@@ -367,6 +565,18 @@ export default function VideoConvert({ copy = {} }) {
                 gif,
                 audioFormat,
                 thumbnail,
+                speed,
+                rotate,
+                crop,
+                fade,
+                adjust,
+                reverse,
+                volume,
+                loop,
+                pad,
+                normalize,
+                denoise,
+                sharpen,
                 raw,
             });
             addLog('Writing input file...');
@@ -422,15 +632,29 @@ export default function VideoConvert({ copy = {} }) {
         anchor.click();
     };
 
-    const onMetadata = () => {
-        const video = videoRef.current;
-        if (!video) return;
-        const duration = Number.isFinite(video.duration) ? video.duration : 0;
-        const width = video.videoWidth || 0;
-        const height = video.videoHeight || 0;
+    const clearMedia = () => {
+        if (inputUrl) URL.revokeObjectURL(inputUrl);
+        if (outputUrlRef.current) URL.revokeObjectURL(outputUrlRef.current);
+        outputUrlRef.current = '';
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        setFile(null);
+        setInputUrl('');
+        setMeta({ duration: 0, width: 0, height: 0 });
+        setTrim({ start: 0, end: 0 });
+        setOutput(null);
+        setLogs(['Ready. Choose a video or audio file to begin.']);
+    };
+
+    const onMetadata = (event) => {
+        const media = event?.currentTarget || videoRef.current;
+        if (!media) return;
+        const duration = Number.isFinite(media.duration) ? media.duration : 0;
+        const width = media.videoWidth || 0;
+        const height = media.videoHeight || 0;
         setMeta({ duration, width, height });
         setTrim({ start: 0, end: duration });
         setCompress((value) => ({ ...value, width: width || '', height: height || '' }));
+        setCrop((value) => ({ ...value, width: width || '', height: height || '' }));
         setThumbnail((value) => ({ ...value, time: duration ? Number((duration / 2).toFixed(1)) : 0 }));
     };
 
@@ -476,6 +700,47 @@ export default function VideoConvert({ copy = {} }) {
                 </div>
             );
         }
+        if (operation === 'speed') {
+            return (
+                <div className="space-y-3">
+                    <Range label={`Multiplier ${speed.multiplier}x`} min="0.25" max="4" step="0.25" value={speed.multiplier} onChange={(multiplier) => setSpeed((value) => ({ ...value, multiplier }))} />
+                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                        <input type="checkbox" checked={speed.keepAudio} onChange={(event) => setSpeed((value) => ({ ...value, keepAudio: event.target.checked }))} />
+                        Preserve and retime audio
+                    </label>
+                    <div className="grid grid-cols-4 gap-2">
+                        {[0.5, 1, 1.5, 2].map((item) => (
+                            <button key={item} type="button" className="rounded-md border border-slate-200 bg-slate-50 py-2 text-xs font-bold text-slate-600 hover:border-blue-300 hover:bg-blue-50" onClick={() => setSpeed((value) => ({ ...value, multiplier: item }))}>{item}x</button>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        if (operation === 'rotate') {
+            return (
+                <label className="space-y-1 text-xs font-semibold text-slate-500">
+                    Transform
+                    <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={rotate.mode} onChange={(event) => setRotate({ mode: event.target.value })}>
+                        <option value="cw">Rotate 90 clockwise</option>
+                        <option value="ccw">Rotate 90 counter-clockwise</option>
+                        <option value="rotate180">Rotate 180</option>
+                        <option value="hflip">Flip horizontal</option>
+                        <option value="vflip">Flip vertical</option>
+                        <option value="both">Flip both axes</option>
+                    </select>
+                </label>
+            );
+        }
+        if (operation === 'crop') {
+            return (
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <Field label="X" value={crop.x} onChange={(x) => setCrop((value) => ({ ...value, x }))} />
+                    <Field label="Y" value={crop.y} onChange={(y) => setCrop((value) => ({ ...value, y }))} />
+                    <Field label="Width" value={crop.width} onChange={(width) => setCrop((value) => ({ ...value, width }))} />
+                    <Field label="Height" value={crop.height} onChange={(height) => setCrop((value) => ({ ...value, height }))} />
+                </div>
+            );
+        }
         if (operation === 'audio') {
             return (
                 <label className="space-y-1 text-xs font-semibold text-slate-500">
@@ -502,6 +767,111 @@ export default function VideoConvert({ copy = {} }) {
                         </select>
                     </label>
                 </div>
+            );
+        }
+        if (operation === 'reverse') {
+            return (
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                    <input type="checkbox" checked={reverse.keepAudio} onChange={(event) => setReverse({ keepAudio: event.target.checked })} />
+                    Reverse audio too
+                </label>
+            );
+        }
+        if (operation === 'fade') {
+            return (
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <label className="space-y-1 text-xs font-semibold text-slate-500">
+                        Fade mode
+                        <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={fade.mode} onChange={(event) => setFade((value) => ({ ...value, mode: event.target.value }))}>
+                            <option value="both">Fade in and out</option>
+                            <option value="in">Fade in only</option>
+                            <option value="out">Fade out only</option>
+                        </select>
+                    </label>
+                    <Field label="Duration seconds" value={fade.duration} onChange={(duration) => setFade((value) => ({ ...value, duration }))} />
+                </div>
+            );
+        }
+        if (operation === 'adjust') {
+            return (
+                <div className="space-y-3">
+                    <Range label={`Brightness ${adjust.brightness}`} min="-1" max="1" step="0.1" value={adjust.brightness} onChange={(brightness) => setAdjust((value) => ({ ...value, brightness }))} />
+                    <Range label={`Contrast ${adjust.contrast}`} min="0" max="2" step="0.1" value={adjust.contrast} onChange={(contrast) => setAdjust((value) => ({ ...value, contrast }))} />
+                    <Range label={`Saturation ${adjust.grayscale ? 0 : adjust.saturation}`} min="0" max="3" step="0.1" value={adjust.saturation} onChange={(saturation) => setAdjust((value) => ({ ...value, saturation }))} />
+                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                        <input type="checkbox" checked={adjust.grayscale} onChange={(event) => setAdjust((value) => ({ ...value, grayscale: event.target.checked }))} />
+                        Grayscale
+                    </label>
+                </div>
+            );
+        }
+        if (operation === 'metadata') {
+            return <p className="text-sm text-slate-500">Removes embedded metadata while stream-copying video and audio when possible.</p>;
+        }
+        if (operation === 'volume') {
+            return <Range label={`Volume ${volume.multiplier}x`} min="0" max="4" step="0.1" value={volume.multiplier} onChange={(multiplier) => setVolume({ multiplier })} />;
+        }
+        if (operation === 'loop') {
+            return <Range label={`Total plays ${loop.count}`} min="2" max="20" step="1" value={loop.count} onChange={(count) => setLoop({ count })} />;
+        }
+        if (operation === 'pad') {
+            return (
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <label className="space-y-1 text-xs font-semibold text-slate-500">
+                        Target ratio
+                        <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={pad.ratio} onChange={(event) => setPad((value) => ({ ...value, ratio: event.target.value }))}>
+                            <option value="16:9">16:9</option>
+                            <option value="9:16">9:16</option>
+                            <option value="1:1">1:1</option>
+                            <option value="4:3">4:3</option>
+                            <option value="4:5">4:5</option>
+                            <option value="21:9">21:9</option>
+                        </select>
+                    </label>
+                    <label className="space-y-1 text-xs font-semibold text-slate-500">
+                        Pad color
+                        <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={pad.color} onChange={(event) => setPad((value) => ({ ...value, color: event.target.value }))}>
+                            <option value="black">Black</option>
+                            <option value="white">White</option>
+                            <option value="gray">Gray</option>
+                        </select>
+                    </label>
+                </div>
+            );
+        }
+        if (operation === 'normalize') {
+            return (
+                <label className="space-y-1 text-xs font-semibold text-slate-500">
+                    Target loudness
+                    <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={normalize.target} onChange={(event) => setNormalize({ target: event.target.value })}>
+                        <option value="-14">-14 LUFS (YouTube / Spotify)</option>
+                        <option value="-16">-16 LUFS (Podcast)</option>
+                        <option value="-23">-23 LUFS (Broadcast)</option>
+                    </select>
+                </label>
+            );
+        }
+        if (operation === 'denoise') {
+            return (
+                <label className="space-y-1 text-xs font-semibold text-slate-500">
+                    Strength
+                    <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={denoise.preset} onChange={(event) => setDenoise({ preset: event.target.value })}>
+                        <option value="light">Light</option>
+                        <option value="medium">Medium</option>
+                        <option value="heavy">Heavy</option>
+                    </select>
+                </label>
+            );
+        }
+        if (operation === 'sharpen') {
+            return (
+                <label className="space-y-1 text-xs font-semibold text-slate-500">
+                    Effect
+                    <select className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700" value={sharpen.mode} onChange={(event) => setSharpen({ mode: event.target.value })}>
+                        <option value="sharpen">Sharpen</option>
+                        <option value="blur">Blur</option>
+                    </select>
+                </label>
             );
         }
         if (operation === 'raw') {
@@ -540,46 +910,73 @@ export default function VideoConvert({ copy = {} }) {
     const audioOutput = output && ['mp3', 'aac', 'wav', 'ogg', 'flac'].includes(output.ext);
     const imageOutput = output && ['gif', 'jpg', 'png'].includes(output.ext);
     const ffmpegStatus = getFFmpegStatus({ status, ffmpegLoaded, progress, copy: t });
+    const isAudioInput = file?.type?.startsWith('audio/');
 
     return (
         <div className="rounded-md border border-white/70 bg-white/90 p-3 shadow-lg backdrop-blur">
-            <div className="mb-4 flex flex-col gap-3 rounded-md border border-slate-800 bg-slate-950 px-4 py-3 text-slate-300 shadow-sm md:flex-row md:items-center md:justify-between">
-                <div className="flex min-w-0 items-center gap-3 text-sm font-semibold">
-                    <span className={`h-2 w-2 shrink-0 rounded-full ${ffmpegStatus.dotClass}`} />
-                    <span className="truncate">{ffmpegStatus.label}</span>
-                </div>
-                <button
-                    type="button"
-                    disabled={status === 'loading' || status === 'processing' || ffmpegLoaded}
-                    onClick={preloadFFmpeg}
-                    className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-extrabold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-300"
-                >
-                    <Icon name={status === 'loading' ? 'Loader2' : ffmpegLoaded ? 'CheckCircle2' : 'Play'} className={status === 'loading' ? 'animate-spin' : ''} />
-                    {ffmpegStatus.button}
-                </button>
-            </div>
-            <div
-                className="mb-4 cursor-pointer rounded-md border border-dashed border-blue-200 bg-sky-50/70 p-6 text-center transition hover:border-blue-400 hover:bg-sky-50"
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => {
-                    event.preventDefault();
-                    onFile(event.dataTransfer.files?.[0]);
-                }}
-            >
-                <input ref={fileInputRef} className="hidden" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.webm,.mp4,.mp3,.wav,.flac,.ogg,.aac" onChange={(event) => onFile(event.target.files?.[0])} />
-                <Icon name="UploadCloud" size={34} className="mb-2 inline-flex text-blue-600" />
-                <p className="text-sm font-bold text-slate-700">{t.upload}</p>
-                <p className="mt-1 text-xs text-slate-400">{t.uploadHint}</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_390px]">
                 <div className="space-y-4">
-                    <div className="rounded-md bg-slate-950 p-3">
+                    <div className="flex flex-col gap-2 rounded-md border border-slate-100 bg-white px-3 py-2 text-slate-500 shadow-sm md:flex-row md:items-center md:justify-between">
+                        <div className="min-w-0">
+                            <div className="flex min-w-0 items-center gap-2 text-xs font-semibold">
+                                <span className={`h-2 w-2 shrink-0 rounded-full ${ffmpegStatus.dotClass}`} />
+                                <span className="truncate">{ffmpegStatus.label}</span>
+                            </div>
+                            {(status === 'loading' || status === 'processing') && (
+                                <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-100">
+                                    <div className="h-full rounded-full bg-blue-500 transition-all" style={{ width: `${progress}%` }} />
+                                </div>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            disabled={status === 'loading' || status === 'processing' || ffmpegLoaded}
+                            onClick={preloadFFmpeg}
+                            className="inline-flex h-7 shrink-0 items-center justify-center gap-1.5 rounded-md bg-blue-600 px-2.5 text-xs font-bold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+                        >
+                            <Icon name={status === 'loading' ? 'Loader2' : ffmpegLoaded ? 'CheckCircle2' : 'Play'} size={13} className={status === 'loading' ? 'animate-spin' : ''} />
+                            {ffmpegStatus.button}
+                        </button>
+                    </div>
+
+                    <div
+                        className={`rounded-md border ${file ? 'border-slate-200 bg-slate-950 p-3' : 'cursor-pointer border-dashed border-blue-200 bg-sky-50/70 p-6 text-center transition hover:border-blue-400 hover:bg-sky-50'}`}
+                        onClick={() => {
+                            if (!file) fileInputRef.current?.click();
+                        }}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={(event) => {
+                            event.preventDefault();
+                            onFile(event.dataTransfer.files?.[0]);
+                        }}
+                    >
+                        <input ref={fileInputRef} className="hidden" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.webm,.mp4,.mp3,.wav,.flac,.ogg,.aac" onChange={(event) => onFile(event.target.files?.[0])} />
                         {file ? (
-                            <video ref={videoRef} src={inputUrl} controls className="max-h-[430px] w-full rounded bg-black" onLoadedMetadata={onMetadata} />
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="min-w-0 text-xs font-semibold text-slate-400">
+                                        <span className="block truncate text-slate-200">{file.name}</span>
+                                        <span>{formatBytes(file.size)}</span>
+                                    </div>
+                                    <button type="button" onClick={clearMedia} className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-white/10 px-2.5 text-xs font-bold text-slate-200 hover:bg-white/10">
+                                        <Icon name="X" size={14} />
+                                        Clear
+                                    </button>
+                                </div>
+                                {isAudioInput ? (
+                                    <div className="flex min-h-[260px] items-center rounded bg-slate-900 p-6">
+                                        <audio src={inputUrl} controls className="w-full" onLoadedMetadata={onMetadata} />
+                                    </div>
+                                ) : (
+                                    <video ref={videoRef} src={inputUrl} controls className="max-h-[430px] w-full rounded bg-black" onLoadedMetadata={onMetadata} />
+                                )}
+                            </div>
                         ) : (
-                            <div className="flex min-h-[260px] items-center justify-center rounded bg-slate-900 text-sm text-slate-400">Media preview</div>
+                            <div className="flex min-h-[320px] flex-col items-center justify-center">
+                                <Icon name="UploadCloud" size={34} className="mb-2 inline-flex text-blue-600" />
+                                <p className="text-sm font-bold text-slate-700">{t.upload}</p>
+                                <p className="mt-1 text-xs text-slate-400">{t.uploadHint}</p>
+                            </div>
                         )}
                     </div>
 
@@ -607,20 +1004,33 @@ export default function VideoConvert({ copy = {} }) {
                         <div className="mb-2 flex items-center gap-2 text-slate-500"><Icon name="TerminalSquare" /> Command preview</div>
                         <div className="break-all">{command}</div>
                     </div>
+
+                    <div className="rounded-md bg-slate-950 p-3">
+                        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
+                            <span>FFmpeg Log</span>
+                            <button type="button" className="text-slate-300 hover:text-white" onClick={() => setLogs([])}>Clear</button>
+                        </div>
+                        <div className="max-h-48 overflow-auto font-mono text-[11px] leading-5 text-slate-300">
+                            {logs.map((item, index) => <div key={`${item}-${index}`}>{item}</div>)}
+                        </div>
+                    </div>
                 </div>
 
                 <aside className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-1.5">
                         {OPERATIONS.map((item) => (
                             <button
                                 key={item.id}
                                 type="button"
                                 onClick={() => setOperation(item.id)}
-                                className={`rounded-md border p-3 text-left transition ${operation === item.id ? 'border-blue-500 bg-blue-600 text-white shadow-md shadow-blue-200' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50'}`}
+                                className={`rounded-md border px-2.5 py-2 text-left transition ${operation === item.id ? 'border-blue-500 bg-blue-600 text-white shadow-sm shadow-blue-100' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50'}`}
                             >
-                                <Icon name={item.icon} className="mb-2" />
-                                <span className="block text-sm font-bold">{item.title}</span>
-                                <span className={`block text-[11px] ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{item.desc}</span>
+                                <span className="flex min-w-0 items-center gap-1.5">
+                                    <Icon name={item.icon} size={14} className="shrink-0" />
+                                    <span className="truncate text-sm font-bold leading-5">{item.title}</span>
+                                    {item.badge && <span className="shrink-0 text-xs leading-none" aria-label="Popular">{item.badge}</span>}
+                                </span>
+                                <span className={`mt-0.5 block truncate text-[11px] leading-4 ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{item.desc}</span>
                             </button>
                         ))}
                     </div>
@@ -630,18 +1040,6 @@ export default function VideoConvert({ copy = {} }) {
                         {renderSettings()}
                         {estimate && <div className="mt-3 rounded-md bg-green-50 px-3 py-2 text-xs font-semibold text-green-700">Estimated output: {estimate}</div>}
                     </div>
-
-                    {(status === 'loading' || status === 'processing') && (
-                        <div className="rounded-md bg-blue-50 p-3">
-                            <div className="mb-2 flex justify-between text-xs font-semibold text-blue-700">
-                                <span>{status === 'loading' ? t.loading : t.processing}</span>
-                                <span>{progress}%</span>
-                            </div>
-                            <div className="h-2 overflow-hidden rounded-full bg-blue-100">
-                                <div className="h-full rounded-full bg-blue-600 transition-all" style={{ width: `${progress}%` }} />
-                            </div>
-                        </div>
-                    )}
 
                     <button
                         type="button"
@@ -669,16 +1067,6 @@ export default function VideoConvert({ copy = {} }) {
                         )}
                     </div>
                 </aside>
-            </div>
-
-            <div className="mt-4 rounded-md bg-slate-950 p-3">
-                <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
-                    <span>FFmpeg Log</span>
-                    <button type="button" className="text-slate-300 hover:text-white" onClick={() => setLogs([])}>Clear</button>
-                </div>
-                <div className="max-h-48 overflow-auto font-mono text-[11px] leading-5 text-slate-300">
-                    {logs.map((item, index) => <div key={`${item}-${index}`}>{item}</div>)}
-                </div>
             </div>
         </div>
     );

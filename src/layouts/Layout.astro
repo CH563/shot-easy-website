@@ -7,6 +7,7 @@ import { getLocale, getLang } from '@i18n/index';
 interface Props {
     title: string;
     description?: string;
+    keywords?: string;
     image?: string;
 }
 const { pathname, origin } = Astro.url;
@@ -25,9 +26,10 @@ alternates.push({
     hrefLang: 'x-default'
 });
 const t = getLang(locale)
-const { title, description, image } = Astro.props;
+const { title, description, keywords, image } = Astro.props;
 const headTitle = title || t.title;
 const headDesc = description || t.description;
+const headKeywords = keywords || t.keywords;
 const ogImage = image || resolvedImageWithDomain;
 ---
 
@@ -39,7 +41,7 @@ const ogImage = image || resolvedImageWithDomain;
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
         <link rel="sitemap" href="/sitemap-index.xml" />
-        <meta name="keywords" content={t.keywords}>
+        {headKeywords && <meta name="keywords" content={headKeywords}>}
         <SEO
             title={headTitle}
             description={headDesc}
