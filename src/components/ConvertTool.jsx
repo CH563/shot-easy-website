@@ -663,18 +663,18 @@ export default function ConvertTool({ copy = {} }) {
         <>
             {contextHolder}
             <div className="bg-white shadow-md rounded-md overflow-hidden">
-                <div className="flex gap-4 p-2 justify-center flex-col-reverse md:flex-row md:justify-between border-b border-dotted bg-white">
-                    <div className="flex gap-3 items-center justify-center flex-wrap">
+                <div className="flex min-w-0 gap-4 p-2 justify-center flex-col-reverse md:flex-row md:justify-between border-b border-dotted bg-white">
+                    <div className="flex min-w-0 w-full gap-3 items-center justify-center flex-wrap md:w-auto">
                         <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false} accept={inputTypes.join(',')}>
-                            <Button disabled={loading} icon={<Icon name="ImagePlus" />}>{copy.addFiles || 'Add Files'}</Button>
+                            <Button className="max-w-full whitespace-normal" disabled={loading} icon={<Icon name="ImagePlus" />}>{copy.addFiles || 'Add Files'}</Button>
                         </Upload>
-                        {supportsDirectoryPicker && <Button disabled={loading} icon={<Icon name="FolderPlus" />} onClick={addFolder}>{copy.addFolder || 'Add Folder'}</Button>}
+                        {supportsDirectoryPicker && <Button className="max-w-full whitespace-normal" disabled={loading} icon={<Icon name="FolderPlus" />} onClick={addFolder}>{copy.addFolder || 'Add Folder'}</Button>}
                     </div>
-                    <div className="flex gap-3 items-center justify-center flex-wrap">
+                    <div className="flex min-w-0 w-full gap-3 items-center justify-center flex-wrap md:w-auto">
                         <Tooltip placement="top" title={copy.convertAll || 'Convert All'}>
                             <Button
                                 type="primary"
-                                className="bg-black"
+                                className="max-w-full whitespace-normal bg-black"
                                 loading={loading}
                                 disabled={!items.length}
                                 icon={<Icon name="Repeat2" />}
@@ -684,41 +684,41 @@ export default function ConvertTool({ copy = {} }) {
                         <Tooltip placement="top" title={outputs.length ? (copy.downloadAll || 'Download All') : 'Convert first'}>
                             <Button
                                 type="primary"
-                                className="bg-black"
+                                className="max-w-full whitespace-normal bg-black"
                                 disabled={!outputs.length || loading}
                                 icon={<Icon name="Download" />}
                                 onClick={downloadAll}
                             >{copy.downloadAll || 'Download All'}</Button>
                         </Tooltip>
                         <Tooltip placement="top" title={copy.clearAll || 'Clear All'}>
-                            <Button type="text" disabled={!items.length || loading} icon={<Icon name="Eraser" />} onClick={clearAll}>{copy.clearAll || 'Clear All'}</Button>
+                            <Button className="max-w-full whitespace-normal" type="text" disabled={!items.length || loading} icon={<Icon name="Eraser" />} onClick={clearAll}>{copy.clearAll || 'Clear All'}</Button>
                         </Tooltip>
                     </div>
                 </div>
-                <div className="py-1 px-2 flex items-center gap-4 border-b border-dotted bg-slate-50 text-xs select-none flex-wrap">
-                    <div className="flex gap-2 items-center">
-                        <label className="font-semibold">{copy.convert || 'Convert'}:</label>
-                        <Select className="w-44" size="small" value={mode} options={modeOptions} onChange={handleModeChange} />
+                <div className="py-2 px-2 flex items-center gap-3 border-b border-dotted bg-slate-50 text-xs select-none flex-wrap">
+                    <div className="flex min-w-0 w-full gap-2 items-center sm:w-auto">
+                        <label className="shrink-0 font-semibold">{copy.convert || 'Convert'}:</label>
+                        <Select className="min-w-0 flex-1 sm:w-44 sm:flex-none" size="small" value={mode} options={modeOptions} onChange={handleModeChange} />
                     </div>
                     {(mode === 'image-to-webp' || mode === 'image-to-jpg') && (
-                        <div className="flex gap-2 items-center">
-                            <label className="font-semibold">{copy.quality || 'Quality'}:</label>
-                            <InputNumber className="w-28" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} />
+                        <div className="flex min-w-0 w-full gap-2 items-center sm:w-auto">
+                            <label className="shrink-0 font-semibold">{copy.quality || 'Quality'}:</label>
+                            <InputNumber className="min-w-0 flex-1 sm:w-28 sm:flex-none" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} />
                         </div>
                     )}
                     {mode === 'pdf-to-images' && (
-                        <div className="flex gap-2 items-center">
-                            <label className="font-semibold">{copy.pdfScale || 'PDF Scale'}:</label>
-                            <InputNumber className="w-28" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} />
+                        <div className="flex min-w-0 w-full gap-2 items-center sm:w-auto">
+                            <label className="shrink-0 font-semibold">{copy.pdfScale || 'PDF Scale'}:</label>
+                            <InputNumber className="min-w-0 flex-1 sm:w-28 sm:flex-none" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} />
                         </div>
                     )}
                     {mode === 'png-to-ico' && (
-                        <div className="flex gap-2 items-center">
-                            <label className="font-semibold">{copy.icoSize || 'ICO Size'}:</label>
-                            <InputNumber className="w-32" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={updateIcoSize} />
+                        <div className="flex min-w-0 w-full gap-2 items-center sm:w-auto">
+                            <label className="shrink-0 font-semibold">{copy.icoSize || 'ICO Size'}:</label>
+                            <InputNumber className="min-w-0 flex-1 sm:w-32 sm:flex-none" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={updateIcoSize} />
                         </div>
                     )}
-                    <div className="flex-1 text-right">
+                    <div className="w-full text-right sm:flex-1">
                         <Button
                             size="small"
                             type="link"
