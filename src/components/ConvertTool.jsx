@@ -30,6 +30,23 @@ const sortFiles = (files) => Array.from(files)
 
 const getUploadFile = (file) => file?.originFileObj || file;
 
+const getUniqueZipName = (name, usedNames) => {
+    const dotIndex = name.lastIndexOf('.');
+    const hasExtension = dotIndex > 0;
+    const base = hasExtension ? name.slice(0, dotIndex) : name;
+    const extension = hasExtension ? name.slice(dotIndex) : '';
+    let nextName = name;
+    let index = 2;
+
+    while (usedNames.has(nextName)) {
+        nextName = `${base} (${index})${extension}`;
+        index += 1;
+    }
+
+    usedNames.add(nextName);
+    return nextName;
+};
+
 const getAllFilesFromEntry = async (entry) => {
     if (entry.isFile) {
         return new Promise((resolve) => {
@@ -120,7 +137,8 @@ const getItemMeta = (item) => {
 
 const zipOutputs = async (outputs, fileName) => {
     const zip = new JSZip();
-    outputs.forEach((output) => zip.file(output.name, output.blob));
+    const usedNames = new Set();
+    outputs.forEach((output) => zip.file(getUniqueZipName(output.name, usedNames), output.blob));
     const blob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(blob);
     toDownloadFile(url, fileName);
@@ -163,6 +181,25 @@ export default function ConvertTool({ copy = {} }) {
         return { ...item, status: 'ready', skipReason: undefined, error: undefined, outputs: [] };
     });
 
+    const invalidateOutputs = () => {
+        setItems((prev) => resetOutputs(prev));
+    };
+
+    const updateQuality = (value) => {
+        invalidateOutputs();
+        setQuality(value || 92);
+    };
+
+    const updatePdfScale = (value) => {
+        invalidateOutputs();
+        setPdfScale(value || 2);
+    };
+
+    const updateIcoSize = (value) => {
+        invalidateOutputs();
+        setIcoSize(Math.max(1, Math.min(256, Math.round(value || 256))));
+    };
+
     const addFiles = async (files) => {
         const sortedFiles = sortFiles(files);
         const acceptedFiles = sortedFiles.filter((file) => inputTypes.includes(file.type));
@@ -176,6 +213,7 @@ export default function ConvertTool({ copy = {} }) {
 
         setLoading(true);
         const loadedItems = [];
+        let hasLoadError = false;
         try {
             for (const file of acceptedFiles) {
                 const baseItem = {
@@ -189,14 +227,23 @@ export default function ConvertTool({ copy = {} }) {
                 };
 
                 if (imageInputTypes.includes(file.type)) {
-                    const preview = await loadImageFile(file);
-                    loadedItems.push({
-                        ...baseItem,
-                        src: preview.src,
-                        image: preview.image,
-                        width: preview.width,
-                        height: preview.height,
-                    });
+                    try {
+                        const preview = await loadImageFile(file);
+                        loadedItems.push({
+                            ...baseItem,
+                            src: preview.src,
+                            image: preview.image,
+                            width: preview.width,
+                            height: preview.height,
+                        });
+                    } catch (error) {
+                        hasLoadError = true;
+                        loadedItems.push({
+                            ...baseItem,
+                            status: 'error',
+                            error: error.message || 'Image load failed.',
+                        });
+                    }
                     continue;
                 }
 
@@ -204,6 +251,7 @@ export default function ConvertTool({ copy = {} }) {
             }
 
             setItems((prev) => [...resetOutputs(prev), ...loadedItems]);
+            if (hasLoadError) messageApi.error('Some images could not be loaded.');
         } catch (error) {
             cleanupItems(loadedItems);
             messageApi.error(error.message || 'File load failed.');
@@ -256,23 +304,21 @@ export default function ConvertTool({ copy = {} }) {
                 const item = event.dataTransfer.items[i];
                 if (typeof item.getAsFileSystemHandle === 'function') {
                     const handle = await item.getAsFileSystemHandle();
-                    files.push(...await getAllFilesFromHandle(handle));
+                    if (handle.kind === 'directory') {
+                        files.push(...await getAllFilesFromHandle(handle));
+                    }
                     continue;
                 }
                 if (typeof item.webkitGetAsEntry === 'function') {
                     const entry = item.webkitGetAsEntry();
-                    if (entry) {
+                    if (entry?.isDirectory) {
                         files.push(...await getAllFilesFromEntry(entry));
                         continue;
                     }
                 }
-                const file = item.getAsFile?.();
-                if (file) files.push(file);
             }
-        } else if (event.dataTransfer?.files) {
-            files.push(...event.dataTransfer.files);
         }
-        await addFiles(files);
+        if (files.length) await addFiles(files);
     };
 
     const convertItem = async (item, selectedMode) => {
@@ -323,6 +369,7 @@ export default function ConvertTool({ copy = {} }) {
     const convertImagesToPdf = async (sourceItems, selectedMode) => {
         const compatibleItems = [];
         const preparedItems = [];
+        let compatibleCount = 0;
 
         for (const item of sourceItems) {
             if (!isCompatible(item, selectedMode)) {
@@ -330,23 +377,37 @@ export default function ConvertTool({ copy = {} }) {
                 continue;
             }
 
-            let preparedItem = item;
-            if (!preparedItem.image) {
-                const preview = await loadImageFile(preparedItem.file);
-                preparedItem = {
-                    ...preparedItem,
-                    src: preview.src,
-                    image: preview.image,
-                    width: preview.width,
-                    height: preview.height,
-                };
+            compatibleCount += 1;
+            try {
+                let preparedItem = item;
+                if (!preparedItem.image) {
+                    const preview = await loadImageFile(preparedItem.file);
+                    preparedItem = {
+                        ...preparedItem,
+                        src: preview.src,
+                        image: preview.image,
+                        width: preview.width,
+                        height: preview.height,
+                    };
+                }
+                compatibleItems.push(preparedItem);
+                preparedItems.push({ ...preparedItem, status: 'done', outputs: [] });
+            } catch (error) {
+                preparedItems.push({
+                    ...item,
+                    status: 'error',
+                    error: error.message || 'Image load failed.',
+                    outputs: [],
+                });
             }
-            compatibleItems.push(preparedItem);
-            preparedItems.push({ ...preparedItem, status: 'done', outputs: [] });
         }
 
         if (!compatibleItems.length) {
-            messageApi.warning('Please add images supported by the selected mode.');
+            if (compatibleCount) {
+                messageApi.error('No images could be converted to PDF.');
+            } else {
+                messageApi.warning('Please add images supported by the selected mode.');
+            }
             return preparedItems;
         }
 
@@ -359,10 +420,9 @@ export default function ConvertTool({ copy = {} }) {
             pageCount: compatibleItems.length,
         }, 'shoteasy-images.pdf');
 
-        let attached = false;
+        const outputItemId = compatibleItems[0].id;
         return preparedItems.map((item) => {
-            if (attached || !isCompatible(item, selectedMode)) return item;
-            attached = true;
+            if (item.id !== outputItemId) return item;
             return { ...item, outputs: [output] };
         });
     };
@@ -408,12 +468,16 @@ export default function ConvertTool({ copy = {} }) {
 
     const removeItem = (id) => {
         setItems((prev) => {
-            const target = prev.find((item) => item.id === id);
-            if (target) {
-                revokePreviewUrl(target);
-                revokeOutputUrls(target);
-            }
-            return prev.filter((item) => item.id !== id);
+            const remaining = [];
+            prev.forEach((item) => {
+                if (item.id === id) {
+                    revokePreviewUrl(item);
+                    revokeOutputUrls(item);
+                    return;
+                }
+                remaining.push(item);
+            });
+            return resetOutputs(remaining);
         });
     };
 
@@ -574,19 +638,19 @@ export default function ConvertTool({ copy = {} }) {
                     {(mode === 'image-to-webp' || mode === 'image-to-jpg') && (
                         <div className="flex gap-2 items-center">
                             <label className="font-semibold">{copy.quality || 'Quality'}:</label>
-                            <InputNumber className="w-28" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={(value) => setQuality(value || 92)} />
+                            <InputNumber className="w-28" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} />
                         </div>
                     )}
                     {mode === 'pdf-to-images' && (
                         <div className="flex gap-2 items-center">
                             <label className="font-semibold">{copy.pdfScale || 'PDF Scale'}:</label>
-                            <InputNumber className="w-28" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={(value) => setPdfScale(value || 2)} />
+                            <InputNumber className="w-28" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} />
                         </div>
                     )}
                     {mode === 'png-to-ico' && (
                         <div className="flex gap-2 items-center">
                             <label className="font-semibold">{copy.icoSize || 'ICO Size'}:</label>
-                            <InputNumber className="w-32" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={(value) => setIcoSize(Math.max(1, Math.min(256, Math.round(value || 256))))} />
+                            <InputNumber className="w-32" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={updateIcoSize} />
                         </div>
                     )}
                     <div className="flex-1 text-right">
