@@ -4,7 +4,7 @@ import JSZip from 'jszip';
 import { Icon } from './Icons';
 import { UploadDragger } from './UploadDragger';
 import { FormatTag } from './FormatTag';
-import { getFilesFromEntry, getFilesFromHandle, toDownloadFile } from '@lib/utils';
+import { toDownloadFile } from '@lib/utils';
 import { convertImageFile, extensionForMime, formatBytes, imageInputTypes, loadImageFile, pngBlobToIcoBlob, replaceExtension } from '@lib/imageConvert';
 import { createImagesPdfBlob, renderPdfPages } from '@lib/pdfConvert';
 
@@ -27,6 +27,50 @@ const unsupportedReason = 'This file type is not supported by the selected mode.
 
 const sortFiles = (files) => Array.from(files)
     .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+const getUploadFile = (file) => file?.originFileObj || file;
+
+const getAllFilesFromEntry = async (entry) => {
+    if (entry.isFile) {
+        return new Promise((resolve) => {
+            entry.file((file) => resolve([file]), () => resolve([]));
+        });
+    }
+
+    if (entry.isDirectory) {
+        const reader = entry.createReader();
+        const entries = [];
+        let batch = [];
+        do {
+            batch = await new Promise((resolve) => reader.readEntries(resolve, () => resolve([])));
+            entries.push(...batch);
+        } while (batch.length);
+
+        const files = [];
+        for (const item of entries) {
+            files.push(...await getAllFilesFromEntry(item));
+        }
+        return files;
+    }
+
+    return [];
+};
+
+const getAllFilesFromHandle = async (handle) => {
+    if (handle.kind === 'file') {
+        return [await handle.getFile()];
+    }
+
+    if (handle.kind === 'directory') {
+        const files = [];
+        for await (const item of handle.values()) {
+            files.push(...await getAllFilesFromHandle(item));
+        }
+        return files;
+    }
+
+    return [];
+};
 
 const revokeOutputUrls = (item) => {
     item.outputs?.forEach((output) => {
@@ -86,6 +130,7 @@ const zipOutputs = async (outputs, fileName) => {
 export default function ConvertTool({ copy = {} }) {
     const [messageApi, contextHolder] = message.useMessage();
     const itemsRef = useRef([]);
+    const uploadQueueRef = useRef({ files: [], timer: null });
     const [items, setItems] = useState([]);
     const [mode, setMode] = useState('image-to-webp');
     const [quality, setQuality] = useState(92);
@@ -108,7 +153,10 @@ export default function ConvertTool({ copy = {} }) {
         itemsRef.current = items;
     }, [items]);
 
-    useEffect(() => () => cleanupItems(itemsRef.current), []);
+    useEffect(() => () => {
+        if (uploadQueueRef.current.timer) window.clearTimeout(uploadQueueRef.current.timer);
+        cleanupItems(itemsRef.current);
+    }, []);
 
     const resetOutputs = (list) => list.map((item) => {
         revokeOutputUrls(item);
@@ -164,16 +212,36 @@ export default function ConvertTool({ copy = {} }) {
         }
     };
 
-    const beforeUpload = async (file) => {
-        await addFiles([file]);
-        return Promise.reject();
+    const flushUploadQueue = async () => {
+        const files = uploadQueueRef.current.files;
+        uploadQueueRef.current = { files: [], timer: null };
+        await addFiles(files);
+    };
+
+    const beforeUpload = (file, fileList = []) => {
+        const queuedFiles = (fileList.length ? fileList : [file])
+            .map(getUploadFile)
+            .filter(Boolean);
+        const queuedSet = new Set(uploadQueueRef.current.files);
+        queuedFiles.forEach((queuedFile) => {
+            if (!queuedSet.has(queuedFile)) {
+                queuedSet.add(queuedFile);
+                uploadQueueRef.current.files.push(queuedFile);
+            }
+        });
+
+        if (!uploadQueueRef.current.timer) {
+            uploadQueueRef.current.timer = window.setTimeout(flushUploadQueue, 0);
+        }
+
+        return Upload.LIST_IGNORE;
     };
 
     const addFolder = async () => {
         if (!supportsDirectoryPicker) return;
         try {
             const handle = await window.showDirectoryPicker();
-            const files = await getFilesFromHandle(handle, inputTypes);
+            const files = await getAllFilesFromHandle(handle);
             await addFiles(files);
         } catch (error) {
             if (error.name !== 'AbortError') messageApi.error(error.message || 'Folder selection failed.');
@@ -188,13 +256,13 @@ export default function ConvertTool({ copy = {} }) {
                 const item = event.dataTransfer.items[i];
                 if (typeof item.getAsFileSystemHandle === 'function') {
                     const handle = await item.getAsFileSystemHandle();
-                    files.push(...await getFilesFromHandle(handle, inputTypes));
+                    files.push(...await getAllFilesFromHandle(handle));
                     continue;
                 }
                 if (typeof item.webkitGetAsEntry === 'function') {
                     const entry = item.webkitGetAsEntry();
                     if (entry) {
-                        files.push(...await getFilesFromEntry(entry, inputTypes));
+                        files.push(...await getAllFilesFromEntry(entry));
                         continue;
                     }
                 }
