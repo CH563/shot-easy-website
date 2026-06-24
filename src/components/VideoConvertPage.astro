@@ -1,6 +1,7 @@
 ---
 import VideoConvert from '@components/VideoConvert';
 import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
 import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const l = getLang(locale);
@@ -34,6 +35,7 @@ type FaqItem = { question: string; answer: string };
         <p>{t.privacyCont1}</p>
         <p>{t.privacyCont2}</p>
     </section>
+    <LocalProcessingBlock />
     {t.featureSections && (
         <section class="my-8 rounded-md border border-slate-100 bg-white/80 p-5 shadow-sm">
             <div class="max-w-3xl">

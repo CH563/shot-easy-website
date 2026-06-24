@@ -1,6 +1,7 @@
 ---
 import LongImageComposer from '@components/LongImageComposer';
 import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
 import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const l = getLang(locale);
@@ -26,6 +27,7 @@ const t = l.longImage;
         <p>{t.settingCont1}</p>
         <p>{t.settingCont2}</p>
     </section>
+    <LocalProcessingBlock />
     <Privacy />
 </div>
 <script type="application/ld+json" set:html={JSON.stringify({

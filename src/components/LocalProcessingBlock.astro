@@ -1,0 +1,18 @@
+---
+import { getLang } from '@i18n/index';
+
+const { locale } = Astro.params;
+const l = getLang(locale);
+const copy = l.localProcessing || {
+    title: 'No Upload, Local Processing',
+    cont1: 'Your files are processed locally in your browser. ShotEasy does not need to upload images or videos to a server for these tools.',
+    cont2: 'Use it for screenshots, private photos, documents, tutorials, product images, and quick notes with better privacy.'
+};
+---
+
+<section class="mb-3 rounded-md p-4 bg-emerald-100/40 text-xs [&>p]:mb-1">
+    <div class="mb-1 text-sm">🔒</div>
+    <h2 class="text-lg font-bold mb-2">{copy.title}</h2>
+    <p>{copy.cont1}</p>
+    <p>{copy.cont2}</p>
+</section>

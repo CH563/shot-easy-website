@@ -4,10 +4,12 @@ import EditBox from '@components/EditBox.jsx';
 import Privacy from '@components/Privacy.astro';
 import fakeact from '@static/fakeact.svg';
 import fakemail from '@static/fakemail.svg';
-import {getLang, getBrowserType} from '@i18n/index';
+import {getLang, getLocale, getBrowserType} from '@i18n/index';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 const { locale } = Astro.params;
 // console.log(Astro.request.headers.get('User-Agent'));
 const l = getLang(locale);
+const lang = getLocale(locale);
 const t = l.editor;
 const extLink = {
     'Edge': 'https://microsoftedge.microsoft.com/addons/detail/kncmnbknmjfaejmkcogljhkehippifho',
@@ -35,9 +37,10 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
         <p class="text-xs opacity-80">{t.instantly}</p>
     </div>
     <div class="flex flex-col gap-3 justify-center text-xs hover:[&_a]:bg-blue-600 hover:[&_a]:text-white [&_a]:py-1 [&_a]:px-3 [&_a]:inline-block [&_a]:rounded-full [&_a]:bg-white [&_a]:text-blue-600 [&_a]:border [&_a]:border-blue-600 md:flex-row">
-        <div class="text-center"><a href="/screenshot-beautifier" title="Screenshot Beautifier">🏞️ {l.nav.beautifier.title}</a></div>
-        <div class="text-center"><a href="/photo-to-rounded" title="Photo to Rounded">🛟 {l.nav.rounded.title}</a></div>
-        <div class="text-center"><a href="/image-compressor" title="Photo to Rounded">⬇️ {l.nav.compressor.title}</a></div>
+        <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/take-a-screenshot')} title={l.nav.screenshot.title}>📸 {l.nav.screenshot.title}</a></div>
+        <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/screenshot-beautifier')} title={l.nav.beautifier.title}>🏞️ {l.nav.beautifier.title}</a></div>
+        <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/image-compressor')} title={l.nav.compressor.title}>⬇️ {l.nav.compressor.title}</a></div>
+        <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/long-image')} title={l.nav.longImage.title}>🧩 {l.nav.longImage.title}</a></div>
     </div>
     <div class="pt-4 pb-12 min-h-[716px]">
         <EditBox client:only="react" />
