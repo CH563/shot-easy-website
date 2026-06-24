@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # vercel build cache
 .vercel
+
+# Superpowers brainstorming companion
+.superpowers/
