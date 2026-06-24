@@ -19,6 +19,9 @@ interface ClusterLink {
 }
 const faqItems: FaqItem[] = t.faq || [];
 const clusterLinks: ClusterLink[] = t.clusterLinks || [];
+const captureTechTitle = t.captureTechTitle || 'Browser screen capture API';
+const captureTechCont1 = t.captureTechCont1 || 'ShotEasy uses navigator.mediaDevices.getDisplayMedia to request screen capture permission directly from your browser.';
+const captureTechCont2 = t.captureTechCont2 || 'You can capture your desktop, an app window, a chat window, a browser tab, or a game screen, then crop, copy, and save the screenshot without installing separate screenshot software.';
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -48,6 +51,20 @@ const clusterLinks: ClusterLink[] = t.clusterLinks || [];
         <p>{t.whyCont1}</p>
         <p>{t.whyCont2}</p>
         <p>{t.whyCont3}</p>
+    </section>
+    <section class="mb-3 rounded-md p-4 bg-blue-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">🖥️</div>
+        <h2 class="text-lg font-bold mb-2">{captureTechTitle}</h2>
+        <p>
+            <a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-mono rounded bg-white/80 px-1 py-0.5 text-blue-600 hover:underline"
+            >navigator.mediaDevices.getDisplayMedia</a>
+        </p>
+        <p>{captureTechCont1}</p>
+        <p>{captureTechCont2}</p>
     </section>
     <section class="mb-3 rounded-md p-4 bg-green-100/40 text-xs [&>p]:mb-1 [&_span]:inline-block [&_span]:rounded-sm [&_span]:bg-black/70 [&_span]:px-1.5 [&_span]:text-white">
         <div class="mb-1 text-sm">📸</div>
