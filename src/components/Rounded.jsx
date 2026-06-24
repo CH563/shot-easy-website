@@ -141,7 +141,7 @@ export default function Rounded() {
                         {!photoUrl && <UploadDragger beforeUpload={beforeUpload} />}
                         {photoUrl && <div className="overflow-hidden max-w-[80%]" style={{
                             width: computedSize(photoData.width, photoData.height).width + 'px'
-                        }}><img src={photoUrl} className="w-full" /></div>}
+                        }}><img src={photoUrl} alt="Rounded photo preview" className="w-full" /></div>}
                     </div>
                 </div>
             </div>

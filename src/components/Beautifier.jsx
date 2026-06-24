@@ -256,7 +256,7 @@ export default function Beautifier() {
                                 aspectRatio: ratio,
                                 ...boxStyle
                             }}>
-                                {bgValue.includes('_img_') && <img src={`${backgroundConfig[bgValue]}&w=1200`} className="w-full h-full absolute z-0 object-cover object-center" />}
+                                {bgValue.includes('_img_') && <img src={`${backgroundConfig[bgValue]}&w=1200`} alt="Screenshot background preview" className="w-full h-full absolute z-0 object-cover object-center" />}
                                 <Watermark
                                     rootClassName="w-full md:w-[600px] h-full"
                                     content={useWater ? waterCont : ''}
@@ -329,7 +329,7 @@ export default function Beautifier() {
                                                 borderRadius: `${ (frame === 'light' || frame === 'dark') && roundValue - 2 > 0 ? roundValue - 2 : 0 }px`,
                                                 backgroundColor: paddingBg
                                             }}>
-                                                <img src={photoUrl} className="w-full" />
+                                                <img src={photoUrl} alt="Beautified screenshot preview" className="w-full" />
                                             </div>
                                         </div>}
                                     </div>

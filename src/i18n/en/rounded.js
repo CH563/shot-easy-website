@@ -1,5 +1,5 @@
 export default {
-    title: 'Photo To Rounded',
+    title: 'Round Photo Corners Online and Export PNG | ShotEasy',
     description: 'Online photo to rounded tool, quickly add rounded to the photo, made of beautiful rounded photo, size of the rounded, generate rounded photo in PNG format.',
     tip: 'Not uploaded and editing in browser',
     online: 'Photo To Rounded Online',

@@ -1,5 +1,5 @@
 export default {
-    title: 'Background Remover',
+    title: 'Background Remover Online - Create Transparent Images | ShotEasy',
     description: 'Remove image backgrounds automatically just one click. Background remover tool can process your images FAST & FREE--no signup required. Upload your photo now.',
     tips: 'Add an image to remove the background or replace to Any Background',
     how: 'How to remove image background?',

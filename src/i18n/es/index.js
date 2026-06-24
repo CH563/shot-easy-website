@@ -9,7 +9,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
 export default {
-    title: 'editor de fotos en línea gratis',
+    title: 'Editor de fotos y capturas online gratis | ShotEasy',
     description:
         'Edita fotos en línea de forma gratuita, redimensiona y filtra cualquier foto, edita fotos en el navegador, convierte imágenes a jpg/png/jpeg/webp, captura fácilmente áreas o páginas completas',
     keywords:

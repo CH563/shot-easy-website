@@ -1,5 +1,5 @@
 export default {
-    title: '在线截图美化工具',
+    title: '在线截图美化工具 - 添加背景、边框和阴影 | ShotEasy',
     description: '在线截图美化工具可帮助您使用精美的背景和 Macbook Pro 或 iPhone 15 Pro 边框美化您的截图',
     new: '新版本即将推出，LeaferJs开发，抢先体验',
     not: '未在浏览器中上传和编辑',

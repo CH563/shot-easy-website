@@ -31,7 +31,7 @@ export const BackgroundSelect = ({ type, options, onChange, value }) => {
                 <Radio key={index} className="[&_.ant-radio]:hidden [&_span]:p-0 mr-0" value={item.key}>
                     {isImg.includes(type) ?
                         <div className={cn("w-12 h-8 rounded-md overflow-hidden")}>
-                            <img src={`${item.value}&w=48`} className="w-full h-full object-cover object-center" />
+                            <img src={`${item.value}&w=48`} alt={`${item.key} background option`} className="w-full h-full object-cover object-center" />
                         </div> : type.includes('style') ? <div className="w-6 h-8 overflow-hidden" style={JSON.parse(item.key)}></div> :
                             type.includes('svg') ? <div className="w-8 h-8 rounded-full overflow-hidden" style={JSON.parse(item.key)}></div> :
                                 <div className={cn("w-8 h-8 rounded-full overflow-hidden", item.value)}>

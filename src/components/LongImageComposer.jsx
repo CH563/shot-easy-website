@@ -405,7 +405,7 @@ const LongImageComposer = () => {
                     {items.map((item, index) => (
                         <div key={item.id} className="flex items-center justify-between pb-5 relative after:block after:absolute after:bottom-0 after:left-16 after:right-0 after:h-[1px] after:bg-slate-200">
                             <div className="flex items-center min-w-0 max-w-[62%]">
-                                <img src={item.src} className="w-12 h-12 mr-4 rounded-md object-cover flex-shrink-0 bg-slate-100" />
+                                <img src={item.src} alt={`${item.name || 'Image'} long image item preview`} className="w-12 h-12 mr-4 rounded-md object-cover flex-shrink-0 bg-slate-100" />
                                 <div className="min-w-0">
                                     <div className="font-semibold mb-1.5 truncate">{item.name}</div>
                                     <div className="text-xs flex gap-1 text-slate-500">
@@ -544,7 +544,7 @@ const LongImageComposer = () => {
                             </div>
                             {result.format === 'pdf'
                                 ? <iframe title="PDF Preview" src={result.url} className="w-full h-[520px] rounded border" />
-                                : <img src={result.url} className="block max-w-full max-h-[620px] mx-auto rounded border object-contain" />
+                                : <img src={result.url} alt="Composed long image preview" className="block max-w-full max-h-[620px] mx-auto rounded border object-contain" />
                             }
                         </div>
                     )}

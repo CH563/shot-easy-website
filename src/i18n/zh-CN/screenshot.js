@@ -1,5 +1,5 @@
 export default {
-    title: '在线截图',
+    title: '在线截图工具 - 截取网页、窗口和全屏截图 | ShotEasy',
     description: '在线截图和编辑截图',
     tip: '不上传，在浏览器中编辑',
     how: '如何在线截图？',
