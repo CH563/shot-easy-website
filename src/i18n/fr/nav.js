@@ -19,6 +19,10 @@ export default {
         name: 'Compresseur',
         title: "Compresseur d'Images",
     },
+    longImage: {
+        name: 'Image longue',
+        title: "Créateur d'image longue",
+    },
     videoConvert: {
         name: 'Video',
         title: 'Video Convert',

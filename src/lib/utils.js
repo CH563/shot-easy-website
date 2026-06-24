@@ -317,15 +317,14 @@ export function getUniqNameOnNames(names, name) {
     return getName(name);
 }
 
-export async function getFilesFromEntry(entry) {
+export async function getFilesFromEntry(entry, acceptedTypes = Object.values(Mimes)) {
     // If entry is a file
     if (entry.isFile) {
         const fileEntry = entry;
         return new Promise((resolve) => {
             fileEntry.file(
                 (result) => {
-                    const types = Object.values(Mimes);
-                    resolve(types.includes(result.type) ? [result] : []);
+                    resolve(acceptedTypes.includes(result.type) ? [result] : []);
                 },
                 () => []
             );
@@ -340,7 +339,7 @@ export async function getFilesFromEntry(entry) {
         });
         const result = [];
         for (const item of list) {
-            const subList = await getFilesFromEntry(item);
+            const subList = await getFilesFromEntry(item, acceptedTypes);
             result.push(...subList);
         }
         return result;
@@ -350,20 +349,19 @@ export async function getFilesFromEntry(entry) {
     return [];
 }
 
-export async function getFilesFromHandle(handle) {
+export async function getFilesFromHandle(handle, acceptedTypes = Object.values(Mimes)) {
     // If handle is a file
     if (handle.kind === 'file') {
         const fileHandle = handle;
         const file = await fileHandle.getFile();
-        const types = Object.values(Mimes);
-        return types.includes(file.type) ? [file] : [];
+        return acceptedTypes.includes(file.type) ? [file] : [];
     }
 
     // If handle is a directory
     if (handle.kind === 'directory') {
         const result = [];
         for await (const item of handle.values()) {
-            const subList = await getFilesFromHandle(item);
+            const subList = await getFilesFromHandle(item, acceptedTypes);
             result.push(...subList);
         }
         return result;

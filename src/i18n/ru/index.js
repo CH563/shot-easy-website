@@ -4,6 +4,7 @@ import beautifier from './beautifier';
 import rounded from './rounded';
 import remover from './remover';
 import compressor from './compressor';
+import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
@@ -22,6 +23,7 @@ export default {
     rounded,
     remover,
     compressor,
+    longImage,
     screenshot,
     videoConvert
 };
