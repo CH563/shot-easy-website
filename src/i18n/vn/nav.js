@@ -19,6 +19,10 @@ export default {
         name: 'Nén',
         title: 'Nén Ảnh'
     },
+    longImage: {
+        name: 'Ảnh dài',
+        title: 'Ghép ảnh dài'
+    },
     videoConvert: {
         name: 'Video',
         title: 'Video Convert'

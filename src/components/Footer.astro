@@ -15,7 +15,7 @@ const langUrls = CONFIG.locals.map(item => {
 
 <div class="py-8 bg-white">
     <div class="container grid grid-cols-3 items-center gap-2 text-xs text-gray-500">
-        <div class="col-span-3 flex justify-start gap-3 text-xs">
+        <div class="col-span-3 flex justify-start gap-3 text-xs flex-wrap">
             {langUrls.map(item => (
                 item.isActive ? <span class="opacity-80 cursor-default">{item.hrefLang}</span> : <a class="hover:text-blue-500 underline" href={item.href} title={item.hrefLang}>{item.hrefLang}</a>
             ))}

@@ -19,6 +19,10 @@ export default {
         name: 'Компрессор',
         title: 'Компрессор изображений',
     },
+    longImage: {
+        name: 'Длинное',
+        title: 'Склейка длинных изображений',
+    },
     videoConvert: {
         name: 'Video',
         title: 'Video Convert',

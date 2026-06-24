@@ -19,6 +19,10 @@ export default {
         name: '压缩',
         title: '图片快速压缩',
     },
+    longImage: {
+        name: '拼长图',
+        title: '在线拼长图',
+    },
     videoConvert: {
         name: '视频',
         title: '在线视频转换',

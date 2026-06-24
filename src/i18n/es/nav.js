@@ -19,6 +19,10 @@ export default {
         name: 'Compresor',
         title: 'Compresor de Imágenes',
     },
+    longImage: {
+        name: 'Imagen larga',
+        title: 'Compositor de imagen larga',
+    },
     videoConvert: {
         name: 'Video',
         title: 'Video Convert',
