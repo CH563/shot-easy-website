@@ -60,45 +60,54 @@ export const drawImageToCanvas = (image, fill = null) => {
 
 export const convertImageFile = async (file, mime, quality = 0.92) => {
     const loaded = await loadImageFile(file);
-    const fill = mime === 'image/jpeg' ? '#fff' : null;
-    const canvas = drawImageToCanvas(loaded.image, fill);
-    const blob = await canvasToBlob(canvas, mime, quality);
-    URL.revokeObjectURL(loaded.src);
-    return {
-        name: replaceExtension(file.name, extensionForMime(mime)),
-        blob,
-        type: mime,
-        size: blob.size,
-        width: canvas.width,
-        height: canvas.height,
-    };
+    try {
+        const fill = mime === 'image/jpeg' ? '#fff' : null;
+        const canvas = drawImageToCanvas(loaded.image, fill);
+        const blob = await canvasToBlob(canvas, mime, quality);
+        return {
+            name: replaceExtension(file.name, extensionForMime(mime)),
+            blob,
+            type: mime,
+            size: blob.size,
+            width: canvas.width,
+            height: canvas.height,
+        };
+    } finally {
+        URL.revokeObjectURL(loaded.src);
+    }
 };
 
 export const pngBlobToIcoBlob = async (blob, size = 256) => {
+    if (!Number.isInteger(size) || size < 1 || size > 256) {
+        throw new Error('ICO size must be an integer from 1 to 256 pixels.');
+    }
     const file = new File([blob], 'icon.png', { type: 'image/png' });
     const loaded = await loadImageFile(file);
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const context = canvas.getContext('2d');
-    context.clearRect(0, 0, size, size);
-    context.drawImage(loaded.image, 0, 0, size, size);
-    URL.revokeObjectURL(loaded.src);
-    const pngBlob = await canvasToBlob(canvas, 'image/png');
-    const pngBytes = new Uint8Array(await pngBlob.arrayBuffer());
-    const buffer = new ArrayBuffer(22 + pngBytes.length);
-    const view = new DataView(buffer);
-    view.setUint16(0, 0, true);
-    view.setUint16(2, 1, true);
-    view.setUint16(4, 1, true);
-    view.setUint8(6, size >= 256 ? 0 : size);
-    view.setUint8(7, size >= 256 ? 0 : size);
-    view.setUint8(8, 0);
-    view.setUint8(9, 0);
-    view.setUint16(10, 1, true);
-    view.setUint16(12, 32, true);
-    view.setUint32(14, pngBytes.length, true);
-    view.setUint32(18, 22, true);
-    new Uint8Array(buffer, 22).set(pngBytes);
-    return new Blob([buffer], { type: 'image/x-icon' });
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, size, size);
+        context.drawImage(loaded.image, 0, 0, size, size);
+        const pngBlob = await canvasToBlob(canvas, 'image/png');
+        const pngBytes = new Uint8Array(await pngBlob.arrayBuffer());
+        const buffer = new ArrayBuffer(22 + pngBytes.length);
+        const view = new DataView(buffer);
+        view.setUint16(0, 0, true);
+        view.setUint16(2, 1, true);
+        view.setUint16(4, 1, true);
+        view.setUint8(6, size >= 256 ? 0 : size);
+        view.setUint8(7, size >= 256 ? 0 : size);
+        view.setUint8(8, 0);
+        view.setUint8(9, 0);
+        view.setUint16(10, 1, true);
+        view.setUint16(12, 32, true);
+        view.setUint32(14, pngBytes.length, true);
+        view.setUint32(18, 22, true);
+        new Uint8Array(buffer, 22).set(pngBytes);
+        return new Blob([buffer], { type: 'image/x-icon' });
+    } finally {
+        URL.revokeObjectURL(loaded.src);
+    }
 };

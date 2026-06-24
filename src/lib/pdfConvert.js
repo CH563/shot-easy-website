@@ -121,31 +121,36 @@ export async function renderPdfPages(file, options = {}) {
         const pageNumberLength = String(pdf.numPages).length;
         for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
             const page = await pdf.getPage(pageNumber);
-            const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
-            canvas.width = Math.max(1, Math.ceil(viewport.width));
-            canvas.height = Math.max(1, Math.ceil(viewport.height));
-            const context = canvas.getContext('2d');
-            context.fillStyle = '#fff';
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            await page.render({
-                canvasContext: context,
-                viewport,
-                background: 'white',
-            }).promise;
-            page.cleanup?.();
+            try {
+                const viewport = page.getViewport({ scale });
+                canvas.width = Math.max(1, Math.ceil(viewport.width));
+                canvas.height = Math.max(1, Math.ceil(viewport.height));
+                const context = canvas.getContext('2d');
+                context.fillStyle = '#fff';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                await page.render({
+                    canvasContext: context,
+                    viewport,
+                    background: 'white',
+                }).promise;
 
-            const blob = await canvasToBlob(canvas, outputType, quality);
-            const pageLabel = String(pageNumber).padStart(pageNumberLength, '0');
-            items.push({
-                name: `${baseName}-page-${pageLabel}.${extensionForMime(outputType)}`,
-                blob,
-                type: outputType,
-                size: blob.size,
-                width: canvas.width,
-                height: canvas.height,
-                pageNumber,
-            });
+                const blob = await canvasToBlob(canvas, outputType, quality);
+                const pageLabel = String(pageNumber).padStart(pageNumberLength, '0');
+                items.push({
+                    name: `${baseName}-page-${pageLabel}.${extensionForMime(outputType)}`,
+                    blob,
+                    type: outputType,
+                    size: blob.size,
+                    width: canvas.width,
+                    height: canvas.height,
+                    pageNumber,
+                });
+            } finally {
+                page.cleanup?.();
+                canvas.width = 0;
+                canvas.height = 0;
+            }
         }
         return items;
     } finally {
@@ -156,6 +161,7 @@ export async function renderPdfPages(file, options = {}) {
 export async function createImagesPdfBlob(items) {
     if (!items.length) throw new Error('No images to convert.');
 
+    // Pages are rasterized to white-backed JPEGs, so transparency is flattened by design.
     const pages = [];
     for (const item of items) {
         if (!item.image) throw new Error('PDF image records must include an image.');
