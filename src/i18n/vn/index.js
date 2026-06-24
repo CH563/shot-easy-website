@@ -7,6 +7,7 @@ import compressor from './compressor';
 import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
+import convert from './convert';
 
 export default {
     title: 'Chỉnh sửa ảnh và chụp màn hình online miễn phí | ShotEasy',
@@ -25,5 +26,6 @@ export default {
     compressor,
     longImage,
     screenshot,
-    videoConvert
+    videoConvert,
+    convert
 };

@@ -7,6 +7,7 @@ import compressor from './compressor';
 import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
+import convert from './convert';
 
 export default {
     title: 'Photo editor online for free',
@@ -30,5 +31,6 @@ export default {
     compressor,
     longImage,
     screenshot,
-    videoConvert
+    videoConvert,
+    convert
 }

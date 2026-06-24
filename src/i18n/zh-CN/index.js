@@ -7,6 +7,7 @@ import compressor from './compressor';
 import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
+import convert from './convert';
 
 export default {
     title: '在线截图、图片编辑与格式转换工具 | ShotEasy',
@@ -25,5 +26,6 @@ export default {
     compressor,
     longImage,
     screenshot,
-    videoConvert
+    videoConvert,
+    convert
 };

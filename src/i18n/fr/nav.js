@@ -27,6 +27,10 @@ export default {
         name: 'Video',
         title: 'Video Convert',
     },
+    convert: {
+        name: 'Convert',
+        title: 'Image Convert'
+    },
     screenshot: {
         name: 'capture d\'écran',
         title: 'prendre une capture d\'écran'

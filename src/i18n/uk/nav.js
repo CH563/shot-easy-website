@@ -27,6 +27,10 @@ export default {
         name: 'Відео',
         title: 'Конвертер відео та GIF'
     },
+    convert: {
+        name: 'Convert',
+        title: 'Image Convert'
+    },
     screenshot: {
         name: 'Скриншот',
         title: 'Скриншот онлайн'
