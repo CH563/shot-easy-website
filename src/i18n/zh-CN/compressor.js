@@ -1,5 +1,5 @@
 export default {
-    title: '在线压缩图片',
+    title: '在线压缩图片 - JPG、PNG、WebP 本地压缩 | ShotEasy',
     description: '免费在线图片压缩,图片格式转换!基于 Webassembly 的压缩实现,可减小您的 WEBP、JPEG 和 PNG 图片的文件大小。',
     tip: '不会上传,使用 Webassembly 在浏览器中压缩',
     online: '在线压缩图片',

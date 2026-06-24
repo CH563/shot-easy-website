@@ -77,7 +77,7 @@ const Compressor = observer(() => {
                             <div key={info.key} className="flex items-center justify-between pb-5 relative after:block after:absolute after:bottom-0 after:left-16 after:right-0 after:h-[1px] after:bg-slate-200">
                                 <div className="flex items-center max-w-[50%]">
                                     <div className="overflow-hidden w-[48px] h-[48px] mr-4 rounded-md relative cursor-pointer [&_div]:hover:flex select-none">
-                                        <img src={info.preview?.src || info.src} className="w-full h-full flex-shrink-0 object-cover aspect-[1/1] relative z-0" />
+                                        <img src={info.preview?.src || info.src} alt={`${info.name || 'Image'} compression preview`} className="w-full h-full flex-shrink-0 object-cover aspect-[1/1] relative z-0" />
                                         {info.compress?.src && 
                                             <div
                                                 className="absolute hidden top-0 left-0 right-0 bottom-0 bg-[#00000050] items-center justify-center text-white"

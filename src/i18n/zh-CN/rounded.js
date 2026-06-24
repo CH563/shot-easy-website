@@ -1,5 +1,5 @@
 export default {
-    title: '将照片变圆角',
+    title: '照片圆角处理工具 - 在线制作圆角 PNG 图片 | ShotEasy',
     description:
         '在线将照片变圆角工具,快速为照片添加圆角,制作美丽的圆角照片,调整圆角大小,以PNG格式生成圆角照片。',
     tip: '无需上传和在浏览器中编辑',

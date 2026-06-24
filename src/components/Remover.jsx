@@ -216,8 +216,8 @@ export default function Remover() {
                         <div className="flex w-full items-center justify-center relative z-10">
                             {!photoUrl && <UploadDragger beforeUpload={beforeUpload} />}
                             <Spin spinning={loading} delay={500}>
-                                {photoUrl && <div className={cn("overflow-hidden w-auto", transparentUrl && 'opacity-0 absolute top-0 left-0 transition-all z-10', showOrigin && 'opacity-100')}><img src={photoUrl} width={imageSize.width} height={imageSize.height} className="w-full object-cover" /></div>}
-                                {transparentUrl && <div className="overflow-hidden w-auto relative z-[9]"><img src={transparentUrl} className="w-full" /></div>}
+                                {photoUrl && <div className={cn("overflow-hidden w-auto", transparentUrl && 'opacity-0 absolute top-0 left-0 transition-all z-10', showOrigin && 'opacity-100')}><img src={photoUrl} alt="Original image before background removal" width={imageSize.width} height={imageSize.height} className="w-full object-cover" /></div>}
+                                {transparentUrl && <div className="overflow-hidden w-auto relative z-[9]"><img src={transparentUrl} alt="Image with background removed" className="w-full" /></div>}
                                 {transparentUrl && <div className="absolute z-0 w-full h-full top-0 left-0" style={{
                                     background: bgColor
                                 }}></div>}

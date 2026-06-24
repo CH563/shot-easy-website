@@ -1,5 +1,5 @@
 export default {
-    title: 'Foto Redondeada',
+    title: 'Redondear fotos online y crear PNG con esquinas | ShotEasy',
     description:
         'Herramienta en línea para redondear fotos, agrega rápidamente redondeado a la foto, crea una hermosa foto redondeada, tamaño del redondeado, genera foto redondeada en formato PNG.',
     tip: 'No se carga ni se edita en el navegador',

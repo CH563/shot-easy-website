@@ -9,7 +9,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
 export default {
-    title: 'Trình chỉnh sửa ảnh trực tuyến miễn phí',
+    title: 'Chỉnh sửa ảnh và chụp màn hình online miễn phí | ShotEasy',
     description:
         'Chỉnh sửa ảnh trực tuyến miễn phí, thay đổi kích thước và lọc bất kỳ ảnh nào, chỉnh sửa ảnh trên trình duyệt, chuyển đổi ảnh sang jpg/png/jpeg/webp, dễ dàng chụp ảnh vùng hoặc toàn trang',
     keywords:

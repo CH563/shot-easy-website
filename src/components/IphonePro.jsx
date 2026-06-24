@@ -9,7 +9,7 @@ export const IphonePro = ({height, img, style, fit, shadow}) => {
                 <img src={darkBlue.src} alt="Iphone 15 Pro frame" className="absolute z-[1] top-0 left-0 right-0 bottom-0" />
                 <div className='frame h-full w-full overflow-hidden bg-black relative z-0'>
                     <div className="h-full w-full" style={style}>
-                        <img src={img} className={cn("max-w-full max-h-full block min-h-full min-w-full object-center", fit === 'cover' && "object-cover", fit === 'contain' && "object-contain", fit === 'fill' && "object-fill")} />
+                        <img src={img} alt="Screenshot preview inside iPhone frame" className={cn("max-w-full max-h-full block min-h-full min-w-full object-center", fit === 'cover' && "object-cover", fit === 'contain' && "object-contain", fit === 'fill' && "object-fill")} />
                     </div>
                 </div>
                 <div className="sd absolute -z-10" style={{opacity: shadow/10}}>

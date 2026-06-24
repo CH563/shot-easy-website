@@ -58,7 +58,7 @@ export const DrawerSide = ({ showMore, onChange, onSelectChange, value, photoUrl
                         <>
                             <div className="flex gap-3 items-center mb-2">
                                 <div className="overflow-hidden p-[1px] border" style={{width: `${realWidth}px`}}>
-                                    <img src={photoUrl} className="w-full" />
+                                    <img src={photoUrl} alt="Uploaded image color preview" className="w-full" />
                                 </div>
                                 <BackgroundSelect type="style" options={options} onChange={onSelectChange} value={value} />
                             </div>

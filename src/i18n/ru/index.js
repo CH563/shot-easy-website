@@ -9,7 +9,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
 export default {
-    title: 'Бесплатный онлайн-фоторедактор',
+    title: 'Скриншот онлайн и фоторедактор в браузере | ShotEasy',
     description:
         'Бесплатный онлайн-редактор фотографий, изменение размера и фильтрация любых фотографий, редактирование фото в браузере, конвертация изображений в jpg/png/jpeg/webp, легкое создание скриншотов области или всей страницы',
     keywords:

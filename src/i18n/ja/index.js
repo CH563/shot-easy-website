@@ -9,7 +9,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
 export default {
-    title: 'オンラインで無料の写真編集',
+    title: 'スクリーンショットと写真編集をオンラインで無料利用 | ShotEasy',
     description:
         'オンラインで写真を無料で編集、リサイズ、フィルタリングができます。ブラウザで写真を編集、画像をjpg/png/jpeg/webpに変換、簡単に画面の一部または全体をスクリーンショットできます',
     keywords:

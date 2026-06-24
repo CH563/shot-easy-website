@@ -9,7 +9,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 
 export default {
-    title: '在线截图和编辑',
+    title: '在线截图、图片编辑与格式转换工具 | ShotEasy',
     description:
         '免费在线截图和编辑照片，直接在浏览器中截图和调整图像大小并为任何照片添加滤镜。将图像转换为各种格式，如 jpg、png、jpeg 或 webp。截取特定区域或滚动截取整个页面。',
     keywords:
