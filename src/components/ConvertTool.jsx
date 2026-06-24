@@ -145,6 +145,22 @@ const zipOutputs = async (outputs, fileName) => {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
+const markPdfSerializationFailures = async (items, errorMessage) => {
+    const serializableItems = [];
+    const failedIds = new Set();
+
+    for (const item of items) {
+        try {
+            await createImagesPdfBlob([item]);
+            serializableItems.push(item);
+        } catch {
+            failedIds.add(item.id);
+        }
+    }
+
+    return { serializableItems, failedIds, errorMessage };
+};
+
 export default function ConvertTool({ copy = {} }) {
     const [messageApi, contextHolder] = message.useMessage();
     const itemsRef = useRef([]);
@@ -411,17 +427,66 @@ export default function ConvertTool({ copy = {} }) {
             return preparedItems;
         }
 
-        const blob = await createImagesPdfBlob(compatibleItems);
+        let pdfItems = compatibleItems;
+        let serializationFailedIds = new Set();
+        let blob = null;
+
+        try {
+            blob = await createImagesPdfBlob(pdfItems);
+        } catch (error) {
+            const fallback = await markPdfSerializationFailures(compatibleItems, error.message || 'PDF serialization failed.');
+            pdfItems = fallback.serializableItems;
+            serializationFailedIds = fallback.failedIds;
+
+            if (!pdfItems.length) {
+                messageApi.error('No images could be serialized to PDF.');
+                return preparedItems.map((item) => {
+                    if (!serializationFailedIds.has(item.id)) return item;
+                    return {
+                        ...item,
+                        status: 'error',
+                        error: fallback.errorMessage,
+                        outputs: [],
+                    };
+                });
+            }
+
+            try {
+                blob = await createImagesPdfBlob(pdfItems);
+            } catch (retryError) {
+                const errorMessage = retryError.message || 'PDF conversion failed.';
+                messageApi.error(errorMessage);
+                const remainingIds = new Set(pdfItems.map((item) => item.id));
+                return preparedItems.map((item) => {
+                    if (!serializationFailedIds.has(item.id) && !remainingIds.has(item.id)) return item;
+                    return {
+                        ...item,
+                        status: 'error',
+                        error: serializationFailedIds.has(item.id) ? fallback.errorMessage : errorMessage,
+                        outputs: [],
+                    };
+                });
+            }
+        }
+
         const output = outputWithUrl({
             name: 'shoteasy-images.pdf',
             blob,
             type: 'application/pdf',
             size: blob.size,
-            pageCount: compatibleItems.length,
+            pageCount: pdfItems.length,
         }, 'shoteasy-images.pdf');
 
-        const outputItemId = compatibleItems[0].id;
+        const outputItemId = pdfItems[0].id;
         return preparedItems.map((item) => {
+            if (serializationFailedIds.has(item.id)) {
+                return {
+                    ...item,
+                    status: 'error',
+                    error: 'PDF serialization failed.',
+                    outputs: [],
+                };
+            }
             if (item.id !== outputItemId) return item;
             return { ...item, outputs: [output] };
         });
