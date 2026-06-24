@@ -5,6 +5,7 @@ export const LANGUAGES = {
     ja: '日本語',
     in: 'English(India)',
     vn: 'Tiếng Việt',
+    uk: 'Українська',
     ru: 'Русский',
     'zh-CN': '简体中文'
 };
@@ -15,6 +16,7 @@ export const LANGUAGES_CODE = {
     ja: 'ja-JP',
     in: 'en-IN',
     vn: 'vi-VN',
+    uk: 'uk-UA',
     ru: 'ru-RU',
     'zh-CN': 'zh-CN'
 };

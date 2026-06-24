@@ -1,16 +1,31 @@
 ---
 import Privacy from '@components/Privacy.astro';
-import { getLang } from '@i18n/index';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
+import { getLocale, getLang } from '@i18n/index';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Screenshot from '@components/screenshot/Screenshot';
 const { locale } = Astro.params;
+const lang = getLocale(locale);
 const l = getLang(locale);
-const nav = l.nav;
 const t = l.screenshot;
+interface FaqItem {
+    question: string;
+    answer: string;
+}
+interface ClusterLink {
+    href: string;
+    title: string;
+    description: string;
+}
+const faqItems: FaqItem[] = t.faq || [];
+const clusterLinks: ClusterLink[] = t.clusterLinks || [];
 ---
 
 <div class="container py-8 relative z-10 flex-1">
-    <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">{t.title}</h1>
+    <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">{t.h1 || t.title}</h1>
     <p class="text-slate-600 text-center mb-2">{t.tip}</p>
+    {t.intro1 && <p class="text-slate-600 text-center text-sm max-w-3xl mx-auto mb-1">{t.intro1}</p>}
+    {t.intro2 && <p class="text-slate-600 text-center text-sm max-w-3xl mx-auto mb-3">{t.intro2}</p>}
     <div class="pb-12 min-h-[320px]">
         <Screenshot client:only="react" />
     </div>
@@ -50,6 +65,32 @@ const t = l.screenshot;
         <h4 class="font-semibold mb-1 pt-2">3.{t.canMacCrop}</h4>
         <p set:html={t.canMacCrop1} />
     </section>
+    <LocalProcessingBlock />
+    {faqItems.length > 0 && (
+        <section class="mb-3 rounded-md p-4 bg-indigo-100/40 text-xs [&>p]:mb-1">
+            <div class="mb-1 text-sm">❔</div>
+            <h2 class="text-lg font-bold mb-2">{t.faqTitle}</h2>
+            {faqItems.map(item => (
+                <div class="mb-3 last:mb-0">
+                    <h3 class="font-semibold mb-1 text-sm">{item.question}</h3>
+                    <p>{item.answer}</p>
+                </div>
+            ))}
+        </section>
+    )}
+    {clusterLinks.length > 0 && (
+        <section class="mb-3 rounded-md p-4 bg-white/75 text-xs shadow-sm ring-1 ring-slate-200/70">
+            <h2 class="text-lg font-bold mb-2">{t.clusterTitle}</h2>
+            <div class="grid gap-2 md:grid-cols-3">
+                {clusterLinks.map(item => (
+                    <a href={getRelativeLocaleUrl(lang, item.href)} class="block rounded-md border border-slate-200 bg-white p-3 hover:border-blue-300 hover:text-blue-600">
+                        <h3 class="font-semibold mb-1 text-sm">{item.title}</h3>
+                        <p class="text-slate-600">{item.description}</p>
+                    </a>
+                ))}
+            </div>
+        </section>
+    )}
     <Privacy />
 </div>
 <script type="application/ld+json" set:html={JSON.stringify({
@@ -72,3 +113,17 @@ const t = l.screenshot;
         "priceCurrency": "USD"
     }
 })}/>
+{faqItems.length > 0 && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems.map(item => ({
+            "@type": "Question",
+            "name": item.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+            }
+        }))
+    })}/>
+)}

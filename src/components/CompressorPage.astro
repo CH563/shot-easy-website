@@ -1,6 +1,7 @@
 ---
 import CompressorInit from '@components/CompressorInit';
 import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
 import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const l = getLang(locale);
@@ -43,6 +44,7 @@ const t = l.compressor;
         <p>{t.vsCont10}</p>
         <p>{t.vsCont11}</p>
     </section>
+    <LocalProcessingBlock />
     <Privacy />
 </div>
 <script type="application/ld+json" set:html={JSON.stringify({

@@ -5,6 +5,7 @@ import fr from '@i18n/fr/index';
 import ja from '@i18n/ja/index';
 import inEn from '@i18n/in/index';
 import vn from '@i18n/vn/index';
+import uk from '@i18n/uk/index';
 import ru from '@i18n/ru/index';
 import zhCn from '@i18n/zh-CN/index';
 
@@ -15,6 +16,7 @@ export const languages = {
     ja,
     in: inEn,
     vn,
+    uk,
     ru,
     'zh-CN': zhCn
 }

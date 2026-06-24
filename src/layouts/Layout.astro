@@ -9,6 +9,7 @@ interface Props {
     description?: string;
     keywords?: string;
     image?: string;
+    languageAlternates?: false | { href: string; hrefLang: string }[];
 }
 const { pathname, origin } = Astro.url;
 const { locale } = Astro.params;
@@ -26,11 +27,12 @@ alternates.push({
     hrefLang: 'x-default'
 });
 const t = getLang(locale)
-const { title, description, keywords, image } = Astro.props;
+const { title, description, keywords, image, languageAlternates } = Astro.props;
 const headTitle = title || t.title;
 const headDesc = description || t.description;
 const headKeywords = keywords || t.keywords;
 const ogImage = image || resolvedImageWithDomain;
+const resolvedAlternates = languageAlternates === false ? undefined : (languageAlternates || alternates);
 ---
 
 <!doctype html>
@@ -46,7 +48,7 @@ const ogImage = image || resolvedImageWithDomain;
             title={headTitle}
             description={headDesc}
             canonical={canonicalURL}
-            languageAlternates={alternates}
+            languageAlternates={resolvedAlternates}
             twitter={{
                 creator: '@LiWen563',
                 site: '@LiWen563',

@@ -2,11 +2,23 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import {getLocale, getLang} from '@i18n/index';
 import { CONFIG, LANGUAGES } from '@lib/config';
+interface Props {
+    showLanguageSwitcher?: boolean;
+}
+const { showLanguageSwitcher = true } = Astro.props;
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
 const languages = LANGUAGES as {[key: string]: string}
 const reg = new RegExp(`/${lang}`, 'i');
+const coreTools = [
+    { href: getRelativeLocaleUrl(lang, '/take-a-screenshot'), title: l.nav.screenshot.title, label: l.nav.screenshot.name },
+    { href: getRelativeLocaleUrl(lang, '/screenshot-beautifier'), title: l.nav.beautifier.title, label: l.nav.beautifier.name },
+    { href: getRelativeLocaleUrl(lang, '/image-compressor'), title: l.nav.compressor.title, label: l.nav.compressor.name },
+    { href: getRelativeLocaleUrl(lang, '/long-image'), title: l.nav.longImage.title, label: l.nav.longImage.name },
+    { href: getRelativeLocaleUrl(lang, '/video-convert'), title: l.nav.videoConvert.title, label: l.nav.videoConvert.name },
+    { href: getRelativeLocaleUrl(lang, '/background-remover'), title: l.nav.remover.title, label: l.nav.remover.name }
+];
 const langUrls = CONFIG.locals.map(item => {
     const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), Astro.url.origin).toString();
     return {href, hrefLang: languages[item] || item, isActive: item.toLocaleLowerCase() === lang.toLocaleLowerCase()};
@@ -15,11 +27,22 @@ const langUrls = CONFIG.locals.map(item => {
 
 <div class="py-8 bg-white">
     <div class="container grid grid-cols-3 items-center gap-2 text-xs text-gray-500">
-        <div class="col-span-3 flex justify-start gap-3 text-xs flex-wrap">
-            {langUrls.map(item => (
-                item.isActive ? <span class="opacity-80 cursor-default">{item.hrefLang}</span> : <a class="hover:text-blue-500 underline" href={item.href} title={item.hrefLang}>{item.hrefLang}</a>
-            ))}
-        </div>
+        <section class="col-span-3 mb-3 rounded-md bg-slate-50 p-4">
+            <h2 class="mb-1 text-sm font-bold text-slate-700">{l.footerToolsTitle || 'Core ShotEasy Tools'}</h2>
+            <p class="mb-3 text-slate-500">{l.footerToolsIntro || 'Quick links to screenshot, image, video, and local browser tools.'}</p>
+            <div class="flex flex-wrap gap-2">
+                {coreTools.map(item => (
+                    <a href={item.href} title={item.title} class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">{item.label}</a>
+                ))}
+            </div>
+        </section>
+        {showLanguageSwitcher && (
+            <div class="col-span-3 flex justify-start gap-3 text-xs flex-wrap">
+                {langUrls.map(item => (
+                    item.isActive ? <span class="opacity-80 cursor-default">{item.hrefLang}</span> : <a class="hover:text-blue-500 underline" href={item.href} title={item.hrefLang}>{item.hrefLang}</a>
+                ))}
+            </div>
+        )}
         <p>Copyright © 2025 ShotEasy</p>
         <div class="flex gap-3 justify-center">
             <a href={getRelativeLocaleUrl(lang, '/privacy-policy')} class="hover:text-blue-500 underline">{l.privacy}</a>

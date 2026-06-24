@@ -2,6 +2,7 @@
 import Remover from '@components/Remover';
 import CompareImage from '@components/CompareImage'
 import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
 import { getLang } from '@i18n/index';
 const { locale } = Astro.params;
 const l = getLang(locale);
@@ -49,6 +50,7 @@ const t = l.remover;
             <CompareImage client:only="react" />
         </div>
     </section>
+    <LocalProcessingBlock />
     <Privacy />
 </div>
 <script type="application/ld+json" set:html={JSON.stringify({

@@ -10,6 +10,11 @@ const nav = l.nav;
 const index = lang === 'en' ? '/' : `/${lang}`;
 const navList = [
     {
+        pathname: getRelativeLocaleUrl(lang, '/take-a-screenshot'),
+        title: nav.screenshot.title,
+        name: nav.screenshot.name
+    },
+    {
         pathname: index,
         title: nav.editor.title,
         name: nav.editor.name
@@ -43,11 +48,6 @@ const navList = [
         pathname: getRelativeLocaleUrl(lang, '/video-convert'),
         title: nav.videoConvert.title,
         name: nav.videoConvert.name
-    },
-    {
-        pathname: getRelativeLocaleUrl(lang, '/take-a-screenshot'),
-        title: nav.screenshot.title,
-        name: nav.screenshot.name
     },
 ];
 ---
