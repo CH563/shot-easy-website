@@ -10,6 +10,7 @@ export default {
     tool: {
         ...en.tool,
         modes: {
+            ...en.tool.modes,
             imageToWebp: 'PNG/JPG в WebP',
             imageToJpg: 'Изображение в JPG',
             imageToPng: 'Изображение в PNG',
