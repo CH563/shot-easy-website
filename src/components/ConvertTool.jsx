@@ -547,6 +547,7 @@ export default function ConvertTool({ copy = {} }) {
     };
 
     const handleModeChange = (value) => {
+        if (loading) return;
         setItems((prev) => resetOutputs(prev));
         setMode(value);
     };
@@ -698,24 +699,24 @@ export default function ConvertTool({ copy = {} }) {
                 <div className="py-2 px-2 flex items-center gap-3 border-b border-dotted bg-slate-50 text-xs select-none flex-wrap">
                     <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                         <label className="shrink-0 font-semibold">{copy.convert || 'Convert'}:</label>
-                        <Select className="min-w-0 flex-1 min-[1300px]:w-44 min-[1300px]:flex-none" size="small" value={mode} options={modeOptions} onChange={handleModeChange} />
+                        <Select className="min-w-0 flex-1 min-[1300px]:w-44 min-[1300px]:flex-none" size="small" value={mode} options={modeOptions} onChange={handleModeChange} disabled={loading} />
                     </div>
                     {(mode === 'image-to-webp' || mode === 'image-to-jpg') && (
                         <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                             <label className="shrink-0 font-semibold">{copy.quality || 'Quality'}:</label>
-                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} />
+                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} disabled={loading} />
                         </div>
                     )}
                     {mode === 'pdf-to-images' && (
                         <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                             <label className="shrink-0 font-semibold">{copy.pdfScale || 'PDF Scale'}:</label>
-                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} />
+                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} disabled={loading} />
                         </div>
                     )}
                     {mode === 'png-to-ico' && (
                         <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                             <label className="shrink-0 font-semibold">{copy.icoSize || 'ICO Size'}:</label>
-                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-32 min-[1300px]:flex-none" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={updateIcoSize} />
+                            <InputNumber className="min-w-0 flex-1 min-[1300px]:w-32 min-[1300px]:flex-none" size="small" min={16} max={256} step={16} value={icoSize} addonAfter="px" onChange={updateIcoSize} disabled={loading} />
                         </div>
                     )}
                     <div className="w-full text-right min-[1300px]:flex-1">
