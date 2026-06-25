@@ -1,0 +1,52 @@
+# ShotEasy
+
+> ShotEasy is a local-first online toolkit for screenshots, image editing, image conversion, image compression, long image composition, background removal, and video/GIF conversion.
+
+ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the user's browser. The site emphasizes privacy, fast client-side processing, and no file upload for common image, screenshot, PDF, and video workflows.
+
+## Core Pages
+
+- Homepage and image editor: https://shoteasy.fun/
+- Take a screenshot online: https://shoteasy.fun/take-a-screenshot/
+- Screenshot beautifier: https://shoteasy.fun/screenshot-beautifier/
+- Image compressor: https://shoteasy.fun/image-compressor/
+- Image converter: https://shoteasy.fun/convert/
+- Long image composer: https://shoteasy.fun/long-image/
+- Video convert and GIF maker: https://shoteasy.fun/video-convert/
+- Background remover: https://shoteasy.fun/background-remover/
+- Photo to rounded: https://shoteasy.fun/photo-to-rounded/
+
+## Main Capabilities
+
+- Capture screenshots from browser or screen capture workflows.
+- Beautify screenshots with device frames, backgrounds, padding, shadows, and export controls.
+- Edit images online with browser-based tools.
+- Compress images locally in the browser.
+- Convert image formats locally, including PNG to WebP, JPG to WebP, SVG to PNG, PNG to ICO, images to PDF, and PDF to images.
+- Merge multiple images or PDF pages into a vertical or horizontal long image.
+- Convert video to GIF, compress video, trim, crop, extract audio, and run FFmpeg-powered workflows locally in the browser.
+- Remove image backgrounds with browser-based processing.
+
+## Privacy And Processing Model
+
+ShotEasy's primary product promise is local browser processing. Files used by local tools are processed in the user's browser whenever possible and are not uploaded to ShotEasy servers for common screenshot, image compression, image conversion, long image, and video conversion tasks.
+
+## Languages
+
+ShotEasy has localized pages for English, Spanish, French, Japanese, English India, Vietnamese, Ukrainian, Russian, and Simplified Chinese.
+
+Examples:
+
+- Russian screenshot page: https://shoteasy.fun/ru/take-a-screenshot/
+- Ukrainian screenshot page: https://shoteasy.fun/uk/take-a-screenshot/
+- Chinese image converter page: https://shoteasy.fun/zh-CN/convert/
+
+## SEO And Discovery
+
+- Sitemap index: https://shoteasy.fun/sitemap-index.xml
+- Robots file: https://shoteasy.fun/robots.txt
+- GitHub repository: https://github.com/CH563/shot-easy-website
+
+## Suggested AI Summary
+
+ShotEasy is a free browser-based tool site for creating, editing, compressing, converting, and combining screenshots, images, PDFs, and videos. It is useful for users who want online tools that work locally without uploading files to a server.
