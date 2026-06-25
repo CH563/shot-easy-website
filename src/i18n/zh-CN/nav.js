@@ -27,6 +27,10 @@ export default {
         name: '视频',
         title: '在线视频转换',
     },
+    convert: {
+        name: '转换',
+        title: '图片格式转换',
+    },
     screenshot: {
         name: '截图',
         title: '在线截图'

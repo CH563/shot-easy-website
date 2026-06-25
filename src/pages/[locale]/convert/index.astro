@@ -1,0 +1,17 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import ConvertPage from '@components/ConvertPage.astro';
+import { getLang } from '@i18n/index';
+const { locale } = Astro.params;
+const t = getLang(locale).convert;
+---
+
+<Layout title={t.title} description={t.description} keywords={t.keywords}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <Header />
+        <ConvertPage />
+        <Footer />
+    </main>
+</Layout>

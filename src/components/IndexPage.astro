@@ -40,9 +40,10 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
         <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/take-a-screenshot')} title={l.nav.screenshot.title}>📸 {l.nav.screenshot.title}</a></div>
         <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/screenshot-beautifier')} title={l.nav.beautifier.title}>🏞️ {l.nav.beautifier.title}</a></div>
         <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/image-compressor')} title={l.nav.compressor.title}>⬇️ {l.nav.compressor.title}</a></div>
+        <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/convert')} title={l.nav.convert.title}>🔁 {l.nav.convert.title}</a></div>
         <div class="text-center"><a href={getRelativeLocaleUrl(lang, '/long-image')} title={l.nav.longImage.title}>🧩 {l.nav.longImage.title}</a></div>
     </div>
-    <div class="pt-4 pb-12 min-h-[716px]">
+    <div class="pt-8 pb-12 min-h-[716px]">
         <EditBox client:only="react" />
     </div>
     <section id="how-to-take-a-screenshot">
