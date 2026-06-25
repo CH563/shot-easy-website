@@ -6,6 +6,35 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import { CONFIG, LANGUAGES_CODE } from "./src/lib/config";
 
+const localizedPages = [
+  '',
+  'take-a-screenshot',
+  'screenshot-beautifier',
+  'image-compressor',
+  'convert',
+  'long-image',
+  'video-convert',
+  'background-remover',
+  'photo-to-rounded',
+  'privacy-policy',
+  'terms-of-service'
+];
+
+const ruScreenshotClusterPages = [
+  'kak-sdelat-skrinshot',
+  'obrezat-skrinshot-online',
+  'redaktor-skrinshotov-online'
+];
+
+const toAbsoluteUrl = (path) => new URL(path, CONFIG.website).toString();
+const toLocalizedPath = (locale, page) => page ? `/${locale}/${page}/` : `/${locale}/`;
+const sitemapCustomPages = [
+  ...CONFIG.locals
+    .filter((locale) => locale !== 'en')
+    .flatMap((locale) => localizedPages.map((page) => toAbsoluteUrl(toLocalizedPath(locale, page)))),
+  ...ruScreenshotClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
+];
+
 // https://astro.build/config
 export default defineConfig({
   site: CONFIG.website,
@@ -19,6 +48,7 @@ export default defineConfig({
     }
   },
   integrations: [tailwind(), react(), sitemap({
+    customPages: sitemapCustomPages,
     i18n: {
       defaultLocale: "en",
       locales: LANGUAGES_CODE
