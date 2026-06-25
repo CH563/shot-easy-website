@@ -20,6 +20,17 @@ const coreTools = [
     { href: getRelativeLocaleUrl(lang, '/video-convert'), title: l.nav.videoConvert.title, label: l.nav.videoConvert.name },
     { href: getRelativeLocaleUrl(lang, '/background-remover'), title: l.nav.remover.title, label: l.nav.remover.name }
 ];
+const llmsUrl = `${CONFIG.website}/llms.txt`;
+const aiPrompt = `Read ${llmsUrl} and explain what ShotEasy is, what tools it offers, and when users should use it.`;
+const encodedAiPrompt = encodeURIComponent(aiPrompt);
+const aiAnswerLinks = [
+    { href: llmsUrl, title: 'Read ShotEasy llms.txt', label: 'llms.txt' },
+    { href: `https://chatgpt.com/?q=${encodedAiPrompt}`, title: 'Ask ChatGPT about ShotEasy', label: 'GPT' },
+    { href: `https://www.google.com/search?q=${encodedAiPrompt}`, title: 'Ask Google AI about ShotEasy', label: 'Google AI' },
+    { href: `https://www.perplexity.ai/search/new?q=${encodedAiPrompt}`, title: 'Ask Perplexity about ShotEasy', label: 'Perplexity' },
+    { href: `https://claude.ai/new?q=${encodedAiPrompt}`, title: 'Ask Claude about ShotEasy', label: 'Claude' },
+    { href: `https://grok.com/?q=${encodedAiPrompt}`, title: 'Ask Grok about ShotEasy', label: 'Grok' }
+];
 const langUrls = CONFIG.locals.map(item => {
     const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), Astro.url.origin).toString();
     return {href, hrefLang: languages[item] || item, isActive: item.toLocaleLowerCase() === lang.toLocaleLowerCase()};
@@ -34,6 +45,15 @@ const langUrls = CONFIG.locals.map(item => {
             <div class="flex flex-wrap gap-2">
                 {coreTools.map(item => (
                     <a href={item.href} title={item.title} class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">{item.label}</a>
+                ))}
+            </div>
+        </section>
+        <section class="col-span-3 mb-3 rounded-md bg-slate-50 p-4">
+            <h2 class="mb-1 text-sm font-bold text-slate-700">Ask AI About ShotEasy</h2>
+            <p class="mb-3 text-slate-500">Open ShotEasy's AI-readable site notes or ask popular AI tools to summarize this website.</p>
+            <div class="flex flex-wrap gap-2">
+                {aiAnswerLinks.map(item => (
+                    <a href={item.href} title={item.title} target="_blank" rel="noopener noreferrer" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">{item.label}</a>
                 ))}
             </div>
         </section>
