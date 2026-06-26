@@ -1,0 +1,128 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import ViewerTool from '@components/ViewerTool';
+import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
+import { getLang, getLocale } from '@i18n/index';
+import { getViewerAliasMeta } from '@lib/viewerAliasMeta';
+const { alias } = Astro.props;
+const { locale } = Astro.params;
+const lang = getLocale(locale);
+const l = getLang(locale);
+const nav = l.nav;
+const t = l.viewer;
+const routeMeta = getViewerAliasMeta(t, alias, lang);
+type ViewerCard = { title: string; desc: string; icon: string };
+type FeatureSection = { title: string; body: string };
+type FaqItem = { question: string; answer: string };
+const cardRoutes = [
+    '/doc-viewer',
+    '/excel-viewer',
+    '/ppt-viewer',
+    '/csv-viewer',
+    '/pdf-viewer',
+    '/archive-viewer'
+];
+const cardTopBorders = [
+    'border-t-blue-500',
+    'border-t-emerald-500',
+    'border-t-amber-500',
+    'border-t-cyan-500',
+    'border-t-rose-500',
+    'border-t-violet-500'
+];
+---
+
+<div class="container py-8 relative z-10 flex-1">
+    <h1 class="text-4xl text-center leading-[42px] font-bold mb-1 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{routeMeta.h1 || t.h1 || nav.viewer.title}</h1>
+    <p class="text-slate-600 text-center mb-5">{routeMeta.tip || t.tip}</p>
+    <div class="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-2 lg:grid-cols-3">
+        {t.cards.map((item: ViewerCard, index: number) => (
+            <a
+                href={getRelativeLocaleUrl(lang, cardRoutes[index] || '/viewer')}
+                title={item.title}
+                class:list={[
+                    'group block rounded-md border border-t border-slate-100 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    cardTopBorders[index] || 'border-t-blue-500'
+                ]}
+            >
+                <div class="mb-2 text-xl text-blue-600">{item.icon === 'FileText' ? '📄' : item.icon === 'Table2' ? '📊' : item.icon === 'Presentation' ? '🖥️' : item.icon === 'Rows3' ? '📋' : item.icon === 'Archive' ? '🗂️' : '📕'}</div>
+                <h2 class="text-base font-bold text-slate-800 group-hover:text-blue-600">{item.title}</h2>
+                <p class="mt-2 text-sm leading-6 text-slate-600">{item.desc}</p>
+            </a>
+        ))}
+    </div>
+    <div class="pb-12 min-h-[560px]">
+        <ViewerTool client:only="react" copy={t.tool} />
+    </div>
+    <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">📄</div>
+        <h2 class="text-lg font-bold mb-2">{t.localTitle}</h2>
+        <p>{t.localCont1}</p>
+        <p>{t.localCont2}</p>
+    </section>
+    <section class="mb-3 rounded-md p-4 bg-purple-100/40 text-xs [&>p]:mb-1">
+        <div class="mb-1 text-sm">🗂️</div>
+        <h2 class="text-lg font-bold mb-2">{t.supportTitle}</h2>
+        <p>{t.supportCont1}</p>
+        <p>{t.supportCont2}</p>
+    </section>
+    <LocalProcessingBlock />
+    <section class="my-8 rounded-md border border-slate-100 bg-white/80 p-5 shadow-sm">
+        <div class="max-w-3xl">
+            <h2 class="text-2xl font-extrabold text-slate-800">{t.seoTitle}</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">{t.seoIntro}</p>
+        </div>
+        <div class="mt-5 grid gap-3 md:grid-cols-2">
+            {t.featureSections.map((item: FeatureSection) => (
+                <article class="rounded-md border border-slate-100 bg-slate-50/70 p-4">
+                    <h3 class="text-base font-bold text-slate-800">{item.title}</h3>
+                    <p class="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+                </article>
+            ))}
+        </div>
+    </section>
+    <section class="my-8 rounded-md border border-slate-100 bg-white/80 p-5 shadow-sm">
+        <h2 class="text-2xl font-extrabold text-slate-800">{t.faqTitle}</h2>
+        <div class="mt-4 divide-y divide-slate-100">
+            {t.faqs.map((item: FaqItem) => (
+                <details class="group py-3">
+                    <summary class="cursor-pointer text-sm font-bold text-slate-800 group-open:text-blue-600">{item.question}</summary>
+                    <p class="mt-2 text-sm leading-6 text-slate-600">{item.answer}</p>
+                </details>
+            ))}
+        </div>
+    </section>
+    <Privacy />
+    <section class="text-center text-xs text-slate-400 [&_a]:underline">
+        {t.poweredBy}
+    </section>
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": t.title,
+    "description": t.description,
+    "operatingSystem": "ALL",
+    "applicationCategory": "BrowserApplication",
+    "browserRequirements": "requires HTML5, WebAssembly, Canvas, and modern browser file APIs",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "featureList": t.cards.map((item: ViewerCard) => item.title),
+    "keywords": t.keywords
+})}/>
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": t.faqs.map((item: FaqItem) => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.answer
+        }
+    }))
+})}/>

@@ -916,7 +916,7 @@ export default function VideoConvert({ copy = {} }) {
     const isAudioInput = file?.type?.startsWith('audio/');
 
     return (
-        <div className="rounded-md border border-white/70 bg-white/90 p-3 shadow-lg backdrop-blur">
+        <div className="rounded-md border border-white/70 bg-white/90 p-3 shadow-lg backdrop-blur border-t-gray-600">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_390px]">
                 <div className="space-y-4">
                     <div className="flex flex-col gap-2 rounded-md border border-slate-100 bg-white px-3 py-2 text-slate-500 shadow-sm md:flex-row md:items-center md:justify-between">

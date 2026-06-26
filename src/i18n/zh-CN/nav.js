@@ -31,6 +31,10 @@ export default {
         name: '转换',
         title: '图片格式转换',
     },
+    viewer: {
+        name: 'Viewer',
+        title: 'Office Viewer',
+    },
     screenshot: {
         name: '截图',
         title: '在线截图'

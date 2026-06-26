@@ -1,8 +1,8 @@
 # ShotEasy
 
-> ShotEasy is a local-first online toolkit for screenshots, image editing, image conversion, image compression, long image composition, background removal, and video/GIF conversion.
+> ShotEasy is a local-first online toolkit for screenshots, image editing, image conversion, image compression, long image composition, background removal, office/document viewing, archive viewing, and video/GIF conversion.
 
-ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the user's browser. The site emphasizes privacy, fast client-side processing, and no file upload for common image, screenshot, PDF, and video workflows.
+ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the user's browser. The site emphasizes privacy, fast client-side processing, and no file upload for common image, screenshot, document, archive, PDF, and video workflows.
 
 ## Core Pages
 
@@ -15,6 +15,13 @@ ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the u
 - Video convert and GIF maker: https://shoteasy.fun/video-convert/
 - Background remover: https://shoteasy.fun/background-remover/
 - Photo to rounded: https://shoteasy.fun/photo-to-rounded/
+- Office, PDF, CSV, ZIP and RAR viewer: https://shoteasy.fun/viewer/
+- DOCX viewer alias: https://shoteasy.fun/doc-viewer/
+- PowerPoint/PPTX viewer alias: https://shoteasy.fun/ppt-viewer/
+- Excel/XLSX viewer alias: https://shoteasy.fun/excel-viewer/
+- CSV viewer alias: https://shoteasy.fun/csv-viewer/
+- PDF viewer alias: https://shoteasy.fun/pdf-viewer/
+- ZIP and RAR archive viewer alias: https://shoteasy.fun/archive-viewer/
 
 ## Main Capabilities
 
@@ -26,10 +33,33 @@ ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the u
 - Merge multiple images or PDF pages into a vertical or horizontal long image.
 - Convert video to GIF, compress video, trim, crop, extract audio, and run FFmpeg-powered workflows locally in the browser.
 - Remove image backgrounds with browser-based processing.
+- Open Word, Excel, and PowerPoint files online, including DOCX, XLSX, and PPTX.
+- View PDF and CSV files in the browser.
+- Browse ZIP and RAR archives, preview supported files inside archives, and download extracted files.
+- Preview common image and text files from archives.
 
 ## Privacy And Processing Model
 
-ShotEasy's primary product promise is local browser processing. Files used by local tools are processed in the user's browser whenever possible and are not uploaded to ShotEasy servers for common screenshot, image compression, image conversion, long image, and video conversion tasks.
+ShotEasy's primary product promise is local browser processing. Files used by local tools are processed in the user's browser whenever possible and are not uploaded to ShotEasy servers for common screenshot, image compression, image conversion, long image, document viewer, archive viewer, and video conversion tasks.
+
+## Viewer Page
+
+The Viewer page opens DOCX, XLSX, PPTX, CSV, PDF, ZIP, RAR, 7z, TAR, common image files, and text files directly in the browser. It is designed for searches and user needs such as "open docx online", "open pptx online", "office viewer", "excel viewer online", "rar extractor online", and "zip extractor online".
+
+Use cases:
+
+- Open a Word document online without installing Microsoft Word.
+- Preview an Excel workbook or CSV file before sharing it.
+- Open a PowerPoint presentation online and move through slides.
+- View a PDF file locally.
+- Browse a ZIP or RAR archive, select a file inside it, preview supported files, and download extracted items.
+
+Implementation notes:
+
+- DOCX, XLSX, and PPTX viewing is powered by the open-source office-open-xml-viewer project.
+- ZIP and RAR archive viewing is powered by libarchivejs.
+- PDF viewing uses the project's existing PDF rendering library.
+- The page includes localized SEO content for English, Spanish, French, Japanese, English India, Vietnamese, Ukrainian, Russian, and Simplified Chinese.
 
 ## Languages
 
@@ -40,6 +70,10 @@ Examples:
 - Russian screenshot page: https://shoteasy.fun/ru/take-a-screenshot/
 - Ukrainian screenshot page: https://shoteasy.fun/uk/take-a-screenshot/
 - Chinese image converter page: https://shoteasy.fun/zh-CN/convert/
+- Chinese office viewer page: https://shoteasy.fun/zh-CN/viewer/
+- Spanish office viewer page: https://shoteasy.fun/es/viewer/
+- French office viewer page: https://shoteasy.fun/fr/viewer/
+- Japanese office viewer page: https://shoteasy.fun/ja/viewer/
 
 ## SEO And Discovery
 
@@ -49,4 +83,4 @@ Examples:
 
 ## Suggested AI Summary
 
-ShotEasy is a free browser-based tool site for creating, editing, compressing, converting, and combining screenshots, images, PDFs, and videos. It is useful for users who want online tools that work locally without uploading files to a server.
+ShotEasy is a free browser-based tool site for creating, editing, compressing, converting, viewing, and combining screenshots, images, documents, archives, PDFs, and videos. It is useful for users who want online tools that work locally without uploading files to a server, including opening DOCX, XLSX, PPTX, PDF, CSV, ZIP, and RAR files online.

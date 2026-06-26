@@ -8,6 +8,7 @@ import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 import convert from './convert';
+import viewer from './viewer';
 
 export default {
     title: 'スクリーンショットと写真編集をオンラインで無料利用 | ShotEasy',
@@ -27,5 +28,6 @@ export default {
     longImage,
     screenshot,
     videoConvert,
-    convert
+    convert,
+    viewer
 };

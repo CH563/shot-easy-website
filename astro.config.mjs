@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 import react from "@astrojs/react";
+import wasm from "vite-plugin-wasm";
 
 import sitemap from "@astrojs/sitemap";
 import { CONFIG, LANGUAGES_CODE } from "./src/lib/config";
@@ -12,6 +13,13 @@ const localizedPages = [
   'screenshot-beautifier',
   'image-compressor',
   'convert',
+  'viewer',
+  'doc-viewer',
+  'ppt-viewer',
+  'excel-viewer',
+  'csv-viewer',
+  'pdf-viewer',
+  'archive-viewer',
   'long-image',
   'video-convert',
   'background-remover',
@@ -55,6 +63,9 @@ export default defineConfig({
     }
   })],
   output: "server",
+  vite: {
+    plugins: [wasm()]
+  },
   adapter: vercel({
     webAnalytics: {
       enabled: true
