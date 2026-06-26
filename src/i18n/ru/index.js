@@ -8,6 +8,7 @@ import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 import convert from './convert';
+import viewer from './viewer';
 
 export default {
     title: 'Скриншот онлайн и фоторедактор в браузере | ShotEasy',
@@ -34,5 +35,6 @@ export default {
     longImage,
     screenshot,
     videoConvert,
-    convert
+    convert,
+    viewer
 };

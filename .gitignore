@@ -1,5 +1,9 @@
 # build output
 dist/
+!public/libarchive.js/
+!public/libarchive.js/dist/
+!public/libarchive.js/dist/worker-bundle.js
+!public/libarchive.js/dist/libarchive.wasm
 
 # generated types
 .astro/

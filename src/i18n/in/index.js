@@ -8,6 +8,7 @@ import longImage from './longImage';
 import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 import convert from './convert';
+import viewer from './viewer';
 
 export default {
     title: 'Online Photo Editor and Screenshot Tools for Free | ShotEasy',
@@ -25,5 +26,6 @@ export default {
     longImage,
     screenshot,
     videoConvert,
-    convert
+    convert,
+    viewer
 }

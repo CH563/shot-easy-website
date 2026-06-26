@@ -590,7 +590,7 @@ export default function ConvertTool({ copy = {} }) {
     };
 
     const listComponent = items.length ? (
-        <div className="w-full bg-white shadow-md rounded-md overflow-hidden">
+        <div className="w-full bg-white shadow-md rounded-md overflow-hidden border-t-gray-600">
             <div className="bg-gray-900 py-1.5 px-3 text-white text-sm flex flex-wrap items-center gap-x-5 gap-y-1">
                 <span className="flex items-center gap-2 text-slate-400">
                     <span className="inline-flex w-3.5 h-3.5 rounded-full border-[3px] border-green-500"></span>
@@ -663,7 +663,7 @@ export default function ConvertTool({ copy = {} }) {
     return (
         <>
             {contextHolder}
-            <div className="bg-white shadow-md rounded-md overflow-hidden">
+            <div className="bg-white shadow-md rounded-md overflow-hidden border-t border-t-gray-600">
                 <div className="flex min-w-0 gap-4 p-2 justify-center flex-col-reverse min-[1300px]:flex-row min-[1300px]:justify-between border-b border-dotted bg-white">
                     <div className="flex min-w-0 w-full gap-3 items-center justify-center flex-wrap min-[1300px]:w-auto">
                         <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false} accept={inputTypes.join(',')}>

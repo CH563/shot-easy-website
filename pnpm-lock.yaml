@@ -44,6 +44,9 @@ importers:
       '@huggingface/transformers':
         specifier: ^3.0.2
         version: 3.0.2
+      '@silurus/ooxml':
+        specifier: ^0.66.3
+        version: 0.66.3
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.10(tailwindcss@3.3.5)
@@ -92,6 +95,9 @@ importers:
       konva:
         specifier: ^9.3.0
         version: 9.3.0
+      libarchive.js:
+        specifier: ^2.0.2
+        version: 2.0.2
       lucide-react:
         specifier: ^0.298.0
         version: 0.298.0(react@18.2.0)
@@ -143,6 +149,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+      vite-plugin-wasm:
+        specifier: ^3.6.0
+        version: 3.6.0(vite@5.0.10)
 
 packages:
 
@@ -1071,6 +1080,9 @@ packages:
       react-dom: ^16.13.1
       styled-components: ^5.1.0
 
+  '@silurus/ooxml@0.66.3':
+    resolution: {integrity: sha512-gns0Wiaf4+jtirUFOlyKTA5yFbMsMTbB0Pews2l8s06TTEiMD2XB/BK/xeX/ezjtMu5TAren+MN9ljsWkMddHg==}
+
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
@@ -1546,6 +1558,9 @@ packages:
   combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
+
+  comlink@4.4.2:
+    resolution: {integrity: sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==}
 
   comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
@@ -2311,6 +2326,9 @@ packages:
 
   konva@9.3.0:
     resolution: {integrity: sha512-qLTW06GRwb+WMMUXJcGIb0qP4uO0mZLAwgRI82zuCkRmCH1lFsVPmrPzqqHnjKCMu4Jzw6d/R8JxkPw7gkVnuw==}
+
+  libarchive.js@2.0.2:
+    resolution: {integrity: sha512-JHb+P4suNSjvz/dMdRgOe7JAxluXJeialzSFkKHU5y0ZK+m175drPOaIYW6I9WXSDcPcQ13eCUgMnpgY0ggmoQ==}
 
   lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -3892,6 +3910,11 @@ packages:
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
 
+  vite-plugin-wasm@3.6.0:
+    resolution: {integrity: sha512-mL/QPziiIA4RAA6DkaZZzOstdwbW5jO4Vz7Zenj0wieKWBlNvIvX5L5ljum9lcUX0ShNfBgCNLKTjNkRVVqcsw==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+
   vite@5.0.10:
     resolution: {integrity: sha512-2P8J7WWgmc355HUMlFrwofacvr98DAjoE52BfdbwQtyLH06XKwaL/FMnmKM2crF0iX4MpmMKoDlNCB1ok7zHCw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -5093,6 +5116,8 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@silurus/ooxml@0.66.3': {}
+
   '@sinclair/typebox@0.27.8': {}
 
   '@sinonjs/commons@3.0.0':
@@ -5743,6 +5768,8 @@ snapshots:
   combined-stream@1.0.8:
     dependencies:
       delayed-stream: 1.0.0
+
+  comlink@4.4.2: {}
 
   comma-separated-tokens@2.0.3: {}
 
@@ -6554,6 +6581,10 @@ snapshots:
   konva@8.4.3: {}
 
   konva@9.3.0: {}
+
+  libarchive.js@2.0.2:
+    dependencies:
+      comlink: 4.4.2
 
   lie@3.3.0:
     dependencies:
@@ -8597,6 +8628,10 @@ snapshots:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
+
+  vite-plugin-wasm@3.6.0(vite@5.0.10):
+    dependencies:
+      vite: 5.0.10
 
   vite@5.0.10:
     dependencies:

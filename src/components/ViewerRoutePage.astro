@@ -1,0 +1,20 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import ViewerPage from '@components/ViewerPage.astro';
+import { getLang } from '@i18n/index';
+import { getViewerAliasMeta } from '@lib/viewerAliasMeta';
+
+const { locale, alias } = Astro.props;
+const t = getLang(locale).viewer;
+const meta = getViewerAliasMeta(t, alias, locale);
+---
+
+<Layout title={meta.title} description={meta.description} keywords={meta.keywords}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <Header />
+        <ViewerPage alias={alias} />
+        <Footer />
+    </main>
+</Layout>

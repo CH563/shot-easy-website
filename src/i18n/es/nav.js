@@ -31,6 +31,10 @@ export default {
         name: 'Convert',
         title: 'Image Convert'
     },
+    viewer: {
+        name: 'Viewer',
+        title: 'Office Viewer'
+    },
     screenshot: {
         name: 'captura de pantalla',
         title: 'tomar una captura de pantalla'

@@ -392,7 +392,7 @@ const LongImageComposer = () => {
 
     if (items.length) {
         listComponent = (
-            <div className="w-full bg-white shadow-md rounded-md overflow-hidden">
+            <div className="w-full bg-white shadow-md rounded-md overflow-hidden border-t-gray-600">
                 <div className="bg-gray-800 py-1 px-3 text-white text-sm flex flex-wrap items-center gap-x-5 gap-y-1">
                     <span className="flex items-center gap-2 text-slate-400">
                         <span className="inline-flex w-3.5 h-3.5 rounded-full border-[3px] border-green-500"></span>
@@ -436,7 +436,7 @@ const LongImageComposer = () => {
     return (
         <>
             {contextHolder}
-            <div className="bg-white shadow-md rounded-md overflow-hidden">
+            <div className="bg-white shadow-md rounded-md overflow-hidden border-t border-t-gray-600">
                 <div className="flex gap-4 p-2 justify-center flex-col-reverse md:flex-row md:justify-between">
                     <div className="flex gap-3 items-center justify-center flex-wrap">
                         <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false} accept={inputTypes.join(',')}>
