@@ -17,6 +17,7 @@ export default {
         download: 'ダウンロード',
         downloadOriginal: '元ファイルをダウンロード',
         downloadSelected: '選択ファイルをダウンロード',
+        downloadPng: 'PNGをダウンロード',
         clear: 'クリア',
         fullscreen: '全画面',
         restore: '戻す',
