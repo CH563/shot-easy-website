@@ -17,6 +17,7 @@ export default {
         download: 'Descargar',
         downloadOriginal: 'Descargar original',
         downloadSelected: 'Descargar seleccionado',
+        downloadPng: 'Descargar PNG',
         clear: 'Limpiar',
         fullscreen: 'Pantalla completa',
         restore: 'Restaurar',

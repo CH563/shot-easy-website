@@ -17,6 +17,7 @@ export default {
         download: '下载',
         downloadOriginal: '下载原文件',
         downloadSelected: '下载选中文件',
+        downloadPng: '下载 PNG',
         clear: '清除',
         fullscreen: '全屏',
         restore: '恢复',

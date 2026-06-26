@@ -1,6 +1,6 @@
 # ShotEasy - take a screenshot online
 
-Photo edit online for free, resize, and filter any photos, edit photo on browser, convert image to jpg/png/jpeg/webp, merge images or PDF pages into a long image, convert video to GIF, and easily screenshot an area or full page.
+Photo edit online for free, resize, and filter any photos, edit photo on browser, convert image to jpg/png/jpeg/webp, merge images or PDF pages into a long image, convert video to GIF, open documents online, and easily screenshot an area or full page.
 
 [🏆 Chrome Extension](https://chromewebstore.google.com/detail/nmppkehciohcgcehlnifgeokgioidknh)
 
@@ -17,6 +17,8 @@ Photo edit online for free, resize, and filter any photos, edit photo on browser
 [🧩 Long Image Composer](https://shoteasy.fun/long-image/)
 
 [🎬 Video Convert](https://shoteasy.fun/video-convert/)
+
+[📄 Office & PDF Viewer](https://shoteasy.fun/viewer/)
 
 ## Blog
 

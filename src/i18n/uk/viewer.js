@@ -17,6 +17,7 @@ export default {
         download: 'Завантажити',
         downloadOriginal: 'Завантажити оригінал',
         downloadSelected: 'Завантажити вибране',
+        downloadPng: 'Завантажити PNG',
         clear: 'Очистити',
         fullscreen: 'На весь екран',
         restore: 'Відновити',

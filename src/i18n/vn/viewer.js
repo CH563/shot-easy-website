@@ -17,6 +17,7 @@ export default {
         download: 'Tải xuống',
         downloadOriginal: 'Tải tệp gốc',
         downloadSelected: 'Tải tệp đã chọn',
+        downloadPng: 'Tải PNG',
         clear: 'Xóa',
         fullscreen: 'Toàn màn hình',
         restore: 'Khôi phục',

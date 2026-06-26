@@ -74,6 +74,102 @@ const downloadFile = (file) => {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
+const downloadCanvasPng = (canvas, name) => {
+    if (!canvas) return;
+    try {
+        canvas.toBlob((blob) => {
+            if (!blob) {
+                message.error('PNG export failed.');
+                return;
+            }
+            const url = URL.createObjectURL(blob);
+            toDownloadFile(url, name);
+            window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+    } catch (error) {
+        message.error(error.message || 'PNG export failed.');
+    }
+};
+
+const downloadElementPng = (element, name) => {
+    if (!element) return;
+    const width = Math.ceil(element.clientWidth || element.scrollWidth || 1);
+    const height = Math.ceil(element.clientHeight || element.scrollHeight || 1);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.ceil(width * dpr);
+    canvas.height = Math.ceil(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    const context = canvas.getContext('2d');
+    const rootRect = element.getBoundingClientRect();
+    context.scale(dpr, dpr);
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, width, height);
+    context.save();
+    context.rect(0, 0, width, height);
+    context.clip();
+
+    const drawNode = (node) => {
+        if (!(node instanceof Element)) return;
+        const rect = node.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return;
+        if (rect.right < rootRect.left || rect.left > rootRect.right || rect.bottom < rootRect.top || rect.top > rootRect.bottom) return;
+
+        const style = window.getComputedStyle(node);
+        const x = rect.left - rootRect.left;
+        const y = rect.top - rootRect.top;
+        const w = rect.width;
+        const h = rect.height;
+        const directText = Array.from(node.childNodes)
+            .filter((child) => child.nodeType === Node.TEXT_NODE)
+            .map((child) => child.textContent || '')
+            .join(' ')
+            .trim();
+        const text = directText || (node.children.length ? '' : (node.textContent || '').trim());
+        const hasBorder = ['Top', 'Right', 'Bottom', 'Left'].some((side) => parseFloat(style[`border${side}Width`]) > 0);
+        const background = style.backgroundColor;
+        const hasBackground = background && background !== 'rgba(0, 0, 0, 0)' && background !== 'transparent';
+
+        if (hasBackground) {
+            context.fillStyle = background;
+            context.fillRect(x, y, w, h);
+        }
+
+        if (hasBorder) {
+            context.strokeStyle = style.borderTopColor || '#d1d5db';
+            context.lineWidth = 1;
+            context.strokeRect(x + 0.5, y + 0.5, Math.max(0, w - 1), Math.max(0, h - 1));
+        }
+
+        if (text) {
+            const fontSize = parseFloat(style.fontSize) || 12;
+            const fontFamily = style.fontFamily || 'Arial, sans-serif';
+            const fontWeight = style.fontWeight || '400';
+            const paddingLeft = parseFloat(style.paddingLeft) || 4;
+            const paddingTop = parseFloat(style.paddingTop) || 2;
+            const color = style.color || '#111827';
+            context.save();
+            context.rect(x, y, w, h);
+            context.clip();
+            context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+            context.fillStyle = color;
+            context.textBaseline = 'top';
+            context.fillText(text, x + paddingLeft, y + paddingTop + Math.max(0, (h - fontSize) / 2 - paddingTop));
+            context.restore();
+        }
+
+        Array.from(node.children).forEach(drawNode);
+    };
+
+    Array.from(element.children).forEach(drawNode);
+    context.restore();
+    downloadCanvasPng(canvas, name);
+};
+
+const getBaseName = (name = 'page') => name.replace(/\.[^.]+$/, '') || 'page';
+
 const parseCsv = (text) => {
     const rows = [];
     let row = [];
@@ -142,12 +238,14 @@ function PdfPreview({ file, copy, isFullscreen = false }) {
     const pdfRef = useRef(null);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
+    const [thumbnails, setThumbnails] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
         setPage(1);
         setTotal(0);
+        setThumbnails([]);
         setLoading(true);
         getPdfJs()
             .then(async (pdfjsLib) => {
@@ -166,6 +264,7 @@ function PdfPreview({ file, copy, isFullscreen = false }) {
                 }
                 pdfRef.current = pdf;
                 setTotal(pdf.numPages);
+                setThumbnails(new Array(pdf.numPages).fill(''));
             })
             .catch((error) => message.error(error.message || 'PDF load failed.'))
             .finally(() => !cancelled && setLoading(false));
@@ -208,6 +307,49 @@ function PdfPreview({ file, copy, isFullscreen = false }) {
         };
     }, [page, total]);
 
+    useEffect(() => {
+        if (!pdfRef.current || total <= 1) return undefined;
+        let cancelled = false;
+        const renderThumbnails = async () => {
+            for (let index = 0; index < total; index += 1) {
+                const pdfPage = await pdfRef.current.getPage(index + 1);
+                try {
+                    const viewport = pdfPage.getViewport({ scale: 1 });
+                    const width = 150;
+                    const scale = width / viewport.width;
+                    const thumbnailViewport = pdfPage.getViewport({ scale });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.ceil(thumbnailViewport.width);
+                    canvas.height = Math.ceil(thumbnailViewport.height);
+                    const context = canvas.getContext('2d');
+                    context.fillStyle = '#fff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    await pdfPage.render({ canvasContext: context, viewport: thumbnailViewport, background: 'white' }).promise;
+                    if (cancelled) return;
+                    const url = canvas.toDataURL('image/png');
+                    setThumbnails((prev) => {
+                        const next = [...prev];
+                        next[index] = url;
+                        return next;
+                    });
+                } finally {
+                    pdfPage.cleanup?.();
+                }
+            }
+        };
+        renderThumbnails().catch((error) => {
+            if (!cancelled) message.error(error.message || 'PDF thumbnail render failed.');
+        });
+        return () => {
+            cancelled = true;
+        };
+    }, [total]);
+
+    const downloadCurrentPng = () => {
+        if (!canvasRef.current) return;
+        downloadCanvasPng(canvasRef.current, `${getBaseName(file.name)}-page-${page}.png`);
+    };
+
     return (
         <div className="h-full">
             <PreviewToolbar
@@ -216,14 +358,30 @@ function PdfPreview({ file, copy, isFullscreen = false }) {
                 canNext={page < total}
                 onPrev={() => setPage((value) => Math.max(1, value - 1))}
                 onNext={() => setPage((value) => Math.min(total, value + 1))}
+                extra={(
+                    <Button size="small" icon={<Icon name="Download" />} onClick={downloadCurrentPng}>
+                        {copy.downloadPng || 'Download PNG'}
+                    </Button>
+                )}
                 copy={copy}
             />
-            <div className={cn(
-                'relative flex justify-center overflow-auto rounded-md border border-slate-200 bg-slate-100 p-4',
-                isFullscreen ? 'h-[calc(100vh-210px)] min-h-[480px]' : 'min-h-[420px]'
-            )}>
-                {loading && <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60"><Spin /></div>}
-                <canvas ref={canvasRef} className="max-w-full rounded bg-white shadow-sm" />
+            <div className={cn('grid gap-4', total > 1 ? 'lg:grid-cols-[196px_minmax(0,1fr)]' : 'grid-cols-1')}>
+                {total > 1 && (
+                    <OfficeThumbnailRail
+                        thumbnails={thumbnails}
+                        current={page}
+                        unit={copy.pdfPage || 'Page'}
+                        isFullscreen={isFullscreen}
+                        onSelect={(pageNumber) => setPage(pageNumber)}
+                    />
+                )}
+                <div className={cn(
+                    'relative flex justify-center overflow-auto rounded-md border border-slate-200 bg-slate-100 p-4',
+                    isFullscreen ? 'h-[calc(100vh-210px)] min-h-[480px]' : total > 1 ? 'h-[560px]' : 'min-h-[420px]'
+                )}>
+                    {loading && <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60"><Spin /></div>}
+                    <canvas ref={canvasRef} className="max-w-full rounded bg-white shadow-sm" />
+                </div>
             </div>
         </div>
     );
@@ -315,6 +473,11 @@ function OfficePreview({ file, kind, copy, isFullscreen = false }) {
         setLoading(true);
         setPosition({ current: 1, total: 0 });
         setThumbnails([]);
+        viewerRef.current?.destroy?.();
+        viewerRef.current = null;
+        engineRef.current?.destroy?.();
+        engineRef.current = null;
+        if (containerRef.current) containerRef.current.innerHTML = '';
 
         const load = async () => {
             const data = await file.arrayBuffer();
@@ -415,6 +578,21 @@ function OfficePreview({ file, kind, copy, isFullscreen = false }) {
 
     const unit = kind === 'pptx' ? copy.slide || 'Slide' : kind === 'xlsx' ? copy.sheet || 'Sheet' : copy.pdfPage || 'Page';
     const canNavigate = position.total > 1;
+    const downloadCurrentPng = () => {
+        if (kind === 'xlsx') {
+            const sheetCanvas = viewerRef.current?.canvasElement || containerRef.current?.querySelector('canvas');
+            if (sheetCanvas) {
+                downloadCanvasPng(sheetCanvas, `${getBaseName(file.name)}-sheet-${position.current}.png`);
+            } else {
+                downloadElementPng(containerRef.current, `${getBaseName(file.name)}-sheet-${position.current}.png`);
+            }
+            return;
+        }
+        if (!canvasRef.current || !isPagedOffice) return;
+        const pageName = kind === 'pptx' ? 'slide' : 'page';
+        const fileName = `${getBaseName(file.name)}-${pageName}-${position.current}.png`;
+        downloadCanvasPng(canvasRef.current, fileName);
+    };
 
     return (
         <div className="h-full">
@@ -430,6 +608,11 @@ function OfficePreview({ file, kind, copy, isFullscreen = false }) {
                     if (isPagedOffice) setPosition((value) => ({ ...value, current: Math.min(value.total, value.current + 1) }));
                     if (kind === 'xlsx') viewerRef.current?.nextSheet();
                 }}
+                extra={isPagedOffice || kind === 'xlsx' ? (
+                    <Button size="small" icon={<Icon name="Download" />} onClick={downloadCurrentPng}>
+                        {copy.downloadPng || 'Download PNG'}
+                    </Button>
+                ) : null}
                 copy={copy}
             />
             {isPagedOffice ? (
@@ -464,6 +647,7 @@ function OfficePreview({ file, kind, copy, isFullscreen = false }) {
 }
 
 function TextPreview({ file, isCsv, copy }) {
+    const tableRef = useRef(null);
     const [text, setText] = useState('');
 
     useEffect(() => {
@@ -481,19 +665,26 @@ function TextPreview({ file, isCsv, copy }) {
         const header = rows[0] || [];
         const body = rows.slice(1);
         return (
-            <div className="overflow-auto rounded-md border border-slate-200 bg-white">
-                <table className="min-w-full border-collapse text-left text-xs">
-                    <thead className="sticky top-0 bg-slate-100 text-slate-700">
-                        <tr>{header.map((cell, index) => <th key={index} className="border-b border-r border-slate-200 px-3 py-2 font-bold">{cell || `Column ${index + 1}`}</th>)}</tr>
-                    </thead>
-                    <tbody>
-                        {body.map((row, rowIndex) => (
-                            <tr key={rowIndex} className="odd:bg-white even:bg-slate-50">
-                                {header.map((_, cellIndex) => <td key={cellIndex} className="border-b border-r border-slate-100 px-3 py-2 text-slate-700">{row[cellIndex] || ''}</td>)}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div>
+                <div className="mb-3 flex justify-end">
+                    <Button size="small" icon={<Icon name="Download" />} onClick={() => downloadElementPng(tableRef.current, `${getBaseName(file.name)}-csv.png`)}>
+                        {copy.downloadPng || 'Download PNG'}
+                    </Button>
+                </div>
+                <div ref={tableRef} className="overflow-auto rounded-md border border-slate-200 bg-white">
+                    <table className="min-w-full border-collapse text-left text-xs">
+                        <thead className="sticky top-0 bg-slate-100 text-slate-700">
+                            <tr>{header.map((cell, index) => <th key={index} className="border-b border-r border-slate-200 px-3 py-2 font-bold">{cell || `Column ${index + 1}`}</th>)}</tr>
+                        </thead>
+                        <tbody>
+                            {body.map((row, rowIndex) => (
+                                <tr key={rowIndex} className="odd:bg-white even:bg-slate-50">
+                                    {header.map((_, cellIndex) => <td key={cellIndex} className="border-b border-r border-slate-100 px-3 py-2 text-slate-700">{row[cellIndex] || ''}</td>)}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
@@ -515,11 +706,12 @@ function ImagePreview({ file }) {
     return <img src={url} alt={file.name} className="mx-auto max-h-[520px] max-w-full rounded-md border border-slate-200 bg-white object-contain" />;
 }
 
-function PreviewToolbar({ label, canPrev, canNext, onPrev, onNext, copy }) {
+function PreviewToolbar({ label, canPrev, canNext, onPrev, onNext, copy, extra = null }) {
     return (
         <div className="mb-3 flex items-center justify-between gap-3">
             <div className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap justify-end gap-2">
+                {extra}
                 <Button size="small" disabled={!canPrev} icon={<Icon name="ChevronLeft" />} onClick={onPrev}>{copy.previous || 'Previous'}</Button>
                 <Button size="small" disabled={!canNext} icon={<Icon name="ChevronRight" />} onClick={onNext}>{copy.next || 'Next'}</Button>
             </div>
@@ -646,6 +838,11 @@ function FilePreview({ file, kind, copy, isFullscreen = false }) {
     return <div className="flex min-h-[360px] items-center justify-center rounded-md border border-dashed border-slate-200 bg-white p-8 text-center text-sm text-slate-400">{copy.unsupported || 'This file type can be downloaded, but preview is not supported yet.'}</div>;
 }
 
+const getPreviewKey = (file, kind) => {
+    if (!file) return 'empty-preview';
+    return [kind, file.name || 'file', file.size || 0, file.lastModified || 0].join(':');
+};
+
 export default function ViewerTool({ copy = {} }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [source, setSource] = useState(null);
@@ -771,8 +968,13 @@ export default function ViewerTool({ copy = {} }) {
                         </div>
                         <div className="flex flex-wrap gap-2">
                             <Button
+                                type={isFullscreen ? 'default' : 'primary'}
                                 icon={<Icon name={isFullscreen ? 'Minimize2' : 'Maximize2'} />}
                                 onClick={() => setIsFullscreen((value) => !value)}
+                                className={cn(
+                                    !isFullscreen && 'bg-indigo-600 shadow-sm hover:!bg-indigo-500',
+                                    isFullscreen && 'border-indigo-200 text-indigo-600 hover:!border-indigo-400 hover:!text-indigo-700'
+                                )}
                             >
                                 {isFullscreen ? copy.restore || 'Restore' : copy.fullscreen || 'Full Screen'}
                             </Button>
@@ -807,12 +1009,12 @@ export default function ViewerTool({ copy = {} }) {
                                 </div>
                                 <div className="relative">
                                     {loading && <div className="absolute inset-0 z-20 flex items-center justify-center rounded-md bg-white/70"><Spin /></div>}
-                                    <FilePreview file={selectedArchiveFile} kind={previewKind} copy={copy} isFullscreen={isFullscreen} />
+                                    <FilePreview key={getPreviewKey(selectedArchiveFile, previewKind)} file={selectedArchiveFile} kind={previewKind} copy={copy} isFullscreen={isFullscreen} />
                                 </div>
                             </section>
                         </div>
                     ) : (
-                        <FilePreview file={previewFile} kind={previewKind} copy={copy} isFullscreen={isFullscreen} />
+                        <FilePreview key={getPreviewKey(previewFile, previewKind)} file={previewFile} kind={previewKind} copy={copy} isFullscreen={isFullscreen} />
                     )}
                     <div className="mt-4 rounded-md bg-slate-50 p-3 text-xs leading-6 text-slate-500">
                         <p>{copy.officeNote || 'Best for Office Open XML files: DOCX, XLSX, and PPTX.'}</p>
