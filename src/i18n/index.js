@@ -1,9 +1,14 @@
 import { CONFIG } from '@lib/config';
 import en from '@i18n/en/index';
+import ptBr from '@i18n/pt-br/index';
 import es from '@i18n/es/index';
 import fr from '@i18n/fr/index';
+import de from '@i18n/de/index';
 import ja from '@i18n/ja/index';
-import inEn from '@i18n/in/index';
+import enIn from '@i18n/en-in/index';
+import hi from '@i18n/hi/index';
+import ko from '@i18n/ko/index';
+import id from '@i18n/id/index';
 import vn from '@i18n/vn/index';
 import uk from '@i18n/uk/index';
 import ru from '@i18n/ru/index';
@@ -11,10 +16,15 @@ import zhCn from '@i18n/zh-CN/index';
 
 export const languages = {
     en,
+    'pt-br': ptBr,
     es,
     fr,
+    de,
     ja,
-    in: inEn,
+    'en-in': enIn,
+    hi,
+    ko,
+    id,
     vn,
     uk,
     ru,

@@ -1,0 +1,23 @@
+export default {
+    feature: 'Edite, redimensione e aplique filtros em fotos',
+    noSign: 'Sem cadastro.',
+    online: 'Uma forma mais rápida de editar fotos online',
+    free: 'grátis',
+    extension: 'Get ShotEasy extension for free',
+    coming: 'Coming soon',
+    capture: 'Capture a tela visível, uma área selecionada ou a página inteira com poucos cliques.',
+    instantly: 'Edite e transforme seus screenshots instantaneamente.',
+    how: 'Como fazer uma captura de tela',
+    take: 'Fazer captura de tela',
+    use: 'Use o ShotEasy para capturar a tela, colar uma imagem da área de transferência ou enviar uma foto local para editar no navegador.',
+    more: 'Deixe suas imagens mais bonitas',
+    moreUse: 'Adicione fundos, molduras, sombras e marcas d\'água para transformar screenshots em imagens prontas para compartilhar.',
+    corp: 'Corte e redimensione com facilidade',
+    corpCont: 'Ajuste enquadramento, tamanho e foco da imagem para posts, tutoriais, documentos e apresentações.',
+    add: 'Adicione marca d\'água facilmente',
+    addCont: 'Proteja suas imagens com texto, logotipo ou imagem discreta, escolhendo posição e orientação.',
+    annotate: 'Anote sem complicação',
+    annotateCont: 'Marque ideias, comentários e ajustes diretamente na imagem.',
+    privacy: 'Sua privacidade importa',
+    privacyCont: 'Suas fotos não são enviadas; a edição acontece no navegador.'
+}

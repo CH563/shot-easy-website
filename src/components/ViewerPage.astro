@@ -3,8 +3,11 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import ViewerTool from '@components/ViewerTool';
 import Privacy from '@components/Privacy.astro';
 import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
 import { getLang, getLocale } from '@i18n/index';
 import { getViewerAliasMeta } from '@lib/viewerAliasMeta';
+import { getToolSeoContent } from '@lib/toolSeoContent';
 const { alias } = Astro.props;
 const { locale } = Astro.params;
 const lang = getLocale(locale);
@@ -12,6 +15,7 @@ const l = getLang(locale);
 const nav = l.nav;
 const t = l.viewer;
 const routeMeta = getViewerAliasMeta(t, alias, lang);
+const seoContent = getToolSeoContent(lang, 'viewer', routeMeta);
 type ViewerCard = { title: string; desc: string; icon: string };
 type FeatureSection = { title: string; body: string };
 type FaqItem = { question: string; answer: string };
@@ -68,6 +72,7 @@ const cardTopBorders = [
         <p>{t.supportCont2}</p>
     </section>
     <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
     <section class="my-8 rounded-md border border-slate-100 bg-white/80 p-5 shadow-sm">
         <div class="max-w-3xl">
             <h2 class="text-2xl font-extrabold text-slate-800">{t.seoTitle}</h2>
@@ -98,22 +103,14 @@ const cardTopBorders = [
         {t.poweredBy}
     </section>
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": t.title,
-    "description": t.description,
-    "operatingSystem": "ALL",
-    "applicationCategory": "BrowserApplication",
-    "browserRequirements": "requires HTML5, WebAssembly, Canvas, and modern browser file APIs",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    },
-    "featureList": t.cards.map((item: ViewerCard) => item.title),
-    "keywords": t.keywords
-})}/>
+<ToolStructuredData
+    name={routeMeta.title || t.title}
+    description={routeMeta.description || t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires HTML5, WebAssembly, Canvas, and modern browser file APIs"
+    featureList={[...seoContent.featureList, ...t.cards.map((item: ViewerCard) => item.title)]}
+/>
 <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "FAQPage",

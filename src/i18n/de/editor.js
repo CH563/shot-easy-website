@@ -1,0 +1,23 @@
+export default {
+    feature: 'Fotos bearbeiten, skalieren und filtern',
+    noSign: 'Keine Anmeldung erforderlich.',
+    online: 'Schneller Fotos online bearbeiten',
+    free: 'kostenlos',
+    extension: 'Get ShotEasy extension for free',
+    coming: 'Coming soon',
+    capture: 'Erfassen Sie sichtbare Bereiche, ausgewählte Ausschnitte oder ganze Seiten mit wenigen Klicks.',
+    instantly: 'Bearbeiten und verbessern Sie Screenshots sofort.',
+    how: 'So erstellen Sie einen Screenshot',
+    take: 'Screenshot erstellen',
+    use: 'Nutzen Sie ShotEasy zum Erfassen, Einfügen oder Hochladen lokaler Bilder und bearbeiten Sie alles direkt im Browser.',
+    more: 'Bilder schöner aufbereiten',
+    moreUse: 'Fügen Sie Hintergründe, Rahmen, Schatten und Wasserzeichen hinzu, damit Screenshots professionell wirken.',
+    corp: 'Einfach zuschneiden und skalieren',
+    corpCont: 'Passen Sie Bildausschnitt, Größe und Fokus für Posts, Tutorials und Präsentationen an.',
+    add: 'Wasserzeichen einfach hinzufügen',
+    addCont: 'Schützen Sie Bilder mit Text, Logo oder einem diskreten Bild.',
+    annotate: 'Direkt kommentieren',
+    annotateCont: 'Markieren Sie Ideen, Hinweise und Änderungen direkt im Bild.',
+    privacy: 'Ihre Privatsphäre ist wichtig',
+    privacyCont: 'Ihre Fotos werden nicht hochgeladen; die Bearbeitung läuft im Browser.'
+}

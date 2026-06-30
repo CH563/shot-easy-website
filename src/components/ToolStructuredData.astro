@@ -1,0 +1,79 @@
+---
+import { LANGUAGES_CODE } from '@lib/config';
+
+interface Props {
+    name: string;
+    description: string;
+    keywords?: string;
+    locale?: string;
+    featureList?: string[];
+    applicationCategory?: string;
+    browserRequirements?: string;
+}
+
+const {
+    name,
+    description,
+    keywords,
+    locale = 'en',
+    featureList = [],
+    applicationCategory = 'MultimediaApplication',
+    browserRequirements = 'Requires a modern browser with HTML5 support'
+} = Astro.props as Props;
+
+const url = Astro.url.toString();
+const languageMap = LANGUAGES_CODE as Record<string, string>;
+const languageCode = languageMap[locale] || locale;
+const homeUrl = new URL(locale === 'en' ? '/' : `/${locale}/`, Astro.url.origin).toString();
+const graph = [
+    {
+        '@type': ['WebApplication', 'SoftwareApplication'],
+        '@id': `${url}#app`,
+        name,
+        description,
+        url,
+        inLanguage: languageCode,
+        applicationCategory,
+        operatingSystem: 'Any',
+        browserRequirements,
+        isAccessibleForFree: true,
+        keywords,
+        featureList,
+        provider: {
+            '@type': 'Organization',
+            name: 'ShotEasy',
+            url: Astro.url.origin
+        },
+        offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD'
+        }
+    },
+    {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'ShotEasy',
+                item: homeUrl
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name,
+                item: url
+            }
+        ]
+    }
+];
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@graph': graph
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
