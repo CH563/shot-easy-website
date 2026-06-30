@@ -2,11 +2,16 @@
 import LongImageComposer from '@components/LongImageComposer';
 import Privacy from '@components/Privacy.astro';
 import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
-import { getLang } from '@i18n/index';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
+import { getLang, getLocale } from '@i18n/index';
+import { getToolSeoContent } from '@lib/toolSeoContent';
 const { locale } = Astro.params;
+const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.longImage;
+const seoContent = getToolSeoContent(lang, 'longImage', t);
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -28,19 +33,14 @@ const t = l.longImage;
         <p>{t.settingCont2}</p>
     </section>
     <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
     <Privacy />
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": t.title,
-    "description": t.description,
-    "operatingSystem": "ALL",
-    "applicationCategory": "BrowserApplication",
-    "browserRequirements": "requires HTML5 Canvas support",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    }
-})}/>
+<ToolStructuredData
+    name={t.title}
+    description={t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires HTML5 canvas support"
+    featureList={seoContent.featureList}
+/>

@@ -2,11 +2,16 @@
 import Rounded from '@components/Rounded';
 import Privacy from '@components/Privacy.astro';
 import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
-import { getLang } from '@i18n/index';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
+import { getLang, getLocale } from '@i18n/index';
+import { getToolSeoContent } from '@lib/toolSeoContent';
 const { locale } = Astro.params;
+const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.rounded;
+const seoContent = getToolSeoContent(lang, 'rounded', t);
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -28,25 +33,14 @@ const t = l.rounded;
         <p>{t.whatCont3}</p>
     </section>
     <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
     <Privacy />
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": t.title,
-    "description": t.description,
-    "operatingSystem": "ALL",
-    "applicationCategory": "BrowserApplication",
-    "browserRequirements": "requires HTML5 support",
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "3.6",
-        "ratingCount": "1448",
-        "bestRating": "5"
-    },
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    }
-})}/>
+<ToolStructuredData
+    name={t.title}
+    description={t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires HTML5 canvas support"
+    featureList={seoContent.featureList}
+/>

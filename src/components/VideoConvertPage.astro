@@ -2,11 +2,16 @@
 import VideoConvert from '@components/VideoConvert';
 import Privacy from '@components/Privacy.astro';
 import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
-import { getLang } from '@i18n/index';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
+import { getLang, getLocale } from '@i18n/index';
+import { getToolSeoContent } from '@lib/toolSeoContent';
 const { locale } = Astro.params;
+const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.videoConvert;
+const seoContent = getToolSeoContent(lang, 'videoConvert', t);
 type FeatureSection = { title: string; body: string };
 type FaqItem = { question: string; answer: string };
 ---
@@ -36,6 +41,7 @@ type FaqItem = { question: string; answer: string };
         <p>{t.privacyCont2}</p>
     </section>
     <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
     {t.featureSections && (
         <section class="my-8 rounded-md border border-slate-100 bg-white/80 p-5 shadow-sm">
             <div class="max-w-3xl">
@@ -70,22 +76,14 @@ type FaqItem = { question: string; answer: string };
         Video conversion powered by <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" rel="noopener noreferrer">ffmpeg.wasm</a>. Interaction model adapted from <a href="https://github.com/tejaswigowda/ffmpeg-webCLI" target="_blank" rel="noopener noreferrer">ffmpeg-webCLI</a>.
     </section>
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": t.title,
-    "description": t.description,
-    "operatingSystem": "ALL",
-    "applicationCategory": "BrowserApplication",
-    "browserRequirements": "requires HTML5, WebAssembly, and modern browser media support",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    },
-    "featureList": t.featureSections?.map((item: FeatureSection) => item.title) || undefined,
-    "keywords": t.keywords
-})}/>
+<ToolStructuredData
+    name={t.title}
+    description={t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires HTML5, WebAssembly, and modern browser media support"
+    featureList={[...seoContent.featureList, ...(t.featureSections?.map((item: FeatureSection) => item.title) || [])]}
+/>
 {t.faqs && (
     <script type="application/ld+json" set:html={JSON.stringify({
         "@context": "https://schema.org",

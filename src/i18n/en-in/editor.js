@@ -1,0 +1,23 @@
+export default {
+    feature: 'Edit, resize, and filter photos online',
+    noSign: 'No sign up required.',
+    online: 'A faster way to edit photos online',
+    free: 'for free',
+    extension: 'Get ShotEasy extension for free',
+    coming: 'Coming soon',
+    capture: 'Capture a visible screen, selected area, browser tab, or full page in a few clicks.',
+    instantly: 'Edit and improve your screenshots instantly.',
+    how: 'How to take a screenshot',
+    take: 'Take a screenshot',
+    use: 'Use ShotEasy to capture, paste, or upload local images and edit them in your browser.',
+    more: 'Make screenshots look better',
+    moreUse: 'Add backgrounds, frames, shadows, and watermarks for clean visuals you can share.',
+    corp: 'Crop and resize easily',
+    corpCont: 'Adjust framing, size, and focus for social posts, tutorials, product images, and documents.',
+    add: 'Add a watermark easily',
+    addCont: 'Protect images with text, a logo, or a small image watermark.',
+    annotate: 'Annotate quickly',
+    annotateCont: 'Mark ideas, comments, and changes directly on the image.',
+    privacy: 'Your privacy matters',
+    privacyCont: 'Your photos are not uploaded. Editing happens in your browser.'
+}

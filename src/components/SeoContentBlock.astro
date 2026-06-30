@@ -1,0 +1,49 @@
+---
+interface SeoContent {
+    title: string;
+    intro: string;
+    painTitle: string;
+    pains: string[];
+    solutionTitle: string;
+    solutions: string[];
+    useCaseTitle: string;
+    useCases: string[];
+    trustTitle: string;
+    trust: string;
+}
+
+const { content } = Astro.props as { content?: SeoContent };
+---
+
+{content && (
+    <section class="my-8 rounded-md border border-slate-100 bg-white/85 p-5 shadow-sm">
+        <div class="max-w-3xl">
+            <h2 class="text-2xl font-extrabold text-slate-800">{content.title}</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">{content.intro}</p>
+        </div>
+        <div class="mt-5 grid gap-3 md:grid-cols-2">
+            <article class="rounded-md border border-rose-100 bg-rose-50/60 p-4">
+                <h3 class="text-base font-bold text-slate-800">{content.painTitle}</h3>
+                <ul class="mt-2 list-disc pl-5 text-sm leading-6 text-slate-600">
+                    {content.pains.map(item => <li>{item}</li>)}
+                </ul>
+            </article>
+            <article class="rounded-md border border-emerald-100 bg-emerald-50/60 p-4">
+                <h3 class="text-base font-bold text-slate-800">{content.solutionTitle}</h3>
+                <ul class="mt-2 list-disc pl-5 text-sm leading-6 text-slate-600">
+                    {content.solutions.map(item => <li>{item}</li>)}
+                </ul>
+            </article>
+            <article class="rounded-md border border-blue-100 bg-blue-50/60 p-4">
+                <h3 class="text-base font-bold text-slate-800">{content.useCaseTitle}</h3>
+                <ul class="mt-2 list-disc pl-5 text-sm leading-6 text-slate-600">
+                    {content.useCases.map(item => <li>{item}</li>)}
+                </ul>
+            </article>
+            <article class="rounded-md border border-slate-100 bg-slate-50/80 p-4">
+                <h3 class="text-base font-bold text-slate-800">{content.trustTitle}</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">{content.trust}</p>
+            </article>
+        </div>
+    </section>
+)}

@@ -1,8 +1,11 @@
 ---
 import Privacy from '@components/Privacy.astro';
 import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
 import { getLocale, getLang } from '@i18n/index';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getToolSeoContent } from '@lib/toolSeoContent';
 import Screenshot from '@components/screenshot/Screenshot';
 const { locale } = Astro.params;
 const lang = getLocale(locale);
@@ -22,6 +25,7 @@ const clusterLinks: ClusterLink[] = t.clusterLinks || [];
 const captureTechTitle = t.captureTechTitle || 'Browser screen capture API';
 const captureTechCont1 = t.captureTechCont1 || 'ShotEasy uses navigator.mediaDevices.getDisplayMedia to request screen capture permission directly from your browser.';
 const captureTechCont2 = t.captureTechCont2 || 'You can capture your desktop, an app window, a chat window, a browser tab, or a game screen, then crop, copy, and save the screenshot without installing separate screenshot software.';
+const seoContent = getToolSeoContent(lang, 'screenshot', t);
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -83,6 +87,7 @@ const captureTechCont2 = t.captureTechCont2 || 'You can capture your desktop, an
         <p set:html={t.canMacCrop1} />
     </section>
     <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
     {faqItems.length > 0 && (
         <section class="mb-3 rounded-md p-4 bg-indigo-100/40 text-xs [&>p]:mb-1">
             <div class="mb-1 text-sm">❔</div>
@@ -110,26 +115,14 @@ const captureTechCont2 = t.captureTechCont2 || 'You can capture your desktop, an
     )}
     <Privacy />
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": t.title,
-    "description": t.description,
-    "operatingSystem": "ALL",
-    "applicationCategory": "BrowserApplication",
-    "browserRequirements": "requires HTML5 support",
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "3.6",
-        "ratingCount": "1448",
-        "bestRating": "5"
-    },
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    }
-})}/>
+<ToolStructuredData
+    name={t.title}
+    description={t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires the browser Screen Capture API and HTML5 canvas support"
+    featureList={seoContent.featureList}
+/>
 {faqItems.length > 0 && (
     <script type="application/ld+json" set:html={JSON.stringify({
         "@context": "https://schema.org",

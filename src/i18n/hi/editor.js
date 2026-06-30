@@ -1,0 +1,23 @@
+export default {
+    feature: 'Photo edit, resize और filter online',
+    noSign: 'Signup की जरूरत नहीं.',
+    online: 'Photos online edit करने का तेज तरीका',
+    free: 'मुफ्त',
+    extension: 'Get ShotEasy extension for free',
+    coming: 'Coming soon',
+    capture: 'Visible screen, selected area, browser tab या full page screenshot कुछ clicks में लें.',
+    instantly: 'Screenshots को तुरंत edit और improve करें.',
+    how: 'Screenshot कैसे लें',
+    take: 'Screenshot लें',
+    use: 'ShotEasy से capture करें, clipboard से paste करें या local photo upload करके browser में edit करें.',
+    more: 'Screenshots को बेहतर बनाएं',
+    moreUse: 'Background, frame, shadow और watermark जोड़कर screenshots को share-ready बनाएं.',
+    corp: 'Crop और resize आसानी से',
+    corpCont: 'Social posts, tutorials, documents और product images के लिए frame, size और focus adjust करें.',
+    add: 'Watermark आसानी से जोड़ें',
+    addCont: 'Text, logo या छोटी image watermark से images protect करें.',
+    annotate: 'जल्दी annotate करें',
+    annotateCont: 'Ideas, comments और changes सीधे image पर mark करें.',
+    privacy: 'आपकी privacy जरूरी है',
+    privacyCont: 'Photos upload नहीं होते; editing browser में होती है.'
+}
