@@ -48,13 +48,6 @@ export default defineConfig({
   site: CONFIG.website,
   trailingSlash: 'ignore',
   compressHTML: false,
-  i18n: {
-    defaultLocale: "en",
-    locales: CONFIG.locals,
-    routing: {
-        prefixDefaultLocale: false
-    }
-  },
   integrations: [tailwind(), react(), sitemap({
     customPages: sitemapCustomPages,
     i18n: {

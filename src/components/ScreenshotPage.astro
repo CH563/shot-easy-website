@@ -4,7 +4,7 @@ import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
 import SeoContentBlock from '@components/SeoContentBlock.astro';
 import ToolStructuredData from '@components/ToolStructuredData.astro';
 import { getLocale, getLang } from '@i18n/index';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getRelativeLocaleUrl } from '@lib/localePaths';
 import { getToolSeoContent } from '@lib/toolSeoContent';
 import Screenshot from '@components/screenshot/Screenshot';
 const { locale } = Astro.params;

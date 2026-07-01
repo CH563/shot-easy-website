@@ -5,7 +5,7 @@ import Privacy from '@components/Privacy.astro';
 import fakeact from '@static/fakeact.svg';
 import fakemail from '@static/fakemail.svg';
 import {getLang, getLocale, getBrowserType} from '@i18n/index';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getRelativeLocaleUrl } from '@lib/localePaths';
 const { locale } = Astro.params;
 // console.log(Astro.request.headers.get('User-Agent'));
 const l = getLang(locale);
