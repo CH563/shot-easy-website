@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const posts = (await getCollection('blog', ({ data }) => !data.draft))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+    return posts.map((post, index) => ({
+        params: { slug: post.slug },
+        props: {
+            post,
+            relatedPosts: posts.filter((_, relatedIndex) => relatedIndex !== index).slice(0, 5)
+        }
+    }));
+}
+
+const { post, relatedPosts } = Astro.props;
+const { Content } = await post.render();
+const publishedDate = post.data.date;
+const modifiedDate = post.data.updatedDate || post.data.date;
+const formatDate = (date: Date) => new Intl.DateTimeFormat('en', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+}).format(date);
+const cover = post.data.cover || '/image.png';
+---
+
+<Layout title={post.data.title} description={post.data.description} image={cover} languageAlternates={false}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <div class="container py-8 relative z-10 flex-1">
+            <div class="flex gap-1 text-xs text-slate-400 mb-10">
+                <a href="/blog" title="blog" class="hover:underline">Blog</a>
+                <span>/</span>
+                <span class="w-96 max-w-[70%] font-semibold truncate text-blue-500">{post.data.title}</span>
+            </div>
+            <section>
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl font-extrabold leading-tight text-slate-900">{post.data.title}</h1>
+                    <p class="mt-4 text-base leading-7 text-slate-600">{post.data.description}</p>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-4 pb-8">
+                        <span>{post.data.author}</span>
+                        <time datetime={publishedDate.toISOString()}>{formatDate(publishedDate)}</time>
+                        {post.data.tags.map(tag => <span class="rounded bg-white/80 px-2 py-1 text-slate-500 shadow-sm ring-1 ring-slate-100">{tag}</span>)}
+                    </div>
+                </div>
+                <div class="grid grid-cols-12">
+                    <article class="prose prose-slate prose-sm max-w-none col-span-12 rounded-md bg-white p-8 shadow-sm lg:col-span-8 [&_img]:mx-auto [&_img]:max-w-[80%]">
+                        <Content />
+                    </article>
+                    <aside class="hidden lg:block col-span-4 pl-10">
+                        <div class="rounded-md bg-white p-4 shadow-sm">
+                            <h2 class="mb-4 text-xl font-semibold">Related posts</h2>
+                            {relatedPosts.map(item =>(
+                                <div class="pb-3">
+                                    <a href={`/blog/${item.slug}`} class="text-sm truncate block hover:underline">{item.data.title}</a>
+                                    <time datetime={item.data.date.toISOString()} class="text-xs text-slate-400">{formatDate(item.data.date)}</time>
+                                </div>
+                            ))}
+                        </div>
+                    </aside>
+                </div>
+            </section>
+        </div>
+        <Footer showLanguageSwitcher={false} />
+    </main>
+</Layout>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "image": [new URL(cover, Astro.url.origin).toString()],
+    "datePublished": publishedDate.toISOString(),
+    "dateModified": modifiedDate.toISOString(),
+    "author": [{
+        "@type": "Organization",
+        "name": post.data.author
+    }],
+    "publisher": {
+        "@type": "Organization",
+        "name": "ShotEasy",
+        "url": Astro.url.origin
+    },
+    "mainEntityOfPage": Astro.url.toString()
+})}/>
