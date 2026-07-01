@@ -16,14 +16,20 @@ const { locale } = Astro.params;
 const resolvedImageWithDomain = `${origin}/image.png`;
 const canonicalURL = new URL(pathname, origin);
 const lang = getLocale(locale);
-const reg = new RegExp(`/${lang}`, 'i');
 const languagesCode = LANGUAGES_CODE as {[key: string]: string};
+const pathParts = pathname.split('/').filter(Boolean);
+const currentLocaleFromPath = CONFIG.locals.find(item => item.toLowerCase() === pathParts[0]?.toLowerCase());
+const pagePath = currentLocaleFromPath ? pathParts.slice(1) : pathParts;
+const toLocalizedPath = (targetLocale: string) => {
+    const segments = targetLocale === 'en' ? pagePath : [targetLocale, ...pagePath];
+    return `/${segments.join('/')}`;
+};
 const alternates = CONFIG.locals.map(item => {
-    const href = new URL((lang === 'en' && item !== 'en' ? item : '') + pathname.replace(reg, item === 'en' ? '': item), CONFIG.website).toString();
+    const href = new URL(toLocalizedPath(item), CONFIG.website).toString();
     return {href, hrefLang: languagesCode[item] || item};
 })
 alternates.push({
-    href: new URL(pathname.replace(reg, ''), CONFIG.website).toString(),
+    href: new URL(toLocalizedPath('en'), CONFIG.website).toString(),
     hrefLang: 'x-default'
 });
 const t = getLang(locale)
