@@ -23,6 +23,7 @@ const localizedPages = [
   'long-image',
   'video-convert',
   'background-remover',
+  'blur-background-online',
   'photo-to-rounded',
   'privacy-policy',
   'terms-of-service'

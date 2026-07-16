@@ -15,6 +15,10 @@ export default {
         name: 'Remover',
         title: 'Penghapus latar foto'
     },
+    blurBackground: {
+        name: 'Blur BG',
+        title: 'Buramkan latar online',
+    },
     compressor: {
         name: 'Compressor',
         title: 'Kompresor gambar'

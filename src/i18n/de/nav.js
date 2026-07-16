@@ -15,6 +15,10 @@ export default {
         name: 'Remover',
         title: 'Foto-Hintergrund entfernen'
     },
+    blurBackground: {
+        name: 'Weichz.',
+        title: 'Hintergrund online weichzeichnen',
+    },
     compressor: {
         name: 'Compressor',
         title: 'Bildkompressor'

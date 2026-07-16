@@ -15,6 +15,10 @@ export default {
         name: 'Remover',
         title: 'Photo Background Remover'
     },
+    blurBackground: {
+        name: 'Blur BG',
+        title: 'Blur Background Online',
+    },
     compressor: {
         name: 'Compressor',
         title: 'Image Compressor'

@@ -15,6 +15,10 @@ export default {
         name: '抠图',
         title: '照片背景移除',
     },
+    blurBackground: {
+        name: '虚化',
+        title: '在线模糊照片背景',
+    },
     compressor: {
         name: '压缩',
         title: '图片快速压缩',

@@ -15,6 +15,10 @@ export default {
         name: 'Remover',
         title: '사진 배경 제거'
     },
+    blurBackground: {
+        name: '배경 흐림',
+        title: '온라인 배경 흐리기',
+    },
     compressor: {
         name: 'Compressor',
         title: '이미지 압축기'

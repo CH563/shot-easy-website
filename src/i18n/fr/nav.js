@@ -15,6 +15,10 @@ export default {
         name: 'Supprimeur',
         title: "Supprimeur d'Arrière-Plan de Photo",
     },
+    blurBackground: {
+        name: 'Flou',
+        title: 'Flouter l’arrière-plan en ligne',
+    },
     compressor: {
         name: 'Compresseur',
         title: "Compresseur d'Images",

@@ -15,6 +15,10 @@ export default {
         name: '除去',
         title: '写真の背景を除去',
     },
+    blurBackground: {
+        name: 'ぼかし',
+        title: '背景をオンラインでぼかす',
+    },
     compressor: {
         name: '圧縮機',
         title: '画像圧縮機',

@@ -1,0 +1,57 @@
+---
+import Remover from '@components/Remover';
+import Privacy from '@components/Privacy.astro';
+import LocalProcessingBlock from '@components/LocalProcessingBlock.astro';
+import SeoContentBlock from '@components/SeoContentBlock.astro';
+import ToolStructuredData from '@components/ToolStructuredData.astro';
+import { getLang, getLocale } from '@i18n/index';
+import { getToolSeoContent } from '@lib/toolSeoContent';
+const { locale } = Astro.params;
+const lang = getLocale(locale);
+const l = getLang(locale);
+const nav = l.nav;
+const t = l.blurBackground;
+const seoContent = getToolSeoContent(lang, 'blurBackground', t);
+---
+
+<div class="container py-8 relative z-10 flex-1">
+    <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">{nav.blurBackground.title}</h1>
+    <p class="text-slate-600 text-center mb-2">{t.tips}</p>
+    <p class="text-slate-600 text-xs text-center mb-2">{t.modelTip}</p>
+    <div class="pb-8 min-h-[388px]">
+        <Remover variant="blur" client:only="react" />
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+        <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs">
+            <div class="mb-1 text-sm">✨</div>
+            <h2 class="text-lg font-bold mb-2">{t.how}</h2>
+            <p>{t.howCont}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-emerald-100/40 text-xs">
+            <div class="mb-1 text-sm">🎯</div>
+            <h2 class="text-lg font-bold mb-2">{t.focus}</h2>
+            <p>{t.focusCont}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-rose-100/40 text-xs">
+            <div class="mb-1 text-sm">⚙️</div>
+            <h2 class="text-lg font-bold mb-2">{t.adjust}</h2>
+            <p>{t.adjustCont}</p>
+        </section>
+        <section class="mb-3 rounded-md p-4 bg-amber-100/40 text-xs">
+            <div class="mb-1 text-sm">🔒</div>
+            <h2 class="text-lg font-bold mb-2">{t.local}</h2>
+            <p>{t.localCont}</p>
+        </section>
+    </div>
+    <LocalProcessingBlock />
+    <SeoContentBlock content={seoContent} />
+    <Privacy />
+</div>
+<ToolStructuredData
+    name={t.title}
+    description={t.description}
+    keywords={t.keywords}
+    locale={lang}
+    browserRequirements="Requires WebAssembly, WebGPU or modern browser ML support when available"
+    featureList={seoContent.featureList}
+/>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { ColorPicker, Button, message, Spin, Modal } from 'antd';
+import { ColorPicker, Button, message, Spin, Modal, Slider } from 'antd';
 import {
     env,
     AutoModel,
@@ -24,7 +24,15 @@ const REMOVE_BACKGROUND_STATUS = {
     PROCESSING_SUCCESS: 5 // 处理成功
 };
 
-export default function Remover() {
+const loadImageFromUrl = (url) => new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = url;
+});
+
+export default function Remover({ variant = 'remove' }) {
+    const isBlurMode = variant === 'blur';
     const [messageApi, contextHolder] = message.useMessage();
     const canvasRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -32,6 +40,9 @@ export default function Remover() {
     const [photoUrl, setPhotoUrl] = useState('');
     const [transparentUrl, setTransparentUrl] = useState('');
     const [photoData, setPhotoData] = useState('');
+    const [originalDataUrl, setOriginalDataUrl] = useState('');
+    const [cutoutDataUrl, setCutoutDataUrl] = useState('');
+    const [blurRadius, setBlurRadius] = useState(18);
     const [isGrid, setIsGrid] = useState(false);
     const [showOrigin, setShowOrigin] = useState(false);
 
@@ -78,13 +89,16 @@ export default function Remover() {
         if (removeBgStatus === REMOVE_BACKGROUND_STATUS.NO_SUPPORT_WEBGPU) return messageApi.info('WebGPU is not supported in this browser, to use the image segmentation function, please use the latest version of Google Chrome.');
         if (loading) return messageApi.info('Working hard, please wait!');
         fileToDataURL(file).then(img => {
+            setPhotoData(img);
+            setOriginalDataUrl(img.src);
+            setCutoutDataUrl('');
+            setTransparentUrl('');
             const imgbase64 = toDraw(img);
             setPhotoUrl(imgbase64);
-            setPhotoData(img);
         }).catch(error => console.error(error));
     }, [loading]);
 
-    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoData, bgColor, loading]);
+    useKeyboardShortcuts(() => toDownload(), () => toCopy(), [photoData, bgColor, blurRadius, loading]);
 
     const imageSize = useMemo(() => computedSize(photoData.width, photoData.height), [photoData]);
 
@@ -109,37 +123,86 @@ export default function Remover() {
                 )
             ).data;
 
-            // 创建一个新的 canvas
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
+            const cutoutCanvas = document.createElement('canvas');
+            cutoutCanvas.width = img.width;
+            cutoutCanvas.height = img.height;
+            const cutoutCtx = cutoutCanvas.getContext('2d');
 
-            // 绘制原始图像
-            ctx.drawImage(img.toCanvas(), 0, 0);
-            // 更新蒙版区域
-            const pixelData = ctx.getImageData(0, 0, img.width, img.height);
+            cutoutCtx.drawImage(img.toCanvas(), 0, 0);
+            const pixelData = cutoutCtx.getImageData(0, 0, img.width, img.height);
             for (let i = 0; i < maskData.length; ++i) {
                 pixelData.data[4 * i + 3] = maskData[i];
             }
-            ctx.putImageData(pixelData, 0, 0);
-            const imgData = canvas.toDataURL('image/png');
-            setTransparentUrl(imgData);
-            const imgFile = await canvas2Blob(canvas);
-            const image = await fileToDataURL(imgFile);
-            setPhotoData(image);
+            cutoutCtx.putImageData(pixelData, 0, 0);
+            const cutoutUrl = cutoutCanvas.toDataURL('image/png');
+            setCutoutDataUrl(cutoutUrl);
+            setTransparentUrl(cutoutUrl);
+
+            if (isBlurMode) {
+                const resultUrl = await composeBlurredBackground(photoUrl, cutoutUrl, blurRadius);
+                setTransparentUrl(resultUrl);
+                const imgFile = await url2Blob(resultUrl);
+                const image = await fileToDataURL(imgFile);
+                setPhotoData(image);
+            } else {
+                const imgFile = await canvas2Blob(cutoutCanvas);
+                const image = await fileToDataURL(imgFile);
+                setPhotoData(image);
+            }
             setLoading(false);
             setRemoveBgStatus(REMOVE_BACKGROUND_STATUS.PROCESSING_SUCCESS);
         };
         processImage();
     }, [photoUrl]);
 
+    useEffect(() => {
+        const redrawBlurredImage = async () => {
+            if (!isBlurMode || !originalDataUrl || !cutoutDataUrl || loading) return;
+            setLoading(true);
+            try {
+                const resultUrl = await composeBlurredBackground(originalDataUrl, cutoutDataUrl, blurRadius);
+                setTransparentUrl(resultUrl);
+                const imgFile = await url2Blob(resultUrl);
+                const image = await fileToDataURL(imgFile);
+                setPhotoData(image);
+            } catch (error) {
+                messageApi.error('Failed to update blur background.');
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        redrawBlurredImage();
+    }, [blurRadius]);
+
     const beforeUpload = async (file) => {
         const img = await fileToDataURL(file);
         setPhotoData(img);
+        setOriginalDataUrl(img.src);
+        setCutoutDataUrl('');
+        setTransparentUrl('');
         const imgbase64 = toDraw(img);
         setPhotoUrl(imgbase64);
         return Promise.reject();
+    }
+
+    const composeBlurredBackground = async (originUrl, cutoutUrl, radius) => {
+        const [origin, cutout] = await Promise.all([
+            loadImageFromUrl(originUrl),
+            loadImageFromUrl(cutoutUrl)
+        ]);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = origin.width;
+        canvas.height = origin.height;
+
+        const bleed = Math.max(12, radius * 2);
+        ctx.save();
+        ctx.filter = `blur(${radius}px)`;
+        ctx.drawImage(origin, -bleed, -bleed, origin.width + bleed * 2, origin.height + bleed * 2);
+        ctx.restore();
+        ctx.drawImage(cutout, 0, 0, origin.width, origin.height);
+        return canvas.toDataURL('image/png');
     }
 
     const toDraw = (image, bgColor) => {
@@ -190,7 +253,9 @@ export default function Remover() {
         if (loading) return messageApi.info('Working hard, please wait!');
         setPhotoUrl('');
         setPhotoData('');
-        setTransparentUrl('')
+        setTransparentUrl('');
+        setOriginalDataUrl('');
+        setCutoutDataUrl('');
     }
 
     return (
@@ -200,8 +265,12 @@ export default function Remover() {
                 <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", isGrid ? 'tr':'polka')}>
                     <div className="flex gap-4 justify-center flex-col-reverse bg-white p-2 border-b shadow-md md:flex-row md:justify-between">
                         <div className="flex items-center justify-center gap-3">
-                            <ColorPicker allowClear size="small" value={bgColor} onChange={onBgChange} />
-                            <Button type="text" shape="circle" className={isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => setIsGrid(!isGrid)}></Button>
+                            {!isBlurMode && <ColorPicker allowClear size="small" value={bgColor} onChange={onBgChange} />}
+                            {!isBlurMode && <Button type="text" shape="circle" className={isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => setIsGrid(!isGrid)}></Button>}
+                            {isBlurMode && <div className="flex w-48 items-center gap-3 text-xs text-slate-600">
+                                <Icon name="Sparkles" />
+                                <Slider className="flex-1" min={4} max={36} value={blurRadius} onChange={setBlurRadius} tooltip={{ formatter: value => `${value}px` }} />
+                            </div>}
                             <div className="active:[&_.ant-btn:not(:disabled)]:bg-[#1677ff]/20">
                                 <Button type="text" shape="circle" className="[&_span]:active:text-[#1677ff]" icon={<Icon name="SplitSquareHorizontal" />} onMouseDown={() => setShowOrigin(true)} onMouseLeave={() => setShowOrigin(false)} onMouseUp={() => setShowOrigin(false)}></Button>
                             </div>
@@ -217,8 +286,8 @@ export default function Remover() {
                             {!photoUrl && <UploadDragger beforeUpload={beforeUpload} />}
                             <Spin spinning={loading} delay={500}>
                                 {photoUrl && <div className={cn("overflow-hidden w-auto", transparentUrl && 'opacity-0 absolute top-0 left-0 transition-all z-10', showOrigin && 'opacity-100')}><img src={photoUrl} alt="Original image before background removal" width={imageSize.width} height={imageSize.height} className="w-full object-cover" /></div>}
-                                {transparentUrl && <div className="overflow-hidden w-auto relative z-[9]"><img src={transparentUrl} alt="Image with background removed" className="w-full" /></div>}
-                                {transparentUrl && <div className="absolute z-0 w-full h-full top-0 left-0" style={{
+                                {transparentUrl && <div className="overflow-hidden w-auto relative z-[9]"><img src={transparentUrl} alt={isBlurMode ? "Image with blurred background" : "Image with background removed"} className="w-full" /></div>}
+                                {transparentUrl && !isBlurMode && <div className="absolute z-0 w-full h-full top-0 left-0" style={{
                                     background: bgColor
                                 }}></div>}
                             </Spin>
