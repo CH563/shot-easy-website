@@ -15,6 +15,10 @@ export default {
         name: 'Gỡ Bỏ',
         title: 'Gỡ Bỏ Nền Ảnh'
     },
+    blurBackground: {
+        name: 'Làm mờ',
+        title: 'Làm mờ nền online',
+    },
     compressor: {
         name: 'Nén',
         title: 'Nén Ảnh'

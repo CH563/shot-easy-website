@@ -3,6 +3,7 @@ import editor from './editor';
 import beautifier from './beautifier';
 import rounded from './rounded';
 import remover from './remover';
+import blurBackground from './blurBackground';
 import compressor from './compressor';
 import longImage from './longImage';
 import screenshot from './screenshot';
@@ -24,6 +25,7 @@ export default {
     beautifier,
     rounded,
     remover,
+    blurBackground,
     compressor,
     longImage,
     screenshot,

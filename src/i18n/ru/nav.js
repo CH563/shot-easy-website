@@ -15,6 +15,10 @@ export default {
         name: 'Удалитель',
         title: 'Удалитель фона фотографии',
     },
+    blurBackground: {
+        name: 'Размытие',
+        title: 'Размыть фон онлайн',
+    },
     compressor: {
         name: 'Компрессор',
         title: 'Компрессор изображений',

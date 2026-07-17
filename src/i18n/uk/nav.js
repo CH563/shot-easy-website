@@ -15,6 +15,10 @@ export default {
         name: 'Фон',
         title: 'Видалити фон з фото'
     },
+    blurBackground: {
+        name: 'Розмиття',
+        title: 'Розмити фон онлайн',
+    },
     compressor: {
         name: 'Стиснення',
         title: 'Стиснути зображення онлайн'

@@ -15,6 +15,10 @@ export default {
         name: 'Removedor',
         title: 'Removedor de Fondo de Foto',
     },
+    blurBackground: {
+        name: 'Desenfoque',
+        title: 'Desenfocar fondo online',
+    },
     compressor: {
         name: 'Compresor',
         title: 'Compresor de Imágenes',

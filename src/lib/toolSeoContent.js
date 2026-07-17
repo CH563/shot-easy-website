@@ -344,6 +344,7 @@ const TOOL_FEATURES = {
     convert: ['Image format conversion', 'PDF export', 'Local canvas processing'],
     rounded: ['Rounded corners', 'Transparent output', 'Avatar and product image styling'],
     remover: ['AI background removal', 'Transparent PNG output', 'Local model processing'],
+    blurBackground: ['AI subject detection', 'Adjustable background blur', 'Local canvas composition'],
     longImage: ['Merge images vertically', 'Spacing and width controls', 'Long image export'],
     viewer: ['DOCX, PPTX, XLSX, CSV, PDF, archive preview', 'No office suite required', 'Browser file viewing'],
     videoConvert: ['Video to GIF', 'Format conversion', 'Compression, trim, crop, audio extraction']
