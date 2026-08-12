@@ -3,6 +3,8 @@ import { message } from 'antd';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import { Icon } from './Icons';
+import usePaste from '@lib/usePaste';
+import { modKey } from '@lib/utils';
 
 const FONT_URL = 'https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf';
 const imageTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/bmp'];
@@ -14,6 +16,14 @@ const polyBounds = (poly = []) => {
   const ys = points.map((p) => Number(p[1]) || 0);
   if (!xs.length) return { x: 0, y: 0, right: 0, bottom: 0 };
   return { x: Math.min(...xs), y: Math.min(...ys), right: Math.max(...xs), bottom: Math.max(...ys) };
+};
+const fitTextSize = (font, text, preferredSize, maxWidth) => {
+  let size = preferredSize;
+  try {
+    const width = font.widthOfTextAtSize(text, size);
+    if (width > maxWidth && width > 0) size = Math.max(4, size * (maxWidth / width));
+  } catch { /* drawText will surface unsupported glyphs */ }
+  return size;
 };
 const toBlob = (canvas, type = 'image/jpeg', quality = .92) => new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Canvas export failed')), type, quality));
 
@@ -53,9 +63,9 @@ async function imagePage(file) {
 export default function OcrTool({ lang = 'en' }) {
   const zh = lang === 'zh-CN';
   const t = useMemo(() => zh ? {
-    drop: '拖入图片或扫描 PDF', choose: '选择文件', support: '支持 JPG、PNG、WebP、BMP、PDF · 单文件处理', local: '文件不会离开此设备', ready: '待识别', recognizing: '正在识别', done: '已识别', failed: '识别失败', start: '开始 OCR', export: '导出可搜索 PDF', reset: '重新导入', page: '页面', result: '识别文本', empty: '识别后可在这里逐行校对', model: '首次使用需下载 OCR 模型，之后浏览器会缓存', loadingModel: '正在加载 PaddleOCR 模型…', importing: '正在解析 PDF', allText: '全文编辑', overlay: '页面校对', confidence: '置信度', noText: '未识别到文字', exportWait: '正在生成 PDF…', fontWait: '正在准备中文字体…', add: '更换文件', remove: '删除本页', privacy: '本地 OCR · 无文件上传',
+    drop: '拖入图片、扫描 PDF，或直接粘贴图片', choose: '选择文件', support: '支持 JPG、PNG、WebP、BMP、PDF · 单文件处理', paste: '粘贴剪贴板图片', pasteBusy: '请等待当前识别完成后再粘贴', copy: '复制全文', copied: '全文已复制', copyFailed: '复制失败，请重试', local: '文件不会离开此设备', ready: '待识别', recognizing: '正在识别', done: '已识别', failed: '识别失败', start: '开始 OCR', export: '导出可搜索 PDF', reset: '重新导入', page: '页面', result: '识别文本', empty: '识别后可在这里逐行校对', model: '首次使用需下载 OCR 模型，之后浏览器会缓存', loadingModel: '正在加载 PaddleOCR 模型…', importing: '正在解析 PDF', allText: '全文编辑', overlay: '页面校对', confidence: '置信度', noText: '未识别到文字', exportWait: '正在生成 PDF…', fontWait: '正在准备中文字体…', add: '更换文件', remove: '删除本页', privacy: '本地 OCR · 无文件上传',
   } : {
-    drop: 'Drop an image or a scanned PDF', choose: 'Choose file', support: 'JPG, PNG, WebP, BMP, PDF · one file at a time', local: 'Files never leave this device', ready: 'Ready', recognizing: 'Recognizing', done: 'Recognized', failed: 'Failed', start: 'Start OCR', export: 'Export searchable PDF', reset: 'Start over', page: 'Page', result: 'Recognized text', empty: 'Run OCR, then correct each line here', model: 'The OCR model downloads once and is cached by your browser', loadingModel: 'Loading PaddleOCR model…', importing: 'Rendering PDF', allText: 'Full text', overlay: 'Page review', confidence: 'Confidence', noText: 'No text was detected', exportWait: 'Creating PDF…', fontWait: 'Preparing document font…', add: 'Replace file', remove: 'Remove page', privacy: 'Local OCR · no file upload',
+    drop: 'Drop an image or scanned PDF, or paste an image', choose: 'Choose file', support: 'JPG, PNG, WebP, BMP, PDF · one file at a time', paste: 'Paste an image', pasteBusy: 'Wait for the current OCR to finish before pasting', copy: 'Copy full text', copied: 'Full text copied', copyFailed: 'Copy failed. Please try again.', local: 'Files never leave this device', ready: 'Ready', recognizing: 'Recognizing', done: 'Recognized', failed: 'Failed', start: 'Start OCR', export: 'Export searchable PDF', reset: 'Start over', page: 'Page', result: 'Recognized text', empty: 'Run OCR, then correct each line here', model: 'The OCR model downloads once and is cached by your browser', loadingModel: 'Loading PaddleOCR model…', importing: 'Rendering PDF', allText: 'Full text', overlay: 'Page review', confidence: 'Confidence', noText: 'No text was detected', exportWait: 'Creating PDF…', fontWait: 'Preparing document font…', add: 'Replace file', remove: 'Remove page', privacy: 'Local OCR · no file upload',
   }, [zh]);
 
   const inputRef = useRef(null);
@@ -67,6 +77,8 @@ export default function OcrTool({ lang = 'en' }) {
   const [progress, setProgress] = useState('');
   const [mode, setMode] = useState('overlay');
   const [drag, setDrag] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const pasteKey = modKey();
   pagesRef.current = pages;
 
   useEffect(() => () => {
@@ -90,6 +102,15 @@ export default function OcrTool({ lang = 'en' }) {
     } catch (error) { message.error(error.message || 'Import failed'); }
     finally { setBusy(false); setProgress(''); }
   };
+
+  usePaste((file) => {
+    if (!file) return;
+    if (busy) {
+      message.info(t.pasteBusy);
+      return;
+    }
+    importFiles([file]);
+  }, [busy, zh]);
 
   const getOcr = async () => {
     if (ocrRef.current) return ocrRef.current;
@@ -137,6 +158,18 @@ export default function OcrTool({ lang = 'en' }) {
     const lines = value.split('\n');
     setPages((old) => old.map((page, index) => index === active ? { ...page, items: page.items.map((item, i) => ({ ...item, text: lines[i] ?? '' })) } : page));
   };
+  const copyFullText = async () => {
+    const text = page.items.map((item) => item.text).join('\n').trim();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      message.success(t.copied);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      message.error(t.copyFailed);
+    }
+  };
   const removePage = (index) => {
     URL.revokeObjectURL(pages[index].url);
     setPages((old) => old.filter((_, i) => i !== index)); setActive((old) => Math.max(0, Math.min(old, pages.length - 2)));
@@ -148,30 +181,40 @@ export default function OcrTool({ lang = 'en' }) {
     try {
       const pdf = await PDFDocument.create();
       pdf.registerFontkit(fontkit);
+      pdf.setTitle(`${baseName(pages[0].name)} OCR`);
+      pdf.setCreator('ShotEasy OCR');
+      pdf.setProducer('ShotEasy PDF Editor');
       let font;
+      const needsUnicodeFont = pages.some((source) => source.items.some((item) => /[^\u0000-\u00ff]/.test(item.text || '')));
       try {
         setProgress(t.fontWait);
-        const bytes = await fetch(FONT_URL).then((response) => { if (!response.ok) throw new Error('Font download failed'); return response.arrayBuffer(); });
-        font = await pdf.embedFont(bytes, { subset: true });
+        if (!needsUnicodeFont) font = await pdf.embedFont(StandardFonts.Helvetica);
+        else {
+          const bytes = await fetch(FONT_URL).then((response) => { if (!response.ok) throw new Error('Font download failed'); return response.arrayBuffer(); });
+          font = await pdf.embedFont(bytes, { subset: false });
+        }
       } catch { font = await pdf.embedFont(StandardFonts.Helvetica); }
       for (let index = 0; index < pages.length; index += 1) {
         setProgress(`${t.exportWait} ${index + 1}/${pages.length}`);
         const source = pages[index];
-        const bytes = await source.blob.arrayBuffer();
-        let embedded;
-        try { embedded = source.blob.type === 'image/png' ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes); }
-        catch {
-          const bitmap = await createImageBitmap(source.blob); const canvas = document.createElement('canvas'); canvas.width = bitmap.width; canvas.height = bitmap.height; canvas.getContext('2d').drawImage(bitmap, 0, 0); bitmap.close();
-          embedded = await pdf.embedJpg(await (await toBlob(canvas)).arrayBuffer());
-        }
         const maxSide = 842; const scale = Math.min(1, maxSide / Math.max(source.width, source.height));
         const width = source.width * scale; const height = source.height * scale;
-        const page = pdf.addPage([width, height]); page.drawImage(embedded, { x: 0, y: 0, width, height });
+        const page = pdf.addPage([width, height]);
+        page.drawRectangle({ x: 0, y: 0, width, height, color: rgb(1, 1, 1) });
         source.items.forEach((item) => {
           if (!item.text?.trim()) return;
-          const box = polyBounds(item.poly); const boxHeight = Math.max(7, (box.bottom - box.y) * scale);
-          const size = clamp(boxHeight * .72, 5, 36);
-          try { page.drawText(item.text, { x: box.x * scale, y: height - box.bottom * scale + boxHeight * .12, size, font, color: rgb(0, 0, 0), opacity: .012, maxWidth: Math.max(8, (box.right - box.x) * scale) }); } catch { /* unsupported glyph in fallback font */ }
+          const box = polyBounds(item.poly);
+          const boxHeight = Math.max(7, (box.bottom - box.y) * scale);
+          const boxWidth = Math.max(8, (box.right - box.x) * scale);
+          const lines = item.text.split(/\r?\n/).filter((line) => line.trim());
+          const lineHeight = boxHeight / Math.max(1, lines.length);
+          lines.forEach((line, lineIndex) => {
+            const preferredSize = clamp(lineHeight * .78, 5, 36);
+            const size = fitTextSize(font, line, preferredSize, boxWidth);
+            const x = clamp(box.x * scale, 0, Math.max(0, width - 4));
+            const y = clamp(height - box.bottom * scale + (lines.length - lineIndex - 1) * lineHeight + Math.max(0, (lineHeight - size) * .35), 0, Math.max(0, height - size));
+            page.drawText(line, { x, y, size, font, color: rgb(.08, .1, .14) });
+          });
         });
       }
       const blob = new Blob([await pdf.save()], { type: 'application/pdf' });
@@ -186,6 +229,7 @@ export default function OcrTool({ lang = 'en' }) {
       <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-600 text-white shadow-[0_16px_40px_rgba(37,99,235,.28)] transition group-hover:-translate-y-1"><Icon name="ScanText" size={36} /></div>
       <h2 className="relative text-2xl font-bold text-slate-800">{t.drop}</h2><p className="relative mt-2 text-sm text-slate-500">{t.support}</p>
       <button className="relative mt-6 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-700">{t.choose}</button>
+      <div className="relative mt-4 flex items-center justify-center gap-1.5 text-xs text-slate-500"><span>{zh ? '或' : 'or'}</span><kbd className="rounded border border-slate-200 bg-slate-50 px-1.5 py-1 font-semibold text-slate-600 shadow-sm">{pasteKey}</kbd><span>+</span><kbd className="rounded border border-slate-200 bg-slate-50 px-1.5 py-1 font-semibold text-slate-600 shadow-sm">V</kbd><span>{t.paste}</span></div>
       <div className="relative mt-5 flex items-center gap-2 text-xs font-semibold text-emerald-700"><Icon name="ShieldCheck" size={15} />{t.local}</div>
       <input ref={inputRef} className="hidden" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,application/pdf" onChange={(event) => importFiles(event.target.files)} />
     </div>
@@ -197,6 +241,7 @@ export default function OcrTool({ lang = 'en' }) {
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
       <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700"><Icon name="ShieldCheck" size={15} />{t.privacy}</div>
       <div className="flex flex-wrap gap-2">
+        <span className="hidden items-center gap-1 text-[11px] text-slate-400 md:inline-flex"><kbd className="rounded border border-slate-200 bg-slate-50 px-1.5 py-1 font-semibold">{pasteKey}</kbd>+<kbd className="rounded border border-slate-200 bg-slate-50 px-1.5 py-1 font-semibold">V</kbd>{t.paste}</span>
         <button onClick={() => inputRef.current?.click()} disabled={busy} className="inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md border border-slate-200 px-3 py-2 text-xs font-bold leading-none text-slate-600 hover:bg-slate-50 disabled:opacity-50"><span className="text-sm leading-none">＋</span>{t.add}</button>
         <button onClick={() => recognize()} disabled={busy} className="inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-xs font-bold leading-none text-white hover:bg-blue-700 disabled:opacity-50"><Icon name="ScanText" size={14} /> <span>{progress || t.start}</span></button>
         <button onClick={exportPdf} disabled={busy || !pages.some((item) => item.status === 'done')} className="inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md bg-slate-900 px-4 py-2 text-xs font-bold leading-none text-white hover:bg-black disabled:cursor-not-allowed disabled:opacity-35"><Icon name="Download" size={14} /> <span>{t.export}</span></button>
@@ -214,7 +259,7 @@ export default function OcrTool({ lang = 'en' }) {
         </div>
       </aside>
       <div className="min-w-0 bg-slate-100/70 p-4 md:p-6">
-        <div className="mb-3 flex items-center justify-between"><div className="flex rounded-md bg-white p-1 text-xs shadow-sm"><button onClick={() => setMode('overlay')} className={`rounded px-3 py-1.5 font-semibold ${mode === 'overlay' ? 'bg-blue-50 text-blue-700' : 'text-slate-500'}`}>{t.overlay}</button><button onClick={() => setMode('text')} className={`rounded px-3 py-1.5 font-semibold ${mode === 'text' ? 'bg-blue-50 text-blue-700' : 'text-slate-500'}`}>{t.allText}</button></div><button onClick={() => removePage(active)} className="text-xs text-slate-400 hover:text-red-500">{t.remove}</button></div>
+        <div className="mb-3 flex items-center justify-between"><div className="flex items-center gap-2"><div className="flex rounded-md bg-white p-1 text-xs shadow-sm"><button onClick={() => setMode('overlay')} className={`rounded px-3 py-1.5 font-semibold ${mode === 'overlay' ? 'bg-blue-50 text-blue-700' : 'text-slate-500'}`}>{t.overlay}</button><button onClick={() => setMode('text')} className={`rounded px-3 py-1.5 font-semibold ${mode === 'text' ? 'bg-blue-50 text-blue-700' : 'text-slate-500'}`}>{t.allText}</button></div>{mode === 'text' && <button type="button" onClick={copyFullText} disabled={!page.items.some((item) => item.text?.trim())} title={copied ? t.copied : t.copy} aria-label={copied ? t.copied : t.copy} className={`inline-flex h-8 w-8 items-center justify-center rounded-md border shadow-sm transition ${copied ? 'border-emerald-200 bg-emerald-50 text-emerald-600' : 'border-slate-200 bg-white text-slate-500 hover:border-blue-200 hover:text-blue-600'} disabled:cursor-not-allowed disabled:opacity-35`}><Icon name={copied ? 'Check' : 'Copy'} size={15} /></button>}</div><button onClick={() => removePage(active)} className="text-xs text-slate-400 hover:text-red-500">{t.remove}</button></div>
         {mode === 'overlay' ? <div className="relative mx-auto w-fit max-w-full overflow-hidden rounded-sm bg-white shadow-lg" style={{ aspectRatio: `${page.width}/${page.height}`, width: `min(100%, ${page.width}px)` }}>
           <img src={page.url} className="block h-full w-full object-contain" alt={page.name} />
           {page.items.map((item) => { const b = polyBounds(item.poly); return <textarea key={item.id} value={item.text} onChange={(event) => updateItem(active, item.id, event.target.value)} title={`${t.confidence}: ${Math.round((item.score || 0) * 100)}%`} className="absolute resize-none overflow-hidden border border-transparent bg-blue-50/10 px-0.5 text-transparent caret-blue-600 outline-none transition hover:border-blue-400 hover:bg-blue-50/80 hover:text-slate-900 focus:z-10 focus:border-blue-600 focus:bg-white/95 focus:text-slate-900" style={{ left: `${b.x / page.width * 100}%`, top: `${b.y / page.height * 100}%`, width: `${Math.max(2, (b.right - b.x) / page.width * 100)}%`, height: `${Math.max(1.6, (b.bottom - b.y) / page.height * 100)}%`, fontSize: `${clamp((b.bottom - b.y) / page.height * 620 * .65, 8, 24)}px`, lineHeight: 1.05 }} />; })}

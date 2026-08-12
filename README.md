@@ -32,7 +32,7 @@ Key capabilities:
 - Starts OCR automatically after a file is selected.
 - Displays detected text regions and recognition confidence scores.
 - Allows line-by-line correction and full-text editing before export.
-- Exports the original page appearance with a selectable, searchable PDF text layer.
+- Reconstructs visible OCR text at the detected positions in a selectable, searchable PDF without embedding the source image.
 - Keeps document images, rendered PDF pages, and recognized text in browser memory without uploading the selected file to an OCR server.
 - Downloads the public OCR model and WebAssembly runtime on first use; browser caching can make later recognition faster.
 
