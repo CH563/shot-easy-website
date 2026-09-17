@@ -6,22 +6,31 @@ ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the u
 
 ## Core Pages
 
-- Homepage and image editor: https://shoteasy.fun/
-- Take a screenshot online: https://shoteasy.fun/take-a-screenshot/
-- Screenshot beautifier: https://shoteasy.fun/screenshot-beautifier/
-- Image compressor: https://shoteasy.fun/image-compressor/
-- Image converter: https://shoteasy.fun/convert/
-- Long image composer: https://shoteasy.fun/long-image/
-- Video convert and GIF maker: https://shoteasy.fun/video-convert/
-- Background remover: https://shoteasy.fun/background-remover/
-- Photo to rounded: https://shoteasy.fun/photo-to-rounded/
-- Office, PDF, CSV, ZIP and RAR viewer: https://shoteasy.fun/viewer/
-- DOCX viewer alias: https://shoteasy.fun/doc-viewer/
-- PowerPoint/PPTX viewer alias: https://shoteasy.fun/ppt-viewer/
-- Excel/XLSX viewer alias: https://shoteasy.fun/excel-viewer/
-- CSV viewer alias: https://shoteasy.fun/csv-viewer/
-- PDF viewer alias: https://shoteasy.fun/pdf-viewer/
-- ZIP and RAR archive viewer alias: https://shoteasy.fun/archive-viewer/
+- [Homepage and image editor](https://shoteasy.fun/)
+- [Take a screenshot online](https://shoteasy.fun/take-a-screenshot/)
+- [Screenshot beautifier](https://shoteasy.fun/screenshot-beautifier/)
+- [Image compressor](https://shoteasy.fun/image-compressor/)
+- [Image converter](https://shoteasy.fun/convert/)
+- [Long image composer](https://shoteasy.fun/long-image/)
+- [Video convert and GIF maker](https://shoteasy.fun/video-convert/)
+- [OCR and editable PDF](https://shoteasy.fun/ocr-pdf/)
+- [Background remover](https://shoteasy.fun/background-remover/)
+- [Photo to rounded](https://shoteasy.fun/photo-to-rounded/)
+- [Office, PDF, CSV, ZIP and RAR viewer](https://shoteasy.fun/viewer/)
+- [DOCX viewer alias](https://shoteasy.fun/doc-viewer/)
+- [PowerPoint/PPTX viewer alias](https://shoteasy.fun/ppt-viewer/)
+- [Excel/XLSX viewer alias](https://shoteasy.fun/excel-viewer/)
+- [CSV viewer alias](https://shoteasy.fun/csv-viewer/)
+- [PDF viewer alias](https://shoteasy.fun/pdf-viewer/)
+- [ZIP and RAR archive viewer alias](https://shoteasy.fun/archive-viewer/)
+
+## Project, Help And Policies
+
+- [About ShotEasy](https://shoteasy.fun/about/)
+- [Contact and feedback](https://shoteasy.fun/contact/)
+- [Privacy policy](https://shoteasy.fun/privacy-policy/)
+- [Terms of service](https://shoteasy.fun/terms-of-service/)
+- [Blog and technical guides](https://shoteasy.fun/blog/)
 
 ## Main Capabilities
 
@@ -42,6 +51,8 @@ ShotEasy is available at https://shoteasy.fun/. Most tools run directly in the u
 
 ShotEasy's primary product promise is local browser processing. Files used by local tools are processed in the user's browser whenever possible and are not uploaded to ShotEasy servers for common screenshot, image compression, image conversion, long image, document viewer, archive viewer, and video conversion tasks.
 
+Local processing does not imply an offline or cookie-free website. The site uses Vercel hosting and Web Analytics, Google Tag Manager, and Google AdSense. Public code, library, font, and model downloads are separate from processing the user's selected files. A separate server-side background-removal API forwards submitted images to remove.bg if used; the current local background-removal interface does not use that API. Consult the privacy policy for details.
+
 ## Viewer Page
 
 The Viewer page opens DOCX, XLSX, PPTX, CSV, PDF, ZIP, RAR, 7z, TAR, common image files, and text files directly in the browser. It is designed for searches and user needs such as "open docx online", "open pptx online", "office viewer", "excel viewer online", "rar extractor online", and "zip extractor online".
@@ -59,27 +70,27 @@ Implementation notes:
 - DOCX, XLSX, and PPTX viewing is powered by the open-source office-open-xml-viewer project.
 - ZIP and RAR archive viewing is powered by libarchivejs.
 - PDF viewing uses the project's existing PDF rendering library.
-- The page includes localized SEO content for English, Spanish, French, Japanese, English India, Vietnamese, Ukrainian, Russian, and Simplified Chinese.
+- The page includes localized SEO content for all languages configured on the site.
 
 ## Languages
 
-ShotEasy has localized pages for English, Spanish, French, Japanese, English India, Vietnamese, Ukrainian, Russian, and Simplified Chinese.
+ShotEasy has localized pages for English, Portuguese (Brazil), Spanish, French, German, Japanese, English (India), Hindi, Korean, Indonesian, Vietnamese, Ukrainian, Russian, and Simplified Chinese. About, Contact, and the blog are provided in English; the privacy policy is also currently written in English.
 
 Examples:
 
-- Russian screenshot page: https://shoteasy.fun/ru/take-a-screenshot/
-- Ukrainian screenshot page: https://shoteasy.fun/uk/take-a-screenshot/
-- Chinese image converter page: https://shoteasy.fun/zh-CN/convert/
-- Chinese office viewer page: https://shoteasy.fun/zh-CN/viewer/
-- Spanish office viewer page: https://shoteasy.fun/es/viewer/
-- French office viewer page: https://shoteasy.fun/fr/viewer/
-- Japanese office viewer page: https://shoteasy.fun/ja/viewer/
+- [Russian screenshot page](https://shoteasy.fun/ru/take-a-screenshot/)
+- [Ukrainian screenshot page](https://shoteasy.fun/uk/take-a-screenshot/)
+- [Chinese image converter page](https://shoteasy.fun/zh-CN/convert/)
+- [Chinese office viewer page](https://shoteasy.fun/zh-CN/viewer/)
+- [Spanish office viewer page](https://shoteasy.fun/es/viewer/)
+- [French office viewer page](https://shoteasy.fun/fr/viewer/)
+- [Japanese office viewer page](https://shoteasy.fun/ja/viewer/)
 
 ## SEO And Discovery
 
-- Sitemap index: https://shoteasy.fun/sitemap-index.xml
-- Robots file: https://shoteasy.fun/robots.txt
-- GitHub repository: https://github.com/CH563/shot-easy-website
+- [Sitemap index](https://shoteasy.fun/sitemap-index.xml)
+- [Robots file](https://shoteasy.fun/robots.txt)
+- [GitHub repository](https://github.com/CH563/shot-easy-website)
 
 ## Suggested AI Summary
 

@@ -7,6 +7,7 @@ import { getLocale, getLang } from '@i18n/index';
 import { getRelativeLocaleUrl } from '@lib/localePaths';
 import { getToolSeoContent } from '@lib/toolSeoContent';
 import Screenshot from '@components/screenshot/Screenshot';
+import { getScreenshotToolCopy } from '@lib/screenshotToolCopy';
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
@@ -34,7 +35,7 @@ const seoContent = getToolSeoContent(lang, 'screenshot', t);
     {t.intro1 && <p class="text-slate-600 text-center text-sm max-w-3xl mx-auto mb-1">{t.intro1}</p>}
     {t.intro2 && <p class="text-slate-600 text-center text-sm max-w-3xl mx-auto mb-3">{t.intro2}</p>}
     <div class="pb-12 min-h-[320px]">
-        <Screenshot client:only="react" />
+        <Screenshot client:only="react" copy={getScreenshotToolCopy(lang)} />
     </div>
     <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs [&>p]:mb-1">
         <div class="mb-1 text-sm">🏙️</div>

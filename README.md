@@ -67,6 +67,20 @@ Benefits:
 - Frontmatter is validated by `src/content/config.ts`, which keeps article metadata consistent.
 - Cover images can be stored under `public/blog/` and referenced with `/blog/image-name.webp`.
 
+## GEO and trust content
+
+- Project identity and stable JSON-LD IDs are centralized in `src/lib/siteIdentity.js`.
+- Homepage introductions and answers for every configured locale live in `src/lib/homepageCopy.js`.
+- About and Contact are English public pages; do not advertise untranslated versions with hreflang.
+- All privacy routes share `src/components/PrivacyPolicyPage.astro` and canonicalize to `/privacy-policy/`.
+- Blog attribution links to the project About page. Set `updatedDate` only when an article actually changes.
+- Trust-page dates are fixed content dates, not refreshed on every build. Update the date when the described content changes.
+- Never add ratings, usage statistics, or processing guarantees without a verifiable source.
+
+Run the offline checks with `npm run test:geo`. With the dev server running, use `GEO_BASE_URL=http://127.0.0.1:4321 npm run test:geo` to also check server-rendered HTML for all supported locales. After a production build, set `GEO_CHECK_BUILD=1` to include sitemap and generated trust-page checks. Use Node 20 as specified in `package.json`; the existing Vercel adapter is not compatible with local Node 22.
+
+The privacy disclosure reflects source-configured services. The live GTM container, advertising consent settings, retention settings, and jurisdiction-specific obligations still require operator review; changing this page does not itself establish legal compliance.
+
 ## Environment variables
 
 ```
@@ -101,6 +115,8 @@ All commands are run from the root of the project, from a terminal:
 
 ## Update
 
+- 2026-09-17: refine the existing Russian DOCX, Ukrainian PPTX, and French XLSX landing pages based on Search Console impressions; localize screenshot controls and fallback/error messages in Russian and Ukrainian. Existing tool URLs are unchanged.
+- Search growth regression checks: `npm run test:seo`. To check server HTML, reciprocal screenshot language links, and priority landing content, use `SEO_BASE_URL=http://127.0.0.1:4321 npm run test:seo`; add `SEO_CHECK_BUILD=1` after a production build to check sitemap entries. Search Console query-to-page attribution still requires a query-filtered report; sitemap presence does not prove indexing.
 - 2026-08-11: add local PaddleOCR.js text recognition, editable OCR results, and searchable PDF export.
 - 2024-11-26: add background remover use Hugging Face model: [Xenova/modnet](https://huggingface.co/Xenova/modnet)
 

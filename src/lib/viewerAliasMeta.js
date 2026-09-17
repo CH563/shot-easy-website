@@ -1,3 +1,5 @@
+import { getViewerLandingContent } from './viewerLandingContent.js';
+
 export const viewerAliases = [
   'doc-viewer',
   'ppt-viewer',
@@ -192,6 +194,14 @@ const routeSubtitles = {
 
 export const getViewerAliasMeta = (viewer, alias, locale = 'en') => {
   if (!viewerAliases.includes(alias)) return viewer;
+  const landing = getViewerLandingContent(locale, alias);
+  if (landing) return {
+    title: landing.title,
+    h1: landing.h1,
+    description: landing.description,
+    tip: landing.intro,
+    keywords: landing.keywords
+  };
 
   const normalizedLocale = routeTerms[locale] ? locale : 'en';
   const term = routeTerms[normalizedLocale][alias] || routeTerms.en[alias];

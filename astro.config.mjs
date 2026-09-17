@@ -52,6 +52,10 @@ export default defineConfig({
   compressHTML: false,
   integrations: [tailwind(), react(), sitemap({
     customPages: sitemapCustomPages,
+    // The existing localized privacy routes serve the same English policy.
+    // Keep them accessible, but list only its canonical URL, without translations.
+    filter: (page) => !page.endsWith('/privacy-policy/') || new URL(page).pathname === '/privacy-policy/',
+    serialize: (item) => item.url.endsWith('/privacy-policy/') ? { ...item, links: [] } : item,
     i18n: {
       defaultLocale: "en",
       locales: LANGUAGES_CODE
