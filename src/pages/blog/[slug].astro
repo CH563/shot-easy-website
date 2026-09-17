@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
@@ -8,12 +8,17 @@ import { CONFIG } from '@lib/config';
 
 export const prerender = true;
 
+interface Props {
+    post: CollectionEntry<'blog'>;
+    relatedPosts: CollectionEntry<'blog'>[];
+}
+
 export async function getStaticPaths() {
     const posts = (await getCollection('blog', ({ data }) => !data.draft))
         .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
     return posts.map((post, index) => ({
-        params: { slug: post.slug },
+        params: { slug: post.id },
         props: {
             post,
             relatedPosts: posts.filter((_, relatedIndex) => relatedIndex !== index).slice(0, 5)
@@ -22,7 +27,7 @@ export async function getStaticPaths() {
 }
 
 const { post, relatedPosts } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 const publishedDate = post.data.date;
 const modifiedDate = post.data.updatedDate || post.data.date;
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en', {
@@ -68,7 +73,7 @@ const pageUrl = new URL(Astro.url.pathname, CONFIG.website).toString();
                             <h2 class="mb-4 text-xl font-semibold">Related posts</h2>
                             {relatedPosts.map(item =>(
                                 <div class="pb-3">
-                                    <a href={`/blog/${item.slug}`} class="text-sm truncate block hover:underline">{item.data.title}</a>
+                                    <a href={`/blog/${item.id}/`} class="text-sm truncate block hover:underline">{item.data.title}</a>
                                     <time datetime={item.data.date.toISOString()} class="text-xs text-slate-400">{formatDate(item.data.date)}</time>
                                 </div>
                             ))}

@@ -5,6 +5,7 @@ import '@static/global.css';
 import { CONFIG, LANGUAGES_CODE } from '@lib/config';
 import { getLocale, getLang } from '@i18n/index';
 import { siteGraph, serializeJsonLd } from '@lib/siteIdentity';
+import Analytics from '@vercel/analytics/astro';
 interface Props {
     title: string;
     description?: string;
@@ -103,5 +104,6 @@ const resolvedAlternates = languageAlternates === false ? undefined : (languageA
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N69NVBDF" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- End Google Tag Manager (noscript) -->
         <slot />
+        <Analytics />
     </body>
 </html>

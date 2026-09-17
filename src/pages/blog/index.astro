@@ -27,14 +27,14 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en', {
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-2 pt-8">
                     {posts.map(post =>(
                         <div class="overflow-hidden flex flex-col gap-2">
-                            <a href={`/blog/${post.slug}`} class="block w-full rounded-md shadow-md overflow-hidden aspect-[11/7] bg-slate-50" title={post.data.title}>
+                            <a href={`/blog/${post.id}/`} class="block w-full rounded-md shadow-md overflow-hidden aspect-[11/7] bg-slate-50" title={post.data.title}>
                                 <img src={post.data.cover || '/image.png'} alt={post.data.coverAlt || post.data.title} class="h-full w-full float-left object-cover transition-all hover:scale-110" />
                             </a>
                             <div class="flex justify-between items-center text-xs text-slate-400 pt-1">
                                 <span>{post.data.author}</span>
                                 <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
                             </div>
-                            <a href={`/blog/${post.slug}`} class="text-xl font-semibold leading-7 hover:underline" title={post.data.title}>{post.data.title}</a>
+                            <a href={`/blog/${post.id}/`} class="text-xl font-semibold leading-7 hover:underline" title={post.data.title}>{post.data.title}</a>
                             <p class="text-sm leading-6 text-slate-500">{post.data.description}</p>
                             {post.data.tags.length > 0 && (
                                 <div class="mt-1 flex flex-wrap gap-1.5">
