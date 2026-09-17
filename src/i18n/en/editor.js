@@ -9,7 +9,7 @@ export default {
     instantly: 'And editing, elevate your Screenshots Instantly!',
     how: 'How to take a screenshot',
     take: 'Take a screenshot',
-    use: 'Ues ShotEasy browser extension capture the visible screen, a selected area, or even the full page with just a single click. Or upload an photo from your local disk and clipboard. Or write some thing with markdown.',
+    use: 'Use the ShotEasy browser extension to capture the visible page, a selected area, or a full page. You can also open a photo from your device or clipboard, or create an image from Markdown.',
     more: 'Editing more beautifully',
     moreUse: 'Use our tool to easily upgrade your screenshots into impressive visuals. Add custom backgrounds, frames, shadows, and watermarks for a professional and fun look, all with just a few clicks.',
     corp: 'Crop & resize effortlessly',

@@ -4,25 +4,28 @@ import { SEO } from 'astro-seo';
 import '@static/global.css';
 import { CONFIG, LANGUAGES_CODE } from '@lib/config';
 import { getLocale, getLang } from '@i18n/index';
+import { siteGraph, serializeJsonLd } from '@lib/siteIdentity';
 interface Props {
     title: string;
     description?: string;
     keywords?: string;
     image?: string;
     languageAlternates?: false | { href: string; hrefLang: string }[];
+    contentLocale?: string;
+    canonicalPath?: string;
 }
-const { pathname, origin } = Astro.url;
+const { pathname } = Astro.url;
 const { locale } = Astro.params;
-const resolvedImageWithDomain = `${origin}/image.png`;
-const canonicalURL = new URL(pathname, origin);
-const lang = getLocale(locale);
+const resolvedImageWithDomain = `${CONFIG.website}/image.png`;
+const canonicalURL = new URL(Astro.props.canonicalPath || pathname, CONFIG.website);
+const lang = getLocale(Astro.props.contentLocale || locale);
 const languagesCode = LANGUAGES_CODE as {[key: string]: string};
 const pathParts = pathname.split('/').filter(Boolean);
 const currentLocaleFromPath = CONFIG.locals.find(item => item.toLowerCase() === pathParts[0]?.toLowerCase());
 const pagePath = currentLocaleFromPath ? pathParts.slice(1) : pathParts;
 const toLocalizedPath = (targetLocale: string) => {
     const segments = targetLocale === 'en' ? pagePath : [targetLocale, ...pagePath];
-    return `/${segments.join('/')}`;
+    return segments.length ? `/${segments.join('/')}/` : '/';
 };
 const alternates = CONFIG.locals.map(item => {
     const href = new URL(toLocalizedPath(item), CONFIG.website).toString();
@@ -49,6 +52,7 @@ const resolvedAlternates = languageAlternates === false ? undefined : (languageA
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
         <link rel="sitemap" href="/sitemap-index.xml" />
+        <script type="application/ld+json" set:html={serializeJsonLd({ '@context': 'https://schema.org', '@graph': siteGraph })} />
         {headKeywords && <meta name="keywords" content={headKeywords}>}
         <SEO
             title={headTitle}

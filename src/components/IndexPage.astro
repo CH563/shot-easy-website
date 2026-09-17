@@ -6,11 +6,16 @@ import fakeact from '@static/fakeact.svg';
 import fakemail from '@static/fakemail.svg';
 import {getLang, getLocale, getBrowserType} from '@i18n/index';
 import { getRelativeLocaleUrl } from '@lib/localePaths';
+import { CONFIG, LANGUAGES_CODE } from '@lib/config';
+import { homepageCopy } from '@lib/homepageCopy';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
 const { locale } = Astro.params;
 // console.log(Astro.request.headers.get('User-Agent'));
 const l = getLang(locale);
 const lang = getLocale(locale);
 const t = l.editor;
+const copy = homepageCopy[lang as keyof typeof homepageCopy];
+const pageUrl = new URL(Astro.url.pathname, CONFIG.website).toString();
 const extLink = {
     'Edge': 'https://microsoftedge.microsoft.com/addons/detail/kncmnbknmjfaejmkcogljhkehippifho',
     'Firefox': 'https://addons.mozilla.org/zh-CN/firefox/addon/shoteasy/',
@@ -22,6 +27,7 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
 <div class="container py-8 relative z-10 flex-1">
     <h1 class="text-4xl text-center leading-[42px] font-extrabold mb-2 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{t.feature}</h1>
     <p class="text-center"><span>{t.noSign}</span><span>{t.online} </span><span class="bg-[#df41f8] inline-block font-extrabold bg-clip-text text-transparent">{t.free} ✨</span></p>
+    <p class="mx-auto mt-4 max-w-3xl text-center text-sm leading-6 text-slate-600">{copy.intro}</p>
     <div class="flex flex-col items-center gap-1 justify-center pt-4 pb-3">
         <a
             href={extLink[browserType] || extLink.Chrome}
@@ -79,11 +85,22 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
         </div>
     </section>
     <Privacy />
+    <section class="mx-auto max-w-3xl py-8" aria-labelledby="shoteasy-questions">
+        <h2 id="shoteasy-questions" class="mb-5 text-center text-xl font-extrabold">{copy.faqTitle}</h2>
+        <div class="space-y-5">
+            {copy.questions.map(([question, answer]) => (
+                <div>
+                    <h3 class="mb-1 text-base font-semibold text-slate-800">{question}</h3>
+                    <p class="text-sm leading-6 text-slate-600">{answer}</p>
+                </div>
+            ))}
+        </div>
+    </section>
     <section class="text-center text-xs text-slate-400 [&_a]:underline">
         Image Editor by <a href="https://github.com/scaleflex/filerobot-image-editor" target="_blank" rel="noopener noreferrer">Filerobot Image Editor</a>
     </section>
     <div class="container mx-auto p-4">
-        <h3 class="text-center font-semibold p-4 my-2">More Tools</h3>
+        <h2 class="text-center font-semibold p-4 my-2">More Tools</h2>
         <div class="flex flex-row gap-6 justify-center">
             <div class="text-center">
                 <a href="https://fakeact.fun/" target="_blank" title="fakeact.fun" class="inline-block text-xs p-2 rounded-md hover:bg-gray-100">
@@ -100,20 +117,21 @@ const browserType = getBrowserType(Astro.request?.headers?.get('User-Agent'));
         </div>
     </div>
 </div>
-<script type="application/ld+json" set:html={JSON.stringify({
+<script type="application/ld+json" set:html={serializeJsonLd({
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": l.title,
-    "description": l.description,
+    "@id": `${pageUrl}#app`,
+    "name": 'ShotEasy',
+    "description": copy.intro,
+    "url": pageUrl,
+    "inLanguage": LANGUAGES_CODE[lang as keyof typeof LANGUAGES_CODE],
+    "isAccessibleForFree": true,
+    "isPartOf": { "@id": SITE_IDENTITY.websiteId },
+    "provider": { "@id": SITE_IDENTITY.projectId },
+    "maintainer": { "@id": SITE_IDENTITY.maintainerId },
     "operatingSystem": "ALL",
     "applicationCategory": "BrowserApplication",
     "browserRequirements": "requires HTML5 support",
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.6",
-        "ratingCount": "2948",
-        "bestRating": "5"
-    },
     "offers": {
         "@type": "Offer",
         "price": "0",

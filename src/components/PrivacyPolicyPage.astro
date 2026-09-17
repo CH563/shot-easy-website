@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { CONFIG } from '@lib/config';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
+
+const url = `${CONFIG.website}/privacy-policy/`;
+---
+
+<Layout title="ShotEasy Privacy Policy | Local Files, Analytics & Ads" description="How ShotEasy processes files locally, which hosting, analytics, and advertising services the website uses, and how to ask privacy questions." contentLocale="en" canonicalPath="/privacy-policy/" languageAlternates={false}>
+    <Header />
+    <main class="container py-12">
+        <article class="prose prose-slate mx-auto max-w-3xl">
+            <h1>Privacy Policy</h1>
+            <p>Last updated: <time datetime={SITE_IDENTITY.updatedDate}>September 17, 2026</time>.</p>
+            <p>This policy describes file processing and website requests for ShotEasy. Local file processing and website analytics or advertising are separate activities.</p>
+            <h2>Files processed in your browser</h2>
+            <p>The homepage image editor and common local screenshot, image conversion, compression, document viewing, OCR, archive, and video workflows process selected files on your device. These local workflows do not require uploading the selected files to ShotEasy servers for processing.</p>
+            <p>Local processing does not mean there are no network requests. The browser downloads application code and may download libraries, fonts, example images, or machine-learning models from external providers. Those downloads are not uploads of your selected files.</p>
+            <h2>Separate server-side processing</h2>
+            <p>A separate server-side background-removal API exists in the project. If that API is used, the submitted image is sent through the ShotEasy server to <a href="https://www.remove.bg/privacy">remove.bg</a> for processing. The current browser-based background remover and homepage editor do not use that API. The local-processing statement above does not apply to files deliberately submitted to a server API or another third-party service.</p>
+            <h2>Hosting and analytics</h2>
+            <p>ShotEasy is hosted on Vercel and enables Vercel Web Analytics. Hosting and analytics providers may process technical request and usage information, such as visited pages, referrers, browser or device information, and network information needed to deliver the website. See <a href="https://vercel.com/docs/analytics/privacy-policy">Vercel’s Web Analytics privacy documentation</a> for its data handling.</p>
+            <p>The website also loads Google Tag Manager, which manages website tags. The information processed depends on the tags configured in the container. Loading Tag Manager should not be interpreted as a guarantee that the site has no tracking or cookies.</p>
+            <h2>Advertising and third-party requests</h2>
+            <p>The website loads Google AdSense advertising code. Google advertising services may process request, device, and interaction information and may use cookies or similar technologies, depending on service settings, consent, and region. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites using its services</a> and <a href="https://policies.google.com/technologies/ads">Google’s advertising technology policy</a>.</p>
+            <p>ShotEasy does not claim that the website is cookie-free or that no information is processed by third parties. Local processing of your chosen files does not prevent hosting, model providers, analytics, or advertising services from receiving separate website requests.</p>
+            <h2>External links and feedback</h2>
+            <p>Links to extension stores, GitHub, social platforms, and other sites take you to services with their own privacy policies. The optional “Ask AI” links pass a public description of ShotEasy and its URL in the destination link, not the contents of files selected in the local tools.</p>
+            <p>Information you post in GitHub Issues is public. Do not include sensitive files or personal data in a bug report. Information sent through other platforms is handled according to those platforms’ policies.</p>
+            <h2>Retention and controls</h2>
+            <p>Data retention for hosting, analytics, and advertising services follows the applicable provider’s settings and policies; this page does not promise a fixed retention period. Files processed locally are not kept on ShotEasy servers by those local workflows. Downloaded output, browser caches, and data shared with external services are separate from that statement.</p>
+            <p>You can review browser cookie and storage controls and <a href="https://myadcenter.google.com/">Google’s ad preferences</a>. These controls do not necessarily stop every technical request. Contact the project for questions about a particular workflow or the services used on the site.</p>
+            <h2>Contact and updates</h2>
+            <p>See <a href="/contact/">Contact ShotEasy</a> for the existing public project and maintainer channels. Please do not attach confidential documents or screenshots to a public issue. This policy will be updated when the described processing practices materially change.</p>
+        </article>
+    </main>
+    <Footer />
+    <script type="application/ld+json" set:html={serializeJsonLd({
+        '@context': 'https://schema.org', '@type': 'WebPage', '@id': `${url}#page`,
+        url, name: 'ShotEasy Privacy Policy', inLanguage: 'en-US',
+        isPartOf: { '@id': SITE_IDENTITY.websiteId },
+        publisher: { '@id': SITE_IDENTITY.projectId }, dateModified: SITE_IDENTITY.updatedDate
+    })} />
+</Layout>

@@ -6,6 +6,7 @@ import { Icon } from '@components/Icons';
 import { DownBtn } from '@components/DownBtn';
 import state from '@states/screenshot';
 import useKeyboardShortcuts from '@lib/useKeyboardShortcuts';
+import { getScreenshotToolCopy } from '@lib/screenshotToolCopy';
 
 const aspectLists = [
     {
@@ -35,7 +36,7 @@ const aspectLists = [
     },
 ]
 
-export default observer(() => {
+export default observer(({ copy = getScreenshotToolCopy() }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
 
@@ -43,73 +44,89 @@ export default observer(() => {
 
     const toApply = async () => {
         setLoading(true);
-        const img = await state.getCroppedImg();
-        state.setImageSrc(img);
-        state.setIsCrop(false);
-        setLoading(false);
+        try {
+            const img = await state.getCroppedImg();
+            if (!img) throw new Error('No cropped image');
+            state.setImageSrc(img);
+            state.setIsCrop(false);
+        } catch {
+            messageApi.error(copy.cropFailed);
+        } finally {
+            setLoading(false);
+        }
     }
     const toDownload = () => {
-        state.downloadFile();
-        messageApi.success('Download Success!');
+        try {
+            state.downloadFile();
+            messageApi.success(copy.downloadSuccess);
+        } catch {
+            messageApi.error(copy.downloadFailed);
+        }
     }
     const toCopy = () => {
         state.copyFile().then(() => {
-            messageApi.success('Copied Success!');
+            messageApi.success(copy.copySuccess);
         }).catch(() => {
-            messageApi.error('Copy Failed!');
+            messageApi.error(copy.copyFailed);
         });
     }
     const toRefresh = () => {
         state.setImageSrc(null);
+        state.setIsCrop(false);
         state.reset();
     }
     let component = (
         <>
             <div className="flex items-center justify-center gap-3">
-                <Tooltip placement="top" title="Crop image">
-                    <Button type="text" shape="circle" icon={<Icon name="Crop" />} onClick={() => state.setIsCrop(true)}></Button>
+                <Tooltip placement="top" title={copy.crop}>
+                    <Button type="text" aria-label={copy.crop} shape="circle" icon={<Icon name="Crop" />} onClick={() => state.setIsCrop(true)}></Button>
                 </Tooltip>
-                <Button type="text" shape="circle" className={state.isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => state.toggleGrid()}></Button>
+                <Tooltip placement="top" title={copy.grid}>
+                    <Button type="text" aria-label={copy.grid} aria-pressed={state.isGrid} shape="circle" className={state.isGrid && 'text-[#1677ff]'} icon={<Icon name="Grip" />} onClick={() => state.toggleGrid()}></Button>
+                </Tooltip>
             </div>
             <div className="flex gap-3 items-center justify-center">
-                <DownBtn disabled={!state.imageSrc} loading={loading} toDownload={toDownload} toCopy={toCopy} />
-                <Button type="text" disabled={!state.imageSrc} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
+                <DownBtn copy={copy} disabled={!state.imageSrc} loading={loading} toDownload={toDownload} toCopy={toCopy} />
+                <Tooltip placement="top" title={copy.clear}>
+                    <Button type="text" aria-label={copy.clear} disabled={!state.imageSrc} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
+                </Tooltip>
             </div>
         </>
     );
     if (state.isCrop) {
         component = (
-            <div className="flex w-full gap-3 justify-center items-center">
-                <Tooltip placement="top" title="Zoom out image">
-                    <Button type="text" shape="circle" disabled={state.zoom <= 1} icon={<Icon name="ZoomOut" />} onClick={() => state.zoomOut()}></Button>
+            <div className="flex flex-wrap w-full gap-3 justify-center items-center">
+                <Tooltip placement="top" title={copy.zoomOut}>
+                    <Button type="text" aria-label={copy.zoomOut} shape="circle" disabled={state.zoom <= 1} icon={<Icon name="ZoomOut" />} onClick={() => state.zoomOut()}></Button>
                 </Tooltip>
-                <Tooltip placement="top" title="Zoom in image">
-                    <Button type="text" shape="circle" disabled={state.zoom >= 3} icon={<Icon name="ZoomIn" />} onClick={() => state.zoomIn()}></Button>
+                <Tooltip placement="top" title={copy.zoomIn}>
+                    <Button type="text" aria-label={copy.zoomIn} shape="circle" disabled={state.zoom >= 3} icon={<Icon name="ZoomIn" />} onClick={() => state.zoomIn()}></Button>
                 </Tooltip>
-                <Tooltip placement="top" title="Rotate left 90°">
-                    <Button type="text" shape="circle" icon={<RotateLeftOutlined />} onClick={() => state.rotateLeft()}></Button>
+                <Tooltip placement="top" title={copy.rotateLeft}>
+                    <Button type="text" aria-label={copy.rotateLeft} shape="circle" icon={<RotateLeftOutlined />} onClick={() => state.rotateLeft()}></Button>
                 </Tooltip>
                 <div className="flex gap-2 items-center text-xs">
-                    <label className="font-light">ROTATION:</label>
+                    <label className="font-light">{copy.rotation}:</label>
                     <Slider className="flex-1 w-28" defaultValue={state.rotation} value={state.rotation} min={0} max={360} step={1} onChange={(value) => state.setRotation(value)} />
                 </div>
                 <div className="flex gap-2 items-center text-xs">
-                    <label className="font-light">ASPECT:</label>
+                    <label className="font-light">{copy.aspect}:</label>
                     <Select
                         className="w-24"
                         defaultValue={state.aspect}
                         value={state.aspect}
                         size="small"
                         onChange={(value) => state.setAspect(value)}
-                        options={aspectLists}
+                        aria-label={copy.aspect}
+                        options={aspectLists.map((group, index) => ({ ...group, label: index === 0 ? copy.landscape : copy.portrait, title: index === 0 ? copy.landscape : copy.portrait }))}
                     />
                 </div>
                 <div className="flex items-center gap-2 before:w-[1px] before:block before:content-[''] before:bg-slate-300 before:h-4">
-                    <Tooltip placement="top" title="Undo">
-                        <Button type="link" shape="circle" icon={<Icon name="Undo" />} loading={loading} onClick={() => state.setIsCrop(false)} />
+                    <Tooltip placement="top" title={copy.cancel}>
+                        <Button type="link" aria-label={copy.cancel} shape="circle" icon={<Icon name="Undo" />} loading={loading} onClick={() => state.setIsCrop(false)} />
                     </Tooltip>
-                    <Tooltip placement="top" title="Apply Crop">
-                        <Button type="link" shape="circle" icon={<Icon name="Check" />} loading={loading} onClick={toApply} />
+                    <Tooltip placement="top" title={copy.apply}>
+                        <Button type="link" aria-label={copy.apply} shape="circle" icon={<Icon name="Check" />} loading={loading} onClick={toApply} />
                     </Tooltip>
                 </div>
             </div>

@@ -12,8 +12,8 @@ import convert from './convert';
 import viewer from './viewer';
 
 export default {
-    title: 'Photo editor online for free',
-    description: 'Photo edit online for free, resize, and filter any photos, convert image to jpg/png/jpeg/webp, take a screenshot in area or full page',
+    title: 'Free Online Photo Editor & Screenshot Tools | ShotEasy',
+    description: 'Edit photos and screenshots for free in your browser. Crop, resize, add filters and watermarks, or explore local image conversion and compression tools.',
     keywords: 'ShotEasy, easy to screenshot, edit photo, photo converter, image converter, editor online, convert image format online, convert image to jpg, jpg to webp, jpg to png',
     privacy: 'Privacy',
     terms: 'Terms',

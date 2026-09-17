@@ -1,5 +1,6 @@
 ---
-import { LANGUAGES_CODE } from '@lib/config';
+import { CONFIG, LANGUAGES_CODE } from '@lib/config';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
 
 interface Props {
     name: string;
@@ -21,10 +22,10 @@ const {
     browserRequirements = 'Requires a modern browser with HTML5 support'
 } = Astro.props as Props;
 
-const url = Astro.url.toString();
+const url = new URL(Astro.url.pathname, CONFIG.website).toString();
 const languageMap = LANGUAGES_CODE as Record<string, string>;
 const languageCode = languageMap[locale] || locale;
-const homeUrl = new URL(locale === 'en' ? '/' : `/${locale}/`, Astro.url.origin).toString();
+const homeUrl = new URL(locale === 'en' ? '/' : `/${locale}/`, CONFIG.website).toString();
 const graph = [
     {
         '@type': ['WebApplication', 'SoftwareApplication'],
@@ -40,10 +41,9 @@ const graph = [
         keywords,
         featureList,
         provider: {
-            '@type': 'Organization',
-            name: 'ShotEasy',
-            url: Astro.url.origin
+            '@id': SITE_IDENTITY.projectId
         },
+        isPartOf: { '@id': SITE_IDENTITY.websiteId },
         offers: {
             '@type': 'Offer',
             price: '0',
@@ -76,4 +76,4 @@ const schema = {
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script type="application/ld+json" set:html={serializeJsonLd(schema)} />

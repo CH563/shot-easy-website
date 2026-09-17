@@ -1,0 +1,36 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { CONFIG } from '@lib/config';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
+
+export const prerender = true;
+const url = `${CONFIG.website}/contact/`;
+---
+
+<Layout title="Contact ShotEasy | Help, Feedback & Bug Reports" description="Contact the ShotEasy project through GitHub Issues or its public maintainer profiles. Report bugs, request features, or ask about the browser tools." languageAlternates={false}>
+    <Header />
+    <main class="container py-12">
+        <article class="prose prose-slate mx-auto max-w-3xl">
+            <h1>Contact ShotEasy</h1>
+            <p>Use the project’s existing public channels for help, feedback, and contributions. ShotEasy does not provide a support email address or a contact form on this page.</p>
+            <h2>How do I report a bug or request a feature?</h2>
+            <p><a href={SITE_IDENTITY.issues}>Search or open an issue on GitHub</a>. Include the tool URL, browser and operating system versions, steps to reproduce the issue, and the expected result. For file-related issues, share the format and approximate size and use a non-sensitive sample only if needed. GitHub may require an account to post.</p>
+            <h2>Where can I find the maintainer?</h2>
+            <p>The public project maintainer profile is <a href={SITE_IDENTITY.maintainerProfile}>CH563 on GitHub</a>. The site’s linked social profile is <a href={SITE_IDENTITY.socialProfile}>@LiWen563 on X</a>. Contact options depend on the platform and the profile’s settings.</p>
+            <h2>What if my question involves private information?</h2>
+            <p>Do not post passwords, personal documents, private screenshots, or confidential data in public issues. For a privacy question, use the contact options available on the linked social profile, without attaching sensitive files. See the <a href="/privacy-policy/">privacy policy</a> for information about file processing and third-party services.</p>
+            <p>For source code and contributions, visit the <a href={SITE_IDENTITY.repository}>ShotEasy repository</a>. Learn more about the project on the <a href="/about/">About page</a>.</p>
+            <p class="text-sm text-slate-500">Last updated: <time datetime={SITE_IDENTITY.updatedDate}>September 17, 2026</time>.</p>
+        </article>
+    </main>
+    <Footer showLanguageSwitcher={false} />
+    <script type="application/ld+json" set:html={serializeJsonLd({
+        '@context': 'https://schema.org', '@type': 'ContactPage', '@id': `${url}#page`,
+        url, name: 'Contact ShotEasy', inLanguage: 'en-US',
+        isPartOf: { '@id': SITE_IDENTITY.websiteId },
+        about: { '@id': SITE_IDENTITY.projectId },
+        publisher: { '@id': SITE_IDENTITY.projectId }, dateModified: SITE_IDENTITY.updatedDate
+    })} />
+</Layout>

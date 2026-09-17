@@ -1,0 +1,38 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { CONFIG } from '@lib/config';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
+
+export const prerender = true;
+const url = `${CONFIG.website}/about/`;
+---
+
+<Layout title="About ShotEasy | Free Local-First Browser Tools" description="Learn about the open-source ShotEasy project, its local browser tools, public maintainer, source code, and feedback channels." languageAlternates={false}>
+    <Header />
+    <main class="container py-12">
+        <article class="prose prose-slate mx-auto max-w-3xl">
+            <h1>About ShotEasy</h1>
+            <p>ShotEasy is a free, open-source browser toolkit for working with screenshots, images, documents, archives, PDFs, and videos. It brings common file tasks together without requiring an account or a paid subscription.</p>
+            <h2>What does ShotEasy do?</h2>
+            <p>ShotEasy provides a <a href="/">photo editor</a>, <a href="/take-a-screenshot/">screenshot tool</a>, <a href="/screenshot-beautifier/">screenshot beautifier</a>, <a href="/image-compressor/">image compressor</a>, <a href="/convert/">image converter</a>, <a href="/viewer/">document and archive viewer</a>, <a href="/ocr-pdf/">OCR tool</a>, and <a href="/video-convert/">video and GIF tools</a>. A browser extension also supports visible-page, selected-area, and full-page screenshot capture.</p>
+            <h2>Who maintains the project?</h2>
+            <p>The project source is published in <a href={SITE_IDENTITY.repository}>CH563/shot-easy-website on GitHub</a>. The public maintainer profile is <a href={SITE_IDENTITY.maintainerProfile}>CH563</a>; the site also links to <a href={SITE_IDENTITY.socialProfile}>@LiWen563 on X</a>. Repository history, issues, and source code provide a public record of the project.</p>
+            <h2>What does local-first mean?</h2>
+            <p>The homepage editor and common image, document, and video workflows process selected files in your browser. This avoids uploading those files to ShotEasy servers for processing. It does not mean every feature works offline: application code, libraries, fonts, and models may need to be downloaded, and some capabilities depend on browser support and device memory.</p>
+            <p>The website also uses analytics and advertising services. These requests are separate from local file processing. See the <a href="/privacy-policy/">privacy policy</a> for the services involved and the separate server-side API exception.</p>
+            <h2>How can I get help or contribute?</h2>
+            <p>Visit <a href="/contact/">Contact</a> for bug reports, feature requests, and project questions. Our <a href="/blog/">blog</a> explains workflows and implementation choices, including browser APIs and open-source libraries.</p>
+            <p class="text-sm text-slate-500">Last updated: <time datetime={SITE_IDENTITY.updatedDate}>September 17, 2026</time>.</p>
+        </article>
+    </main>
+    <Footer showLanguageSwitcher={false} />
+    <script type="application/ld+json" set:html={serializeJsonLd({
+        '@context': 'https://schema.org', '@type': 'AboutPage', '@id': `${url}#page`,
+        url, name: 'About ShotEasy', inLanguage: 'en-US',
+        isPartOf: { '@id': SITE_IDENTITY.websiteId },
+        mainEntity: { '@id': SITE_IDENTITY.projectId },
+        publisher: { '@id': SITE_IDENTITY.projectId }, dateModified: SITE_IDENTITY.updatedDate
+    })} />
+</Layout>

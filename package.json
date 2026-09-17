@@ -9,6 +9,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "test:geo": "node --test tests/geo.test.mjs",
+    "test:seo": "node --test tests/search-growth.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -5,15 +5,15 @@ import { cn } from '@lib/utils';
 import ToolBar from './ToolBar';
 import state from '@states/screenshot';
 
-export default observer(() => {
+export default observer(({ copy }) => {
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
         state.onCropCompleteEvent(croppedArea, croppedAreaPixels);
     }
     return (
         <div className={cn("rounded-md shadow-lg border-t overflow-hidden border-t-gray-600 antialiased", state.isGrid ? 'tr' : 'polka')}>
-            <ToolBar />
+            <ToolBar copy={copy} />
             <div className="relative h-[420px]">
-                {!state.isCrop ? <img src={state.imageSrc} alt="Screenshot preview" className="w-full h-full object-scale-down" /> :
+                {!state.isCrop ? <img src={state.imageSrc} alt={copy.preview} className="w-full h-full object-scale-down" /> :
                     <Cropper
                         image={state.imageSrc}
                         crop={state.crop}

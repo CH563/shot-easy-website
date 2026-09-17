@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import { SITE_IDENTITY, serializeJsonLd } from '@lib/siteIdentity';
+import { CONFIG } from '@lib/config';
 
 export const prerender = true;
 
@@ -29,6 +31,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en', {
     day: 'numeric'
 }).format(date);
 const cover = post.data.cover || '/image.png';
+const pageUrl = new URL(Astro.url.pathname, CONFIG.website).toString();
 ---
 
 <Layout title={post.data.title} description={post.data.description} image={cover} languageAlternates={false}>
@@ -48,8 +51,11 @@ const cover = post.data.cover || '/image.png';
                     <h1 class="text-4xl font-extrabold leading-tight text-slate-900">{post.data.title}</h1>
                     <p class="mt-4 text-base leading-7 text-slate-600">{post.data.description}</p>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-4 pb-8">
-                        <span>{post.data.author}</span>
+                        {post.data.author === 'ShotEasy'
+                            ? <a href="/about/" rel="author" class="hover:underline">{post.data.author}</a>
+                            : <span>{post.data.author}</span>}
                         <time datetime={publishedDate.toISOString()}>{formatDate(publishedDate)}</time>
+                        {post.data.updatedDate && <span>Updated <time datetime={modifiedDate.toISOString()}>{formatDate(modifiedDate)}</time></span>}
                         {post.data.tags.map(tag => <span class="rounded bg-white/80 px-2 py-1 text-slate-500 shadow-sm ring-1 ring-slate-100">{tag}</span>)}
                     </div>
                 </div>
@@ -73,24 +79,26 @@ const cover = post.data.cover || '/image.png';
         </div>
         <Footer showLanguageSwitcher={false} />
     </main>
-</Layout>
-
-<script type="application/ld+json" set:html={JSON.stringify({
+<script type="application/ld+json" set:html={serializeJsonLd({
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": post.data.title,
     "description": post.data.description,
-    "image": [new URL(cover, Astro.url.origin).toString()],
+    "image": [new URL(cover, CONFIG.website).toString()],
     "datePublished": publishedDate.toISOString(),
     "dateModified": modifiedDate.toISOString(),
     "author": [{
         "@type": "Organization",
-        "name": post.data.author
+        "name": post.data.author,
+        ...(post.data.author === 'ShotEasy' ? { "@id": SITE_IDENTITY.projectId } : {})
     }],
     "publisher": {
         "@type": "Organization",
         "name": "ShotEasy",
-        "url": Astro.url.origin
+        "@id": SITE_IDENTITY.projectId,
+        "url": `${CONFIG.website}/`
     },
-    "mainEntityOfPage": Astro.url.toString()
+    "mainEntityOfPage": pageUrl,
+    "isPartOf": { "@id": SITE_IDENTITY.websiteId }
 })}/>
+</Layout>
