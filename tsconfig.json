@@ -1,5 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", ".vercel", ".pnpm-store", "node_modules"],
   "compilerOptions": {
     "baseUrl": "src",
     "jsx": "react-jsx",
