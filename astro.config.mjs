@@ -48,6 +48,11 @@ const sitemapCustomPages = [
 // https://astro.build/config
 export default defineConfig({
   site: CONFIG.website,
+  // Astro 5 validates Host/X-Forwarded-Host before exposing the request URL.
+  // Trust the production domain, never arbitrary forwarded hosts.
+  security: {
+    allowedDomains: [{ hostname: new URL(CONFIG.website).hostname }]
+  },
   trailingSlash: 'ignore',
   compressHTML: false,
   integrations: [tailwind(), react(), sitemap({
