@@ -1,5 +1,5 @@
 ---
-import { getRelativeLocaleUrl } from '@lib/localePaths';
+import { getRelativeLocaleUrl, getLocaleSwitcherPath } from '@lib/localePaths';
 import {getLocale, getLang} from '@i18n/index';
 import { CONFIG, LANGUAGES } from '@lib/config';
 import { homepageCopy } from '@lib/homepageCopy';
@@ -12,7 +12,6 @@ const lang = getLocale(locale);
 const l = getLang(locale);
 const copy = homepageCopy[lang as keyof typeof homepageCopy];
 const languages = LANGUAGES as {[key: string]: string}
-const reg = new RegExp(`/${lang}`, 'i');
 const coreTools = [
     { href: getRelativeLocaleUrl(lang, '/take-a-screenshot'), title: l.nav.screenshot.title, label: l.nav.screenshot.name },
     { href: getRelativeLocaleUrl(lang, '/screenshot-beautifier'), title: l.nav.beautifier.title, label: l.nav.beautifier.name },
@@ -32,7 +31,7 @@ const claudeUrl = `https://claude.ai/new?q=${encodedAiPrompt}`;
 const perplexityUrl = `https://www.perplexity.ai/?q=${encodedAiPrompt}`;
 const grokUrl = `https://grok.com/?q=${encodedAiPrompt}`;
 const langUrls = CONFIG.locals.map(item => {
-    const href = new URL((lang === 'en' && item !== 'en' ? item : '') + Astro.url.pathname.replace(reg, item === 'en' ? '': item), Astro.url.origin).toString();
+    const href = getLocaleSwitcherPath(Astro.url.pathname, item);
     return {href, hrefLang: languages[item] || item, isActive: item.toLocaleLowerCase() === lang.toLocaleLowerCase()};
 });
 ---
@@ -61,7 +60,7 @@ const langUrls = CONFIG.locals.map(item => {
             <a href="/contact/" hreflang="en" class="hover:text-blue-500 underline">{copy.contact}</a>
             <a href={getRelativeLocaleUrl(lang, '/privacy-policy')} class="hover:text-blue-500 underline">{l.privacy}</a>
             <a href={getRelativeLocaleUrl(lang, '/terms-of-service')} class="hover:text-blue-500 underline">{l.terms}</a>
-            <a href="/blog" class="hover:text-blue-500 underline">{l.blog}</a>
+            <a href="/blog/" class="hover:text-blue-500 underline">{l.blog}</a>
         </nav>
         <div class="col-span-3 flex gap-3 justify-center items-center flex-wrap md:col-span-1 md:justify-end">
             <a href="https://github.com/CH563/shot-easy-website" target="_blank" aria-label="GitHub" class="hover:text-blue-500">

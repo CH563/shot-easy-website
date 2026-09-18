@@ -115,7 +115,7 @@ test('screenshot alternates are reciprocal canonical URLs, with no language redi
         if (['ru', 'uk'].includes(locale)) assert.ok(html.includes(getScreenshotToolCopy(locale).captureDenied));
     }
     const home = await htmlFor('/uk/');
-    assert.match(home, /href="\/uk\/take-a-screenshot"/);
+    assert.match(home, /href="\/uk\/take-a-screenshot\/"/);
     const redirect = await fetch(new URL('/uk/take-a-screenshot', baseUrl), { redirect: 'manual' });
     assert.equal(redirect.status, 301);
     assert.ok(redirect.headers.get('location').endsWith('/uk/take-a-screenshot/'));

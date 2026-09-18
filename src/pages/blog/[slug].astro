@@ -47,7 +47,7 @@ const pageUrl = new URL(Astro.url.pathname, CONFIG.website).toString();
         <Header />
         <div class="container py-8 relative z-10 flex-1">
             <div class="flex gap-1 text-xs text-slate-400 mb-10">
-                <a href="/blog" title="blog" class="hover:underline">Blog</a>
+                <a href="/blog/" title="blog" class="hover:underline">Blog</a>
                 <span>/</span>
                 <span class="w-96 max-w-[70%] font-semibold truncate text-blue-500">{post.data.title}</span>
             </div>

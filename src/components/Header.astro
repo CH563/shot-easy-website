@@ -7,7 +7,7 @@ const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
-const index = lang === 'en' ? '/' : `/${lang}`;
+const index = getRelativeLocaleUrl(lang);
 const navList = [
     {
         pathname: getRelativeLocaleUrl(lang, '/take-a-screenshot'),

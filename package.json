@@ -13,6 +13,7 @@
     "test:geo": "node --test tests/geo.test.mjs",
     "test:seo": "node --test tests/search-growth.test.mjs",
     "test:runtime": "node --test tests/runtime.test.mjs",
+    "test:navigation": "node --test tests/navigation.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

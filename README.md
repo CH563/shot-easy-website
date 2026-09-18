@@ -113,6 +113,9 @@ All commands are run from the root of the project, from a terminal:
 - Verify using Node 24: `pnpm build`, `pnpm test:geo`, `pnpm test:seo`, and `RUNTIME_CHECK_BUILD=1 pnpm test:runtime`. The runtime check verifies every generated Node function declares `nodejs24.x`, all existing blog pages remain available, and production HTML includes the Analytics script.
 - To include the live SSR blog-index check, set `RUNTIME_BASE_URL=http://127.0.0.1:4321` while the dev server is running. Astro 5 also requires the updated TypeScript 5.9 configuration for a real source-file type check.
 - Deploying is a separate action. After deployment, verify Node 24 in Vercel build/function logs; a local build does not verify the remote runtime.
+- Astro's `security.allowedDomains` trusts the production hostname explicitly. Internal redirects and language-switch links use root-relative paths, never the proxy request origin; canonical/schema URLs use `CONFIG.website`. Keep origin protection enabled and do not replace the domain allowlist with a wildcard.
+- Navigation regression checks: `pnpm test:navigation`; set `NAVIGATION_BASE_URL` to a running local server or deployment to include response-header, locale-navigation, and breadcrumb checks. These tests require exact root-relative redirect locations, including under simulated proxy headers, rather than checking only the destination pathname.
+- Navigation links target canonical trailing-slash paths directly, avoiding unnecessary redirects and cached broken slashless redirects. After a redirect hotfix, verify the deployment in a private window; browsers may retain an old permanent redirect.
 - Reference: [Vercel Node 20 deprecation notice](https://vercel.com/changelog/node-js-20-is-being-deprecated).
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCH563%2Fshot-easy-website)
