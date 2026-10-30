@@ -1,7 +1,32 @@
 export default {
-    title: 'Take a screenshot online',
-    description: 'Take screenshots and edit screenshots online',
+    title: 'Take a Screenshot Online, No Install | ShotEasy',
+    description: 'Take a screenshot online in your browser. Capture a window or browser tab, crop it, copy it or save it — no plugin, no install and no sign-up.',
+    keywords: 'take screenshot online, screenshot online no install, capture window screenshot, browser screenshot tool, online screenshot tool',
     tip: 'Not uploaded and editing in browser',
+    intro1: 'Capture a window or browser tab right here, crop it, and save or copy it in seconds — no app to install. For one-click full-page screenshots, use the ShotEasy browser extension, then beautify the result in the Screenshot Beautifier.',
+    faqTitle: 'Screenshot FAQ',
+    faq: [
+        {
+            question: 'Can I take a screenshot online without installing anything?',
+            answer: 'Yes. Open this page, allow the browser to share a window or tab, and capture it right here.'
+        },
+        {
+            question: 'Do I need to upload my screenshot?',
+            answer: 'No. Capture and editing run in your browser.'
+        },
+        {
+            question: 'Can I capture a full scrolling page with this page?',
+            answer: 'This page captures a window or browser tab. For a one-click full-page screenshot, use the ShotEasy browser extension, which captures the visible page, a selected area or the full page.'
+        },
+        {
+            question: 'How is this different from Windows Snipping Tool or macOS Screenshot?',
+            answer: 'System tools capture locally too, but ShotEasy lets you crop, beautify and export in the same browser flow, without switching apps.'
+        },
+        {
+            question: 'Which browsers are supported?',
+            answer: 'Modern Chrome, Edge, Firefox and Safari. Screen-capture permission and behaviour depend on the browser.'
+        }
+    ],
     how: 'How to take a screenshot online?',
     howCont1: 'Press the Screenshot button.',
     howCont2: 'Select the window/browser tab that you want to take a screenshot.',
@@ -11,7 +36,7 @@ export default {
     howCont6: 'Press the Save button to Save the screenshot image.',
     howCont7: 'Press the Copy button to Copy the screenshot image.',
     why: 'Why do you need to use screenshot online?',
-    whyCont1: 'Direct access to use, no permissions required',
+    whyCont1: 'Direct access to use in your browser, no app to install',
     whyCont2: 'Not limited to any system, can be used in any scenario',
     whyCont3: 'No plugins required',
     captureTechTitle: 'Powered by the browser screen capture API',

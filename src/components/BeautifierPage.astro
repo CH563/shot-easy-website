@@ -11,6 +11,11 @@ const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.beautifier;
+interface FaqItem {
+    question: string;
+    answer: string;
+}
+const faqItems: FaqItem[] = t.faq || [];
 const seoContent = getToolSeoContent(lang, 'beautifier', t);
 ---
 
@@ -37,6 +42,18 @@ const seoContent = getToolSeoContent(lang, 'beautifier', t);
     </section>
     <LocalProcessingBlock />
     <SeoContentBlock content={seoContent} />
+    {faqItems.length > 0 && (
+        <section class="mb-3 rounded-md p-4 bg-indigo-100/40 text-xs [&>p]:mb-1">
+            <div class="mb-1 text-sm">❔</div>
+            <h2 class="text-lg font-bold mb-2">{t.faqTitle}</h2>
+            {faqItems.map(item => (
+                <div class="mb-3 last:mb-0">
+                    <h3 class="font-semibold mb-1 text-sm">{item.question}</h3>
+                    <p>{item.answer}</p>
+                </div>
+            ))}
+        </section>
+    )}
     <Privacy />
 </div>
 <ToolStructuredData
@@ -47,3 +64,17 @@ const seoContent = getToolSeoContent(lang, 'beautifier', t);
     browserRequirements="Requires HTML5 canvas support"
     featureList={seoContent.featureList}
 />
+{faqItems.length > 0 && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItems.map(item => ({
+            "@type": "Question",
+            "name": item.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+            }
+        }))
+    })}/>
+)}
