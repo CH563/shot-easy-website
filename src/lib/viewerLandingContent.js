@@ -22,6 +22,48 @@ const content = {
       ],
       relatedTitle: 'Другие форматы файлов',
       featureList: ['Локальный просмотр DOCX', 'Переключение страниц', 'Полноэкранный просмотр', 'Скачивание исходного файла и PNG страницы']
+    },
+    'ppt-viewer': {
+      title: 'Открыть PPTX онлайн бесплатно, без PowerPoint | ShotEasy',
+      h1: 'Открыть презентацию PPTX онлайн',
+      description: 'Откройте презентацию PPTX онлайн без установки PowerPoint. Бесплатно просматривайте слайды в браузере: файл обрабатывается локально и не отправляется на сервер ShotEasy.',
+      intro: 'Выберите презентацию PPTX или перетащите её в поле ниже. ShotEasy покажет слайды прямо в браузере — без установки PowerPoint и отправки файла на сервер ShotEasy.',
+      keywords: 'открыть pptx онлайн, открыть презентацию онлайн, просмотр слайдов pptx',
+      tool: { emptyTitle: 'Выберите или перетащите презентацию PPTX', emptyHint: 'Просмотр .pptx в браузере. Старый формат .ppt не поддерживается.' },
+      stepsTitle: 'Как открыть презентацию без PowerPoint?',
+      steps: ['Выберите файл с расширением .pptx на устройстве или перетащите его в поле просмотра.', 'Дождитесь загрузки предпросмотра. При первом открытии браузер загружает необходимые компоненты.', 'Переключайте слайды с помощью миниатюр или кнопок. Можно открыть полноэкранный режим или скачать текущий слайд как PNG.'],
+      limitsTitle: 'Что можно просмотреть в PPTX?',
+      limits: ['Это просмотрщик слайдов, а не редактор презентаций: изменить текст и сохранить правки нельзя.', 'Поддерживается PPTX. Старые файлы PPT нужно сначала преобразовать в PPTX в PowerPoint или LibreOffice.', 'Просмотр не заменяет показ презентации: анимация, переходы и встроенные медиа могут не воспроизводиться.', 'Шрифты и сложное оформление могут отличаться от PowerPoint. Для больших презентаций требуется больше памяти.'],
+      faqTitle: 'Вопросы о просмотре PPTX онлайн',
+      faqs: [
+        { question: 'Можно ли открыть PPTX онлайн бесплатно?', answer: 'Да. Выберите PPTX в поле выше, чтобы просмотреть слайды без установки PowerPoint.' },
+        { question: 'Отправляется ли презентация на сервер?', answer: 'Нет. Файл PPTX обрабатывается локально в браузере. Загрузка компонентов сайта и запросы аналитики или рекламы отдельно от этого могут использовать сеть.' },
+        { question: 'Можно ли открыть старый файл PPT?', answer: 'Нет. Этот просмотрщик поддерживает PPTX, но не старый бинарный формат PPT. Сначала сохраните презентацию как PPTX в совместимой программе.' },
+        { question: 'Можно ли редактировать слайды или воспроизводить анимацию?', answer: 'Нет. ShotEasy предназначен для просмотра слайдов, а не для редактирования или полноценного показа с анимацией. Для этого используйте программу для презентаций.' }
+      ],
+      relatedTitle: 'Другие форматы файлов',
+      featureList: ['Локальный просмотр PPTX', 'Миниатюры слайдов', 'Полноэкранный просмотр', 'Сохранение слайда как PNG']
+    },
+    'excel-viewer': {
+      title: 'Открыть XLSX онлайн бесплатно, без Excel | ShotEasy',
+      h1: 'Открыть таблицу XLSX онлайн',
+      description: 'Откройте таблицу XLSX онлайн без установки Excel. Бесплатно просматривайте листы в браузере: файл обрабатывается локально и не отправляется на сервер ShotEasy.',
+      intro: 'Выберите таблицу XLSX или перетащите её в поле ниже. ShotEasy покажет листы прямо в браузере — без установки Excel и отправки файла на сервер ShotEasy.',
+      keywords: 'открыть xlsx онлайн, открыть таблицу excel онлайн, просмотр xlsx онлайн',
+      tool: { emptyTitle: 'Выберите или перетащите таблицу XLSX', emptyHint: 'Просмотр .xlsx в браузере. Старый формат .xls не поддерживается.' },
+      stepsTitle: 'Как открыть таблицу без Excel?',
+      steps: ['Выберите файл с расширением .xlsx на устройстве или перетащите его в поле просмотра.', 'Дождитесь загрузки предпросмотра. При первом открытии браузер загружает необходимые компоненты.', 'Переключайте листы, откройте полноэкранный режим или скачайте исходный файл.'],
+      limitsTitle: 'Что позволяет этот просмотрщик Excel?',
+      limits: ['Это просмотрщик, а не редактор таблиц: изменить ячейки и сохранить правки нельзя.', 'Поддерживается XLSX. Старые файлы XLS нужно сначала преобразовать в XLSX в Excel или LibreOffice.', 'Просмотр не заменяет Excel для пересчёта формул, выполнения макросов или проверки финансовой модели.', 'Шрифты и сложное форматирование могут отличаться от Excel. Для больших книг требуется больше памяти.'],
+      faqTitle: 'Вопросы о просмотре XLSX онлайн',
+      faqs: [
+        { question: 'Можно ли открыть XLSX онлайн бесплатно?', answer: 'Да. Выберите XLSX в поле выше, чтобы просмотреть листы без установки Excel.' },
+        { question: 'Отправляется ли таблица на сервер?', answer: 'Нет. Файл XLSX обрабатывается локально в браузере. Загрузка компонентов сайта и запросы аналитики или рекламы отдельно от этого могут использовать сеть.' },
+        { question: 'Можно ли открыть старый файл XLS?', answer: 'Нет. Этот просмотрщик поддерживает XLSX, но не старый бинарный формат XLS. Сначала сохраните таблицу как XLSX в совместимой программе.' },
+        { question: 'Можно ли изменить ячейки или пересчитать формулы?', answer: 'Нет. ShotEasy предназначен для просмотра. Для изменения ячеек, пересчёта формул или макросов используйте программу для работы с таблицами.' }
+      ],
+      relatedTitle: 'Другие форматы файлов',
+      featureList: ['Локальный просмотр XLSX', 'Навигация по листам', 'Полноэкранный просмотр', 'Скачивание исходного файла']
     }
   },
   uk: {
@@ -45,6 +87,48 @@ const content = {
       ],
       relatedTitle: 'Перегляд інших форматів',
       featureList: ['Локальний перегляд PPTX', 'Мініатюри слайдів', 'Повноекранний перегляд', 'Збереження слайда як PNG']
+    },
+    'doc-viewer': {
+      title: 'Відкрити DOCX онлайн безкоштовно, без Word | ShotEasy',
+      h1: 'Відкрити DOCX онлайн',
+      description: 'Відкрийте файл DOCX онлайн без встановлення Word. Безкоштовно переглядайте сторінки у браузері: файл обробляється локально і не надсилається на сервер ShotEasy.',
+      intro: 'Виберіть документ DOCX або перетягніть його в поле нижче. ShotEasy покаже сторінки прямо у браузері — без встановлення Word і надсилання документа на сервер ShotEasy.',
+      keywords: 'відкрити docx онлайн, відкрити файл docx, перегляд docx онлайн',
+      tool: { emptyTitle: 'Виберіть або перетягніть файл DOCX', emptyHint: 'Перегляд .docx у браузері. Старий формат .doc не підтримується.' },
+      stepsTitle: 'Як відкрити файл DOCX без Word?',
+      steps: ['Виберіть файл з розширенням .docx на пристрої або перетягніть його в поле перегляду.', 'Дочекайтеся завантаження перегляду. Під час першого відкриття браузер завантажує необхідні компоненти.', 'Перемикайте сторінки, збільшуйте документ або відкрийте повноекранний режим. Можна завантажити вихідний файл або PNG поточної сторінки.'],
+      limitsTitle: 'Що підтримується і які є обмеження?',
+      limits: ['Це переглядач, а не редактор Word: змінити текст і зберегти правки не можна.', 'Підтримується DOCX. Старі файли DOC потрібно спочатку перетворити на DOCX у Word або LibreOffice.', 'Шрифти, складне верстання та окремі елементи можуть відображатися інакше, ніж у Word. Якщо важливе точне оформлення, перевірте документ у вихідній програмі.', 'Для великих документів потрібно більше пам’яті. Якщо перегляд не відкривається, спробуйте актуальний настільний браузер.'],
+      faqTitle: 'Питання про перегляд DOCX онлайн',
+      faqs: [
+        { question: 'Чи можна відкрити DOCX онлайн безкоштовно?', answer: 'Так. Виберіть DOCX у полі вище, щоб переглянути сторінки без встановлення Word.' },
+        { question: 'Чи надсилається документ на сервер?', answer: 'Ні. Файл DOCX обробляється локально у браузері. Завантаження компонентів сайту та запити аналітики або реклами окремо від цього можуть використовувати мережу.' },
+        { question: 'Чи можна відкрити старий файл DOC?', answer: 'Ні. Цей переглядач підтримує DOCX, але не старий бінарний формат DOC. Спочатку збережіть документ як DOCX у сумісній програмі.' },
+        { question: 'Чи можна редагувати текст документа?', answer: 'Ні. ShotEasy призначений для перегляду. Для редагування використовуйте Word, LibreOffice або інший редактор документів.' }
+      ],
+      relatedTitle: 'Перегляд інших форматів',
+      featureList: ['Локальний перегляд DOCX', 'Перемикання сторінок', 'Повноекранний перегляд', 'Завантаження вихідного файлу та PNG сторінки']
+    },
+    'excel-viewer': {
+      title: 'Відкрити XLSX онлайн безкоштовно, без Excel | ShotEasy',
+      h1: 'Відкрити таблицю XLSX онлайн',
+      description: 'Відкрийте таблицю XLSX онлайн без встановлення Excel. Безкоштовно переглядайте аркуші у браузері: файл обробляється локально і не надсилається на сервер ShotEasy.',
+      intro: 'Виберіть таблицю XLSX або перетягніть її в поле нижче. ShotEasy покаже аркуші прямо у браузері — без встановлення Excel і надсилання файлу на сервер ShotEasy.',
+      keywords: 'відкрити xlsx онлайн, відкрити таблицю excel онлайн, перегляд xlsx онлайн',
+      tool: { emptyTitle: 'Виберіть або перетягніть таблицю XLSX', emptyHint: 'Перегляд .xlsx у браузері. Старий формат .xls не підтримується.' },
+      stepsTitle: 'Як відкрити таблицю без Excel?',
+      steps: ['Виберіть файл з розширенням .xlsx на пристрої або перетягніть його в поле перегляду.', 'Дочекайтеся завантаження перегляду. Під час першого відкриття браузер завантажує необхідні компоненти.', 'Перемикайте аркуші, відкрийте повноекранний режим або завантажте вихідний файл.'],
+      limitsTitle: 'Що дозволяє цей переглядач Excel?',
+      limits: ['Це переглядач, а не редактор таблиць: змінити комірки і зберегти правки не можна.', 'Підтримується XLSX. Старі файли XLS потрібно спочатку перетворити на XLSX у Excel або LibreOffice.', 'Перегляд не замінює Excel для перерахунку формул, виконання макросів або перевірки фінансової моделі.', 'Шрифти і складне форматування можуть відрізнятися від Excel. Для великих книг потрібно більше пам’яті.'],
+      faqTitle: 'Питання про перегляд XLSX онлайн',
+      faqs: [
+        { question: 'Чи можна відкрити XLSX онлайн безкоштовно?', answer: 'Так. Виберіть XLSX у полі вище, щоб переглянути аркуші без встановлення Excel.' },
+        { question: 'Чи надсилається таблиця на сервер?', answer: 'Ні. Файл XLSX обробляється локально у браузері. Завантаження компонентів сайту та запити аналітики або реклами окремо від цього можуть використовувати мережу.' },
+        { question: 'Чи можна відкрити старий файл XLS?', answer: 'Ні. Цей переглядач підтримує XLSX, але не старий бінарний формат XLS. Спочатку збережіть таблицю як XLSX у сумісній програмі.' },
+        { question: 'Чи можна змінити комірки або перерахувати формули?', answer: 'Ні. ShotEasy призначений для перегляду. Для зміни комірок, перерахунку формул або макросів використовуйте програму для роботи з таблицями.' }
+      ],
+      relatedTitle: 'Перегляд інших форматів',
+      featureList: ['Локальний перегляд XLSX', 'Навігація між аркушами', 'Повноекранний перегляд', 'Завантаження вихідного файлу']
     }
   },
   fr: {
@@ -68,6 +152,48 @@ const content = {
       ],
       relatedTitle: 'Consulter d’autres formats',
       featureList: ['Consultation locale de fichiers XLSX', 'Navigation entre les feuilles', 'Affichage plein écran', 'Téléchargement du fichier original']
+    },
+    'doc-viewer': {
+      title: 'Ouvrir un fichier Word DOCX en ligne gratuitement | ShotEasy',
+      h1: 'Ouvrir un fichier Word DOCX en ligne',
+      description: 'Ouvrez un fichier Word DOCX en ligne sans installer Word. Consultez les pages gratuitement dans votre navigateur, avec un traitement local du fichier.',
+      intro: 'Sélectionnez un document DOCX ou déposez-le ci-dessous pour consulter ses pages sans installer Word. Le fichier est traité dans votre navigateur, sans être envoyé au serveur ShotEasy.',
+      keywords: 'ouvrir docx en ligne, ouvrir fichier word en ligne, visionneuse docx en ligne',
+      tool: { emptyTitle: 'Sélectionnez ou déposez un fichier Word DOCX', emptyHint: 'Aperçu des fichiers .docx. Le format ancien .doc n’est pas pris en charge.' },
+      stepsTitle: 'Comment ouvrir un fichier DOCX sans Word ?',
+      steps: ['Sélectionnez un fichier .docx sur votre appareil ou déposez-le dans la zone de consultation.', 'Attendez le chargement de l’aperçu. Lors de la première ouverture, le navigateur télécharge les composants nécessaires.', 'Parcourez les pages, agrandissez le document ou passez en plein écran. Vous pouvez télécharger le fichier original ou la page actuelle en PNG.'],
+      limitsTitle: 'Que permet cette visionneuse DOCX ?',
+      limits: ['Elle permet de consulter un document, pas de modifier du texte ou d’enregistrer des changements.', 'Le format DOCX est pris en charge, contrairement au format ancien DOC. Convertissez celui-ci en DOCX avec Word ou LibreOffice.', 'Les polices et les mises en forme complexes peuvent différer de Word. Pour une mise en forme exacte, vérifiez le document dans son application d’origine.', 'Les gros documents demandent davantage de mémoire. Si l’aperçu ne s’ouvre pas, essayez un navigateur de bureau récent.'],
+      faqTitle: 'Questions sur les fichiers DOCX en ligne',
+      faqs: [
+        { question: 'Peut-on ouvrir un fichier DOCX en ligne gratuitement ?', answer: 'Oui. Sélectionnez un fichier DOCX pour consulter ses pages directement dans votre navigateur, sans installer Word.' },
+        { question: 'Mon document est-il envoyé sur un serveur ?', answer: 'Non. Le fichier DOCX est traité localement dans votre navigateur. Le chargement des composants du site, les services de mesure d’audience et la publicité peuvent séparément utiliser le réseau.' },
+        { question: 'Les fichiers DOC sont-ils compatibles ?', answer: 'Non. Cette visionneuse prend en charge DOCX, pas DOC. Enregistrez votre ancien fichier au format DOCX dans une application compatible.' },
+        { question: 'Puis-je modifier le texte du document ?', answer: 'Cet outil est destiné à la consultation. Pour modifier du texte, utilisez Word, LibreOffice ou un autre éditeur de documents.' }
+      ],
+      relatedTitle: 'Consulter d’autres formats',
+      featureList: ['Consultation locale de fichiers DOCX', 'Navigation entre les pages', 'Affichage plein écran', 'Téléchargement du fichier original et de la page en PNG']
+    },
+    'ppt-viewer': {
+      title: 'Ouvrir une présentation PPTX en ligne gratuitement | ShotEasy',
+      h1: 'Ouvrir une présentation PPTX en ligne',
+      description: 'Ouvrez une présentation PPTX en ligne sans installer PowerPoint. Consultez les diapositives gratuitement dans votre navigateur, avec un traitement local du fichier.',
+      intro: 'Sélectionnez une présentation PPTX ou déposez-la ci-dessous pour consulter ses diapositives sans installer PowerPoint. Le fichier est traité dans votre navigateur, sans être envoyé au serveur ShotEasy.',
+      keywords: 'ouvrir pptx en ligne, ouvrir présentation powerpoint en ligne, visionneuse pptx en ligne',
+      tool: { emptyTitle: 'Sélectionnez ou déposez une présentation PPTX', emptyHint: 'Aperçu des fichiers .pptx. Le format ancien .ppt n’est pas pris en charge.' },
+      stepsTitle: 'Comment ouvrir une présentation sans PowerPoint ?',
+      steps: ['Sélectionnez un fichier .pptx sur votre appareil ou déposez-le dans la zone de consultation.', 'Attendez le chargement de l’aperçu. Lors de la première ouverture, le navigateur télécharge les composants nécessaires.', 'Parcourez les diapositives avec les miniatures ou les boutons. Vous pouvez passer en plein écran ou enregistrer la diapositive actuelle en PNG.'],
+      limitsTitle: 'Que permet cette visionneuse PPTX ?',
+      limits: ['Elle permet de consulter des diapositives, pas de modifier du texte ou d’enregistrer des changements.', 'Le format PPTX est pris en charge, contrairement au format ancien PPT. Convertissez celui-ci en PPTX avec PowerPoint ou LibreOffice.', 'Cet aperçu ne remplace pas un diaporama : les animations, les transitions et les médias intégrés peuvent ne pas être lus.', 'Les polices et les mises en forme complexes peuvent différer de PowerPoint. Les grosses présentations demandent davantage de mémoire.'],
+      faqTitle: 'Questions sur les présentations PPTX en ligne',
+      faqs: [
+        { question: 'Peut-on ouvrir une présentation PPTX en ligne gratuitement ?', answer: 'Oui. Sélectionnez un fichier PPTX pour consulter ses diapositives directement dans votre navigateur, sans installer PowerPoint.' },
+        { question: 'Ma présentation est-elle envoyée sur un serveur ?', answer: 'Non. Le fichier PPTX est traité localement dans votre navigateur. Le chargement des composants du site, les services de mesure d’audience et la publicité peuvent séparément utiliser le réseau.' },
+        { question: 'Les fichiers PPT sont-ils compatibles ?', answer: 'Non. Cette visionneuse prend en charge PPTX, pas PPT. Enregistrez votre ancienne présentation au format PPTX dans une application compatible.' },
+        { question: 'Puis-je modifier les diapositives ou lire les animations ?', answer: 'Cet outil est destiné à la consultation. Pour modifier des diapositives ou lire les animations, utilisez une application de présentation.' }
+      ],
+      relatedTitle: 'Consulter d’autres formats',
+      featureList: ['Consultation locale de fichiers PPTX', 'Miniatures des diapositives', 'Affichage plein écran', 'Enregistrement de la diapositive en PNG']
     }
   }
 };
