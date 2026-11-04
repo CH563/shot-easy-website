@@ -47,14 +47,6 @@ const langUrls = CONFIG.locals.map(item => {
                 ))}
             </div>
         </section>
-        <section class="col-span-3 mb-3 rounded-md bg-slate-50 p-4">
-            <h2 class="mb-1 text-sm font-bold text-slate-700">{l.footerFriendlyTitle || 'Friendly Links'}</h2>
-            <div class="flex flex-wrap gap-2">
-                <a href="https://noflake.fun/" target="_blank" rel="noopener noreferrer" title="NoFlake — Keep Your Word" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">NoFlake</a>
-                <a href="https://sipday.chenlw.com/" target="_blank" rel="noopener noreferrer" title="Sipday — Every Sip Deserves a Place" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">Sipday</a>
-                <a href="https://my-corner.chenlw.com/" target="_blank" rel="noopener noreferrer" title="My Corner — 棚拍你的收藏，展示在桌面" class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600">My Corner</a>
-            </div>
-        </section>
         {showLanguageSwitcher && (
             <div class="col-span-3 flex justify-start gap-3 text-xs flex-wrap">
                 {langUrls.map(item => (
