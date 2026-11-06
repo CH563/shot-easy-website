@@ -64,6 +64,69 @@ const content = {
       ],
       relatedTitle: 'Другие форматы файлов',
       featureList: ['Локальный просмотр XLSX', 'Навигация по листам', 'Полноэкранный просмотр', 'Скачивание исходного файла']
+    },
+    'csv-viewer': {
+      title: 'Открыть CSV онлайн бесплатно, без Excel | ShotEasy',
+      h1: 'Открыть таблицу CSV онлайн',
+      description: 'Откройте файл CSV онлайн без установки Excel. Бесплатно просматривайте строки и столбцы в браузере: файл обрабатывается локально и не отправляется на сервер ShotEasy.',
+      intro: 'Выберите файл CSV или перетащите его в поле ниже. ShotEasy покажет таблицу прямо в браузере — без установки Excel и отправки файла на сервер ShotEasy.',
+      keywords: 'открыть csv онлайн, просмотр csv онлайн, открыть файл csv, csv таблица онлайн',
+      tool: { emptyTitle: 'Выберите или перетащите файл CSV', emptyHint: 'Просмотр .csv в браузере в виде таблицы.' },
+      stepsTitle: 'Как открыть файл CSV без Excel?',
+      steps: ['Выберите файл с расширением .csv на устройстве или перетащите его в поле просмотра.', 'Дождитесь загрузки предпросмотра. Таблица строится прямо в браузере.', 'Просматривайте строки и столбцы. Можно скачать таблицу как PNG или исходный файл.'],
+      limitsTitle: 'Что позволяет этот просмотрщик CSV?',
+      limits: ['Это просмотрщик, а не редактор таблиц: изменить ячейки и сохранить правки нельзя.', 'Поддерживаются файлы CSV с запятой в качестве разделителя; значения в кавычках распознаются. Показываются первые 200 непустых строк.', 'Просмотр не заменяет Excel для сортировки, фильтрации, пересчёта формул или макросов.', 'Для больших файлов требуется больше памяти. Если предпросмотр не открывается, попробуйте актуальный настольный браузер.'],
+      faqTitle: 'Вопросы о просмотре CSV онлайн',
+      faqs: [
+        { question: 'Можно ли открыть CSV онлайн бесплатно?', answer: 'Да. Выберите CSV в поле выше, чтобы просмотреть таблицу без установки Excel.' },
+        { question: 'Отправляется ли файл на сервер?', answer: 'Нет. Файл CSV обрабатывается локально в браузере. Загрузка компонентов сайта и запросы аналитики или рекламы отдельно от этого могут использовать сеть.' },
+        { question: 'Сколько строк таблицы показывается?', answer: 'Показываются первые 200 непустых строк файла. Для просмотра полного файла используйте программу для работы с таблицами.' },
+        { question: 'Можно ли изменить ячейки или сохранить таблицу?', answer: 'Нет. ShotEasy предназначен для просмотра. Для изменения ячеек и сохранения используйте программу для работы с таблицами.' }
+      ],
+      relatedTitle: 'Другие форматы файлов',
+      featureList: ['Локальный просмотр CSV', 'Таблица строк и столбцов', 'Скачивание таблицы как PNG', 'Скачивание исходного файла']
+    },
+    'pdf-viewer': {
+      title: 'Открыть PDF онлайн бесплатно, без установки программ | ShotEasy',
+      h1: 'Открыть PDF онлайн',
+      description: 'Откройте файл PDF онлайн без установки программ для чтения PDF. Бесплатно просматривайте страницы в браузере: файл обрабатывается локально и не отправляется на сервер ShotEasy.',
+      intro: 'Выберите файл PDF или перетащите его в поле ниже. ShotEasy покажет страницы прямо в браузере — без установки программ и отправки файла на сервер ShotEasy.',
+      keywords: 'открыть pdf онлайн, просмотр pdf онлайн, открыть файл pdf, pdf читать онлайн',
+      tool: { emptyTitle: 'Выберите или перетащите файл PDF', emptyHint: 'Просмотр .pdf в браузере.' },
+      stepsTitle: 'Как открыть файл PDF онлайн?',
+      steps: ['Выберите файл с расширением .pdf на устройстве или перетащите его в поле просмотра.', 'Дождитесь загрузки предпросмотра. При первом открытии браузер загружает необходимые компоненты.', 'Переключайте страницы с помощью миниатюр или кнопок. Можно открыть полноэкранный режим или скачать текущую страницу как PNG.'],
+      limitsTitle: 'Что позволяет этот просмотрщик PDF?',
+      limits: ['Это просмотрщик, а не редактор PDF: изменить текст, добавить пометки и сохранить правки нельзя.', 'Страницы отображаются как изображения предпросмотра; текст внутри PDF не редактируется.', 'Шрифты и сложное оформление могут отличаться от исходного файла. Для больших документов требуется больше памяти.', 'Если предпросмотр не открывается, попробуйте актуальный настольный браузер.'],
+      faqTitle: 'Вопросы о просмотре PDF онлайн',
+      faqs: [
+        { question: 'Можно ли открыть PDF онлайн бесплатно?', answer: 'Да. Выберите PDF в поле выше, чтобы просмотреть страницы без установки программ.' },
+        { question: 'Отправляется ли файл на сервер?', answer: 'Нет. Файл PDF обрабатывается локально в браузере. Загрузка компонентов сайта и запросы аналитики или рекламы отдельно от этого могут использовать сеть.' },
+        { question: 'Можно ли редактировать PDF или добавлять пометки?', answer: 'Нет. ShotEasy предназначен для просмотра. Для редактирования используйте программу для работы с PDF.' },
+        { question: 'Можно ли скачать страницу как изображение?', answer: 'Да. Текущую страницу можно скачать как PNG, а также скачать исходный файл PDF.' }
+      ],
+      relatedTitle: 'Другие форматы файлов',
+      featureList: ['Локальный просмотр PDF', 'Миниатюры страниц', 'Полноэкранный просмотр', 'Сохранение страницы как PNG']
+    },
+    'archive-viewer': {
+      title: 'Открыть ZIP и RAR онлайн бесплатно | ShotEasy',
+      h1: 'Открыть архив ZIP или RAR онлайн',
+      description: 'Откройте архив ZIP или RAR онлайн без установки программ-архиваторов. Бесплатно просматривайте содержимое в браузере: файл обрабатывается локально и не отправляется на сервер ShotEasy.',
+      intro: 'Выберите архив ZIP или RAR или перетащите его в поле ниже. ShotEasy покажет список файлов внутри архива прямо в браузере — без установки архиватора и отправки файла на сервер ShotEasy.',
+      keywords: 'открыть zip онлайн, открыть rar онлайн, просмотр архива онлайн, распаковать zip онлайн',
+      tool: { emptyTitle: 'Выберите или перетащите архив ZIP или RAR', emptyHint: 'Просмотр .zip и .rar в браузере. Также открываются .7z, .tar и .gz.' },
+      stepsTitle: 'Как открыть архив без архиватора?',
+      steps: ['Выберите файл архива на устройстве или перетащите его в поле просмотра.', 'Дождитесь чтения архива. ShotEasy покажет дерево файлов и папок внутри архива.', 'Выберите файл в списке, чтобы просмотреть его, или скачайте отдельный файл либо исходный архив.'],
+      limitsTitle: 'Что позволяет этот просмотрщик архивов?',
+      limits: ['Это просмотрщик, а не архиватор: изменить содержимое архива и сохранить новый архив нельзя.', 'Поддерживаются ZIP и RAR, а также 7z, tar и gz. Зашифрованные архивы без пароля просмотреть нельзя.', 'Предпросмотр файла внутри архива зависит от его формата: поддерживаются документы, таблицы, PDF, CSV и изображения.', 'Для больших архивов требуется больше памяти. Если архив не открывается, попробуйте актуальный настольный браузер.'],
+      faqTitle: 'Вопросы о просмотре архивов онлайн',
+      faqs: [
+        { question: 'Можно ли открыть ZIP онлайн бесплатно?', answer: 'Да. Выберите архив ZIP в поле выше, чтобы просмотреть его содержимое без установки архиватора.' },
+        { question: 'Отправляется ли архив на сервер?', answer: 'Нет. Файл архива обрабатывается локально в браузере. Загрузка компонентов сайта и запросы аналитики или рекламы отдельно от этого могут использовать сеть.' },
+        { question: 'Можно ли открыть архив RAR с паролем?', answer: 'Нет. Зашифрованные архивы нельзя просмотреть без пароля. Сначала распакуйте такой архив в программе-архиваторе.' },
+        { question: 'Можно ли скачать отдельный файл из архива?', answer: 'Да. Выберите файл в списке содержимого архива и скачайте его отдельно или скачайте исходный архив целиком.' }
+      ],
+      relatedTitle: 'Другие форматы файлов',
+      featureList: ['Локальный просмотр ZIP и RAR', 'Список файлов внутри архива', 'Предпросмотр файлов из архива', 'Скачивание отдельных файлов']
     }
   },
   uk: {
@@ -129,6 +192,69 @@ const content = {
       ],
       relatedTitle: 'Перегляд інших форматів',
       featureList: ['Локальний перегляд XLSX', 'Навігація між аркушами', 'Повноекранний перегляд', 'Завантаження вихідного файлу']
+    },
+    'csv-viewer': {
+      title: 'Відкрити CSV онлайн безкоштовно, без Excel | ShotEasy',
+      h1: 'Відкрити таблицю CSV онлайн',
+      description: 'Відкрийте файл CSV онлайн без встановлення Excel. Безкоштовно переглядайте рядки та стовпці у браузері: файл обробляється локально і не надсилається на сервер ShotEasy.',
+      intro: 'Виберіть файл CSV або перетягніть його в поле нижче. ShotEasy покаже таблицю прямо у браузері — без встановлення Excel і надсилання файлу на сервер ShotEasy.',
+      keywords: 'відкрити csv онлайн, перегляд csv онлайн, відкрити файл csv, csv таблиця онлайн',
+      tool: { emptyTitle: 'Виберіть або перетягніть файл CSV', emptyHint: 'Перегляд .csv у браузері у вигляді таблиці.' },
+      stepsTitle: 'Як відкрити файл CSV без Excel?',
+      steps: ['Виберіть файл з розширенням .csv на пристрої або перетягніть його в поле перегляду.', 'Дочекайтеся завантаження перегляду. Таблиця будується прямо у браузері.', 'Переглядайте рядки та стовпці. Можна завантажити таблицю як PNG або вихідний файл.'],
+      limitsTitle: 'Що дозволяє цей переглядач CSV?',
+      limits: ['Це переглядач, а не редактор таблиць: змінити комірки і зберегти правки не можна.', 'Підтримуються файли CSV з комою як роздільником; значення в лапках розпізнаються. Показуються перші 200 непорожніх рядків.', 'Перегляд не замінює Excel для сортування, фільтрування, перерахунку формул або макросів.', 'Для великих файлів потрібно більше пам’яті. Якщо перегляд не відкривається, спробуйте актуальний настільний браузер.'],
+      faqTitle: 'Питання про перегляд CSV онлайн',
+      faqs: [
+        { question: 'Чи можна відкрити CSV онлайн безкоштовно?', answer: 'Так. Виберіть CSV у полі вище, щоб переглянути таблицю без встановлення Excel.' },
+        { question: 'Чи надсилається файл на сервер?', answer: 'Ні. Файл CSV обробляється локально у браузері. Завантаження компонентів сайту та запити аналітики або реклами окремо від цього можуть використовувати мережу.' },
+        { question: 'Скільки рядків таблиці показується?', answer: 'Показуються перші 200 непорожніх рядків файлу. Для перегляду повного файлу використовуйте програму для роботи з таблицями.' },
+        { question: 'Чи можна змінити комірки або зберегти таблицю?', answer: 'Ні. ShotEasy призначений для перегляду. Для зміни комірок і збереження використовуйте програму для роботи з таблицями.' }
+      ],
+      relatedTitle: 'Перегляд інших форматів',
+      featureList: ['Локальний перегляд CSV', 'Таблиця рядків і стовпців', 'Завантаження таблиці як PNG', 'Завантаження вихідного файлу']
+    },
+    'pdf-viewer': {
+      title: 'Відкрити PDF онлайн безкоштовно, без встановлення програм | ShotEasy',
+      h1: 'Відкрити PDF онлайн',
+      description: 'Відкрийте файл PDF онлайн без встановлення програм для читання PDF. Безкоштовно переглядайте сторінки у браузері: файл обробляється локально і не надсилається на сервер ShotEasy.',
+      intro: 'Виберіть файл PDF або перетягніть його в поле нижче. ShotEasy покаже сторінки прямо у браузері — без встановлення програм і надсилання файлу на сервер ShotEasy.',
+      keywords: 'відкрити pdf онлайн, перегляд pdf онлайн, відкрити файл pdf, pdf читати онлайн',
+      tool: { emptyTitle: 'Виберіть або перетягніть файл PDF', emptyHint: 'Перегляд .pdf у браузері.' },
+      stepsTitle: 'Як відкрити файл PDF онлайн?',
+      steps: ['Виберіть файл з розширенням .pdf на пристрої або перетягніть його в поле перегляду.', 'Дочекайтеся завантаження перегляду. Під час першого відкриття браузер завантажує необхідні компоненти.', 'Переходьте між сторінками за допомогою мініатюр або кнопок. За потреби увімкніть повноекранний режим чи збережіть поточну сторінку як PNG.'],
+      limitsTitle: 'Що дозволяє цей переглядач PDF?',
+      limits: ['Це переглядач, а не редактор PDF: змінити текст, додати позначки і зберегти правки не можна.', 'Сторінки відображаються як зображення перегляду; текст усередині PDF не редагується.', 'Шрифти і складне оформлення можуть відрізнятися від вихідного файлу. Для великих документів потрібно більше пам’яті.', 'Якщо перегляд не відкривається, спробуйте актуальний настільний браузер.'],
+      faqTitle: 'Питання про перегляд PDF онлайн',
+      faqs: [
+        { question: 'Чи можна відкрити PDF онлайн безкоштовно?', answer: 'Так. Виберіть PDF у полі вище, щоб переглянути сторінки без встановлення програм.' },
+        { question: 'Чи надсилається файл на сервер?', answer: 'Ні. Файл PDF обробляється локально у браузері. Завантаження компонентів сайту та запити аналітики або реклами окремо від цього можуть використовувати мережу.' },
+        { question: 'Чи можна редагувати PDF або додавати позначки?', answer: 'Ні. ShotEasy призначений для перегляду. Для редагування використовуйте програму для роботи з PDF.' },
+        { question: 'Чи можна зберегти сторінку як зображення?', answer: 'Так. Поточну сторінку можна зберегти як PNG, а також завантажити вихідний файл PDF.' }
+      ],
+      relatedTitle: 'Перегляд інших форматів',
+      featureList: ['Локальний перегляд PDF', 'Мініатюри сторінок', 'Повноекранний перегляд', 'Збереження сторінки як PNG']
+    },
+    'archive-viewer': {
+      title: 'Відкрити ZIP і RAR онлайн безкоштовно | ShotEasy',
+      h1: 'Відкрити архів ZIP або RAR онлайн',
+      description: 'Відкрийте архів ZIP або RAR онлайн без встановлення програм-архіваторів. Безкоштовно переглядайте вміст у браузері: файл обробляється локально і не надсилається на сервер ShotEasy.',
+      intro: 'Виберіть архів ZIP або RAR або перетягніть його в поле нижче. ShotEasy покаже список файлів усередині архіву прямо у браузері — без встановлення архіватора і надсилання файлу на сервер ShotEasy.',
+      keywords: 'відкрити zip онлайн, відкрити rar онлайн, перегляд архіву онлайн, розпакувати zip онлайн',
+      tool: { emptyTitle: 'Виберіть або перетягніть архів ZIP або RAR', emptyHint: 'Перегляд .zip і .rar у браузері. Також відкриваються .7z, .tar і .gz.' },
+      stepsTitle: 'Як відкрити архів без архіватора?',
+      steps: ['Виберіть файл архіву на пристрої або перетягніть його в поле перегляду.', 'Дочекайтеся читання архіву. ShotEasy покаже дерево файлів і папок усередині архіву.', 'Виберіть файл у списку, щоб переглянути його, або завантажте окремий файл чи вихідний архів.'],
+      limitsTitle: 'Що дозволяє цей переглядач архівів?',
+      limits: ['Це переглядач, а не архіватор: змінити вміст архіву і зберегти новий архів не можна.', 'Підтримуються ZIP і RAR, а також 7z, tar і gz. Зашифровані архіви без пароля переглянути не можна.', 'Перегляд файлу всередині архіву залежить від його формату: підтримуються документи, таблиці, PDF, CSV і зображення.', 'Для великих архівів потрібно більше пам’яті. Якщо архів не відкривається, спробуйте актуальний настільний браузер.'],
+      faqTitle: 'Питання про перегляд архівів онлайн',
+      faqs: [
+        { question: 'Чи можна відкрити ZIP онлайн безкоштовно?', answer: 'Так. Виберіть архів ZIP у полі вище, щоб переглянути його вміст без встановлення архіватора.' },
+        { question: 'Чи надсилається архів на сервер?', answer: 'Ні. Файл архіву обробляється локально у браузері. Завантаження компонентів сайту та запити аналітики або реклами окремо від цього можуть використовувати мережу.' },
+        { question: 'Чи можна відкрити архів RAR з паролем?', answer: 'Ні. Зашифровані архіви не можна переглянути без пароля. Спочатку розпакуйте такий архів у програмі-архіваторі.' },
+        { question: 'Чи можна завантажити окремий файл з архіву?', answer: 'Так. Виберіть файл у списку вмісту архіву і завантажте його окремо або завантажте вихідний архів цілком.' }
+      ],
+      relatedTitle: 'Перегляд інших форматів',
+      featureList: ['Локальний перегляд ZIP і RAR', 'Список файлів усередині архіву', 'Перегляд файлів з архіву', 'Завантаження окремих файлів']
     }
   },
   fr: {
@@ -152,6 +278,69 @@ const content = {
       ],
       relatedTitle: 'Consulter d’autres formats',
       featureList: ['Consultation locale de fichiers XLSX', 'Navigation entre les feuilles', 'Affichage plein écran', 'Téléchargement du fichier original']
+    },
+    'csv-viewer': {
+      title: 'Ouvrir un fichier CSV en ligne gratuitement | ShotEasy',
+      h1: 'Ouvrir un fichier CSV en ligne',
+      description: 'Ouvrez un fichier CSV en ligne sans installer Excel. Consultez les lignes et les colonnes gratuitement dans votre navigateur, avec un traitement local du fichier.',
+      intro: 'Sélectionnez un fichier CSV ou déposez-le ci-dessous pour consulter son tableau sans installer Excel. Le fichier est traité dans votre navigateur, sans être envoyé au serveur ShotEasy.',
+      keywords: 'ouvrir csv en ligne, visionneuse csv en ligne, ouvrir fichier csv, tableau csv en ligne',
+      tool: { emptyTitle: 'Sélectionnez ou déposez un fichier CSV', emptyHint: 'Aperçu des fichiers .csv sous forme de tableau.' },
+      stepsTitle: 'Comment ouvrir un fichier CSV sans Excel ?',
+      steps: ['Sélectionnez un fichier .csv sur votre appareil ou déposez-le dans la zone de consultation.', 'Attendez le chargement de l’aperçu. Le tableau est construit directement dans votre navigateur.', 'Parcourez les lignes et les colonnes. Vous pouvez enregistrer le tableau en PNG ou télécharger le fichier original.'],
+      limitsTitle: 'Que permet cette visionneuse CSV ?',
+      limits: ['Elle permet de consulter un tableau, pas de modifier des cellules ou d’enregistrer des changements.', 'Les fichiers CSV avec la virgule comme séparateur sont pris en charge ; les valeurs entre guillemets sont reconnues. Les 200 premières lignes non vides sont affichées.', 'Cet aperçu ne remplace pas Excel pour trier, filtrer, recalculer des formules ou exécuter des macros.', 'Les gros fichiers demandent davantage de mémoire. Si l’aperçu ne s’ouvre pas, essayez un navigateur de bureau récent.'],
+      faqTitle: 'Questions sur les fichiers CSV en ligne',
+      faqs: [
+        { question: 'Peut-on ouvrir un fichier CSV en ligne gratuitement ?', answer: 'Oui. Sélectionnez un fichier CSV pour consulter son tableau directement dans votre navigateur, sans installer Excel.' },
+        { question: 'Mon fichier est-il envoyé sur un serveur ?', answer: 'Non. Le fichier CSV est traité localement dans votre navigateur. Le chargement des composants du site, les services de mesure d’audience et la publicité peuvent séparément utiliser le réseau.' },
+        { question: 'Combien de lignes du tableau sont affichées ?', answer: 'Les 200 premières lignes non vides du fichier sont affichées. Pour consulter le fichier complet, utilisez une application de tableur.' },
+        { question: 'Puis-je modifier les cellules ou enregistrer le tableau ?', answer: 'Cet outil est destiné à la consultation. Pour modifier des cellules et enregistrer, utilisez une application de tableur.' }
+      ],
+      relatedTitle: 'Consulter d’autres formats',
+      featureList: ['Consultation locale de fichiers CSV', 'Tableau des lignes et colonnes', 'Enregistrement du tableau en PNG', 'Téléchargement du fichier original']
+    },
+    'pdf-viewer': {
+      title: 'Ouvrir un fichier PDF en ligne gratuitement | ShotEasy',
+      h1: 'Ouvrir un fichier PDF en ligne',
+      description: 'Ouvrez un fichier PDF en ligne sans installer de lecteur PDF. Consultez les pages gratuitement dans votre navigateur, avec un traitement local du fichier.',
+      intro: 'Sélectionnez un fichier PDF ou déposez-le ci-dessous pour consulter ses pages sans installer de lecteur PDF. Le fichier est traité dans votre navigateur, sans être envoyé au serveur ShotEasy.',
+      keywords: 'ouvrir pdf en ligne, visionneuse pdf en ligne, ouvrir fichier pdf, lire pdf en ligne',
+      tool: { emptyTitle: 'Sélectionnez ou déposez un fichier PDF', emptyHint: 'Aperçu des fichiers .pdf.' },
+      stepsTitle: 'Comment ouvrir un fichier PDF en ligne ?',
+      steps: ['Sélectionnez un fichier .pdf sur votre appareil ou déposez-le dans la zone de consultation.', 'Attendez le chargement de l’aperçu. Lors de la première ouverture, le navigateur télécharge les composants nécessaires.', 'Parcourez les pages avec les miniatures ou les boutons. Vous pouvez passer en plein écran ou enregistrer la page actuelle en PNG.'],
+      limitsTitle: 'Que permet cette visionneuse PDF ?',
+      limits: ['Elle permet de consulter un document, pas de modifier du texte, d’ajouter des annotations ou d’enregistrer des changements.', 'Les pages sont affichées comme des images d’aperçu ; le texte du PDF ne peut pas être modifié.', 'Les polices et les mises en forme complexes peuvent différer du fichier d’origine. Les gros documents demandent davantage de mémoire.', 'Si l’aperçu ne s’ouvre pas, essayez un navigateur de bureau récent.'],
+      faqTitle: 'Questions sur les fichiers PDF en ligne',
+      faqs: [
+        { question: 'Peut-on ouvrir un fichier PDF en ligne gratuitement ?', answer: 'Oui. Sélectionnez un fichier PDF pour consulter ses pages directement dans votre navigateur, sans installer de lecteur PDF.' },
+        { question: 'Mon fichier est-il envoyé sur un serveur ?', answer: 'Non. Le fichier PDF est traité localement dans votre navigateur. Le chargement des composants du site, les services de mesure d’audience et la publicité peuvent séparément utiliser le réseau.' },
+        { question: 'Puis-je modifier le PDF ou ajouter des annotations ?', answer: 'Cet outil est destiné à la consultation. Pour modifier un PDF, utilisez une application de lecture et d’édition de PDF.' },
+        { question: 'Puis-je enregistrer une page en image ?', answer: 'Oui. La page actuelle peut être enregistrée en PNG, et le fichier PDF original peut être téléchargé.' }
+      ],
+      relatedTitle: 'Consulter d’autres formats',
+      featureList: ['Consultation locale de fichiers PDF', 'Miniatures des pages', 'Affichage plein écran', 'Enregistrement de la page en PNG']
+    },
+    'archive-viewer': {
+      title: 'Ouvrir une archive ZIP ou RAR en ligne gratuitement | ShotEasy',
+      h1: 'Ouvrir une archive ZIP ou RAR en ligne',
+      description: 'Ouvrez une archive ZIP ou RAR en ligne sans installer de logiciel d’archivage. Consultez son contenu gratuitement dans votre navigateur, avec un traitement local du fichier.',
+      intro: 'Sélectionnez une archive ZIP ou RAR ou déposez-la ci-dessous pour consulter la liste des fichiers qu’elle contient, sans installer de logiciel d’archivage. Le fichier est traité dans votre navigateur, sans être envoyé au serveur ShotEasy.',
+      keywords: 'ouvrir zip en ligne, ouvrir rar en ligne, visionneuse archive en ligne, extraire zip en ligne',
+      tool: { emptyTitle: 'Sélectionnez ou déposez une archive ZIP ou RAR', emptyHint: 'Aperçu des archives .zip et .rar. Les formats .7z, .tar et .gz s’ouvrent aussi.' },
+      stepsTitle: 'Comment ouvrir une archive sans logiciel d’archivage ?',
+      steps: ['Sélectionnez un fichier d’archive sur votre appareil ou déposez-le dans la zone de consultation.', 'Attendez la lecture de l’archive. ShotEasy affiche l’arborescence des fichiers et des dossiers qu’elle contient.', 'Sélectionnez un fichier dans la liste pour le consulter, ou téléchargez un fichier seul ou l’archive d’origine.'],
+      limitsTitle: 'Que permet cette visionneuse d’archives ?',
+      limits: ['Elle permet de consulter une archive, pas d’en modifier le contenu ni d’enregistrer une nouvelle archive.', 'Les formats ZIP et RAR sont pris en charge, ainsi que 7z, tar et gz. Les archives chiffrées ne peuvent pas être consultées sans mot de passe.', 'L’aperçu d’un fichier dans l’archive dépend de son format : les documents, tableurs, PDF, CSV et images sont pris en charge.', 'Les grosses archives demandent davantage de mémoire. Si l’archive ne s’ouvre pas, essayez un navigateur de bureau récent.'],
+      faqTitle: 'Questions sur les archives en ligne',
+      faqs: [
+        { question: 'Peut-on ouvrir une archive ZIP en ligne gratuitement ?', answer: 'Oui. Sélectionnez une archive ZIP pour consulter son contenu directement dans votre navigateur, sans installer de logiciel d’archivage.' },
+        { question: 'Mon archive est-elle envoyée sur un serveur ?', answer: 'Non. Le fichier d’archive est traité localement dans votre navigateur. Le chargement des composants du site, les services de mesure d’audience et la publicité peuvent séparément utiliser le réseau.' },
+        { question: 'Peut-on ouvrir une archive RAR protégée par mot de passe ?', answer: 'Non. Les archives chiffrées ne peuvent pas être consultées sans mot de passe. Extrayez d’abord l’archive dans un logiciel d’archivage.' },
+        { question: 'Puis-je télécharger un seul fichier de l’archive ?', answer: 'Oui. Sélectionnez un fichier dans la liste du contenu de l’archive pour le télécharger seul, ou téléchargez l’archive d’origine.' }
+      ],
+      relatedTitle: 'Consulter d’autres formats',
+      featureList: ['Consultation locale des archives ZIP et RAR', 'Liste des fichiers de l’archive', 'Aperçu des fichiers de l’archive', 'Téléchargement de fichiers seuls']
     },
     'doc-viewer': {
       title: 'Ouvrir un fichier Word DOCX en ligne gratuitement | ShotEasy',
