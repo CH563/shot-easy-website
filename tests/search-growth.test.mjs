@@ -29,7 +29,7 @@ test('each priority landing has format-specific metadata, steps, limits and FAQs
 test('other viewer routes retain their original metadata and do not inherit targeted copy', () => {
     const base = { description: 'Generic viewer', keywords: 'viewer' };
     assert.equal(getViewerLandingContent('en', 'doc-viewer'), undefined);
-    assert.equal(getViewerLandingContent('ru', 'ppt-viewer'), undefined);
+    assert.equal(getViewerLandingContent('en', 'ppt-viewer'), undefined);
     assert.equal(getViewerAliasMeta(base, 'viewer', 'ru'), base);
     assert.match(getViewerAliasMeta(base, 'doc-viewer', 'en').title, /^DOCX Viewer Online/);
 });

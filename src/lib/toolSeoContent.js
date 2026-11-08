@@ -347,6 +347,7 @@ const TOOL_FEATURES = {
     blurBackground: ['AI subject detection', 'Adjustable background blur', 'Local canvas composition'],
     longImage: ['Merge images vertically', 'Spacing and width controls', 'Long image export'],
     viewer: ['DOCX, PPTX, XLSX, CSV, PDF, archive preview', 'No office suite required', 'Browser file viewing'],
+    pdfTools: ['Merge multiple PDFs into one', 'Compress PDF files locally', 'No upload, no sign-up'],
     videoConvert: ['Video to GIF', 'Format conversion', 'Compression, trim, crop, audio extraction']
 };
 

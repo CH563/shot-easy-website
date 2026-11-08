@@ -10,6 +10,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 import convert from './convert';
 import viewer from './viewer';
+import pdfTools from './pdf-tools';
 
 export default {
     title: 'Скриншот онлайн и фоторедактор в браузере | ShotEasy',
@@ -38,5 +39,6 @@ export default {
     screenshot,
     videoConvert,
     convert,
-    viewer
+    viewer,
+    pdfTools
 };

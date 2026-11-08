@@ -23,6 +23,9 @@ const coreTools = [
     { href: getRelativeLocaleUrl(lang, '/background-remover'), title: l.nav.remover.title, label: l.nav.remover.name },
     { href: getRelativeLocaleUrl(lang, '/blur-background-online'), title: l.nav.blurBackground.title, label: l.nav.blurBackground.name }
 ];
+if (l.nav.pdfTools) {
+    coreTools.push({ href: getRelativeLocaleUrl(lang, '/pdf-tools'), title: l.nav.pdfTools.title, label: l.nav.pdfTools.name });
+}
 const aiPrompt = 'ShotEasy is a free local-first browser toolkit for screenshots, image editing, image compression, image format conversion, document viewing, PDF and image conversion, long image composition, background removal, and video/GIF conversion. It helps users process files online without uploading them to a server whenever possible. Summarize the highlights from ShotEasy website: https://shoteasy.fun';
 const encodedAiPrompt = encodeURIComponent(aiPrompt);
 const chatGptUrl = `https://chatgpt.com/?q=${encodedAiPrompt}`;
