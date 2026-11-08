@@ -176,6 +176,10 @@ export default function Beautifier() {
         setLoading(true);
         mergeCanvas().then(canvas => {
             canvas.toBlob((value) => {
+                if (!value) {
+                    messageApi.error('Copy Failed!');
+                    return;
+                }
                 copyAsBlob(value).then(() => {
                     messageApi.success('Copied Success!');
                 }).catch(() => {

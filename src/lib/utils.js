@@ -62,12 +62,14 @@ export const canvas2Blob = async (canvasElement) => new Promise((resolve, reject
     canvasElement.toBlob((blob) => resolve(blob), 'image/png');
 });
 
-export const copyAsBlob = (value) =>
-    navigator.clipboard.write([
+export const copyAsBlob = (value) => {
+    if (!value) return Promise.reject(new Error('Nothing to copy'));
+    return navigator.clipboard.write([
         new ClipboardItem({
             [value.type]: value,
         }),
     ]);
+};
 
 export const toDownloadFile = (url, name) => {
     let tmpLink = document.createElement('a');
