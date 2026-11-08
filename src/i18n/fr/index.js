@@ -10,6 +10,7 @@ import screenshot from './screenshot';
 import videoConvert from './videoConvert';
 import convert from './convert';
 import viewer from './viewer';
+import pdfTools from './pdf-tools';
 
 export default {
     title: 'Éditeur photo et outil de capture en ligne gratuit | ShotEasy',
@@ -31,5 +32,6 @@ export default {
     screenshot,
     videoConvert,
     convert,
-    viewer
+    viewer,
+    pdfTools
 };

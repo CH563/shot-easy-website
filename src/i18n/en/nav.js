@@ -39,6 +39,10 @@ export default {
         name: 'Viewer',
         title: 'Office Viewer'
     },
+    pdfTools: {
+        name: 'PDF Tools',
+        title: 'Merge & Compress PDF'
+    },
     screenshot: {
         name: 'Screenshot',
         title: 'Take a screenshot'

@@ -54,6 +54,11 @@ const navList = [
         title: nav.viewer.title,
         name: nav.viewer.name
     },
+    ...(nav.pdfTools ? [{
+        pathname: getRelativeLocaleUrl(lang, '/pdf-tools'),
+        title: nav.pdfTools.title,
+        name: nav.pdfTools.name
+    }] : []),
     {
         pathname: getRelativeLocaleUrl(lang, '/ocr-pdf'),
         title: lang === 'zh-CN' ? 'OCR 文字识别与 PDF 编辑器' : 'OCR & Editable PDF',

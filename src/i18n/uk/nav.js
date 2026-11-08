@@ -39,6 +39,10 @@ export default {
         name: 'Viewer',
         title: 'Office Viewer'
     },
+    pdfTools: {
+        name: 'PDF',
+        title: 'Об’єднати і стиснути PDF'
+    },
     screenshot: {
         name: 'Скриншот',
         title: 'Скриншот онлайн'

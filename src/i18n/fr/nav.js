@@ -39,6 +39,10 @@ export default {
         name: 'Viewer',
         title: 'Office Viewer'
     },
+    pdfTools: {
+        name: 'PDF',
+        title: 'Fusionner et compresser PDF'
+    },
     screenshot: {
         name: 'capture d\'écran',
         title: 'prendre une capture d\'écran'
