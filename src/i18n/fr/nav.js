@@ -43,6 +43,10 @@ export default {
         name: 'PDF',
         title: 'Fusionner et compresser PDF'
     },
+    qrCode: {
+        name: 'QR code',
+        title: 'Générateur de QR code'
+    },
     screenshot: {
         name: 'capture d\'écran',
         title: 'prendre une capture d\'écran'
