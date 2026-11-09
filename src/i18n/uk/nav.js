@@ -43,6 +43,10 @@ export default {
         name: 'PDF',
         title: 'Об’єднати і стиснути PDF'
     },
+    qrCode: {
+        name: 'QR-код',
+        title: 'Генератор QR-кодів'
+    },
     screenshot: {
         name: 'Скриншот',
         title: 'Скриншот онлайн'

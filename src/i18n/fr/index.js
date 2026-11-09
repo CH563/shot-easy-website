@@ -11,6 +11,7 @@ import videoConvert from './videoConvert';
 import convert from './convert';
 import viewer from './viewer';
 import pdfTools from './pdf-tools';
+import qrCode from './qr-code-generator';
 
 export default {
     title: 'Éditeur photo et outil de capture en ligne gratuit | ShotEasy',
@@ -33,5 +34,6 @@ export default {
     videoConvert,
     convert,
     viewer,
-    pdfTools
+    pdfTools,
+    qrCode
 };

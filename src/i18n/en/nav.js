@@ -43,6 +43,10 @@ export default {
         name: 'PDF Tools',
         title: 'Merge & Compress PDF'
     },
+    qrCode: {
+        name: 'QR Code',
+        title: 'QR Code Generator'
+    },
     screenshot: {
         name: 'Screenshot',
         title: 'Take a screenshot'
