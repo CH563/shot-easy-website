@@ -42,6 +42,10 @@ const ruQrClusterPages = [
   'kak-sdelat-qr-kod'
 ];
 
+const ruPdfClusterPages = [
+  'kak-obedinit-pdf'
+];
+
 const toAbsoluteUrl = (path) => new URL(path, CONFIG.website).toString();
 const toLocalizedPath = (locale, page) => page ? `/${locale}/${page}/` : `/${locale}/`;
 const sitemapCustomPages = [
@@ -49,7 +53,8 @@ const sitemapCustomPages = [
     .filter((locale) => locale !== 'en')
     .flatMap((locale) => localizedPages.map((page) => toAbsoluteUrl(toLocalizedPath(locale, page)))),
   ...ruScreenshotClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
-  ...ruQrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
+  ...ruQrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...ruPdfClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
 ];
 
 // https://astro.build/config
