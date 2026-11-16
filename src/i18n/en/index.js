@@ -11,6 +11,7 @@ import videoConvert from './videoConvert';
 import convert from './convert';
 import viewer from './viewer';
 import pdfTools from './pdf-tools';
+import pdfSplit from './pdf-split';
 import qrCode from './qr-code-generator';
 
 export default {
@@ -40,5 +41,6 @@ export default {
     convert,
     viewer,
     pdfTools,
+    pdfSplit,
     qrCode
 }

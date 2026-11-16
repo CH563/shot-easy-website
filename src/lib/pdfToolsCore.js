@@ -53,3 +53,54 @@ export const compressPdfBytes = async (bytes) => {
     const out = await doc.save({ useObjectStreams: true });
     return { bytes: out, size: out.length, pages: doc.getPageCount() };
 };
+
+// Parses user input like "1-3, 5, 8-10" into sorted unique 0-based page indices.
+// Throws Error('empty' | 'invalid' | 'outOfRange').
+export const parsePageRanges = (input, pageCount) => {
+    const text = String(input || '').trim();
+    if (!text) throw new Error('empty');
+    const pages = new Set();
+    for (const part of text.split(',')) {
+        const token = part.trim();
+        if (!token) throw new Error('invalid');
+        const range = token.match(/^(\d+)\s*-\s*(\d+)$/);
+        if (range) {
+            const start = Number(range[1]);
+            const end = Number(range[2]);
+            if (start < 1 || end < 1 || start > end) throw new Error('invalid');
+            if (end > pageCount) throw new Error('outOfRange');
+            for (let p = start; p <= end; p++) pages.add(p - 1);
+        } else if (/^\d+$/.test(token)) {
+            const page = Number(token);
+            if (page < 1 || page > pageCount) throw new Error('outOfRange');
+            pages.add(page - 1);
+        } else {
+            throw new Error('invalid');
+        }
+    }
+    return [...pages].sort((a, b) => a - b);
+};
+
+export const splitPdfBytes = async (bytes, indices) => {
+    const source = await PDFDocument.load(bytes);
+    const out = await PDFDocument.create();
+    const pages = await out.copyPages(source, indices);
+    pages.forEach((page) => out.addPage(page));
+    stripMetadata(out);
+    const outBytes = await out.save({ useObjectStreams: true });
+    return { bytes: outBytes, size: outBytes.length, pages: out.getPageCount() };
+};
+
+export const splitPdfEveryPage = async (bytes) => {
+    const source = await PDFDocument.load(bytes);
+    const results = [];
+    for (const index of source.getPageIndices()) {
+        const out = await PDFDocument.create();
+        const [page] = await out.copyPages(source, [index]);
+        out.addPage(page);
+        stripMetadata(out);
+        const outBytes = await out.save({ useObjectStreams: true });
+        results.push({ bytes: outBytes, size: outBytes.length, page: index + 1 });
+    }
+    return results;
+};

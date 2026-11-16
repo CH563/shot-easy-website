@@ -59,6 +59,11 @@ const navList = [
         title: nav.pdfTools.title,
         name: nav.pdfTools.name
     }] : []),
+    ...(nav.pdfSplit ? [{
+        pathname: getRelativeLocaleUrl(lang, '/pdf-split'),
+        title: nav.pdfSplit.title,
+        name: nav.pdfSplit.name
+    }] : []),
     ...(nav.qrCode ? [{
         pathname: getRelativeLocaleUrl(lang, '/qr-code-generator'),
         title: nav.qrCode.title,

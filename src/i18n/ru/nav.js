@@ -43,6 +43,10 @@ export default {
         name: 'PDF',
         title: 'Объединить и сжать PDF'
     },
+    pdfSplit: {
+        name: 'Разделить PDF',
+        title: 'Разделить PDF онлайн'
+    },
     qrCode: {
         name: 'QR-код',
         title: 'Генератор QR-кодов'
