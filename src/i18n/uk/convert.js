@@ -3,8 +3,8 @@ import en from '../en/convert';
 export default {
     ...en,
     title: 'Конвертер зображень онлайн - PNG у WebP, PDF у зображення | ShotEasy',
-    description: 'Безкоштовний онлайн-конвертер зображень для PNG у WebP, JPG у WebP, SVG у PNG, PNG у ICO, зображень у PDF і PDF у зображення. Конвертуйте файли локально в браузері.',
-    keywords: 'конвертер зображень онлайн, png у webp, jpg у webp, зображення у pdf, pdf у зображення, svg у png, png у ico, локальний конвертер зображень',
+    description: 'Безкоштовний онлайн-конвертер зображень для PNG у WebP, JPG у WebP, SVG у PNG, PNG у ICO, JPG у PDF, зображень у PDF і PDF у зображення. Конвертуйте файли локально в браузері.',
+    keywords: 'конвертер зображень онлайн, png у webp, jpg у webp, jpg в pdf, конвертувати jpg в pdf, зображення у pdf, pdf у зображення, svg у png, png у ico, локальний конвертер зображень',
     tip: 'Конвертація зображень і PDF локально в браузері, без завантаження на сервер.',
     localTitle: 'Локальний конвертер форматів зображень',
     tool: {
