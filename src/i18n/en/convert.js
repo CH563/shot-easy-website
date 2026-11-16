@@ -1,7 +1,7 @@
 export default {
     title: 'Image Converter Online - PNG to WebP, PDF to Images | ShotEasy',
-    description: 'Free online image converter for PNG to WebP, JPG to WebP, SVG to PNG, PNG to ICO, images to PDF, and PDF to images. Convert files locally in your browser.',
-    keywords: 'image converter online, png to webp, jpg to webp, images to pdf, pdf to images, svg to png, png to ico, local image converter',
+    description: 'Free online image converter for PNG to WebP, JPG to WebP, SVG to PNG, PNG to ICO, JPG to PDF, images to PDF, and PDF to images. Convert files locally in your browser.',
+    keywords: 'image converter online, png to webp, jpg to webp, jpg to pdf, convert jpg to pdf, images to pdf, pdf to images, svg to png, png to ico, local image converter',
     tip: 'Convert images and PDFs locally in your browser. No upload, no signup.',
     localTitle: 'Local image format converter',
     localCont1: 'Choose a conversion mode, add images or PDFs, and convert files in your browser without uploading them to a server.',
