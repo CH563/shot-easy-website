@@ -43,6 +43,10 @@ export default {
         name: 'PDF Tools',
         title: 'Merge & Compress PDF'
     },
+    pdfSplit: {
+        name: 'PDF Split',
+        title: 'Split PDF Online'
+    },
     qrCode: {
         name: 'QR Code',
         title: 'QR Code Generator'

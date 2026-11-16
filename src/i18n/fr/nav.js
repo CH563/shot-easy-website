@@ -43,6 +43,10 @@ export default {
         name: 'PDF',
         title: 'Fusionner et compresser PDF'
     },
+    pdfSplit: {
+        name: 'Diviser PDF',
+        title: 'Diviser un PDF en ligne'
+    },
     qrCode: {
         name: 'QR code',
         title: 'Générateur de QR code'

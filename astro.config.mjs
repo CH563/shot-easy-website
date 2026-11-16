@@ -20,6 +20,7 @@ const localizedPages = [
   'csv-viewer',
   'pdf-viewer',
   'pdf-tools',
+  'pdf-split',
   'qr-code-generator',
   'ocr-pdf',
   'archive-viewer',
