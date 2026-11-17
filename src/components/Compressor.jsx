@@ -112,6 +112,11 @@ const Compressor = observer(() => {
                                             </div>
                                         </div>
                                         <div className="p-1">
+                                            <Tooltip placement="top" title="Compare before / after">
+                                                <Button type="text" icon={<Icons.comparer />} onClick={() => compressorState.setCompareId(info.key)} />
+                                            </Tooltip>
+                                        </div>
+                                        <div className="p-1">
                                             <Button
                                                 type="primary"
                                                 className="bg-black"

@@ -58,5 +58,12 @@ export default {
     screenshot: {
         name: 'Скриншот',
         title: 'Скриншот онлайн'
+    },
+    navGroups: {
+        screenshot: 'Скриншот',
+        image: 'Зображення',
+        convert: 'Конвертація',
+        documents: 'Документи',
+        qr: 'QR-код'
     }
 };

@@ -8,26 +8,51 @@ const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const index = getRelativeLocaleUrl(lang);
-const navList = [
+const groups = nav.navGroups || getLang('en').nav.navGroups;
+const item = (path: string, key: string) => ({
+    pathname: getRelativeLocaleUrl(lang, path),
+    title: nav[key].title,
+    name: nav[key].name
+});
+const optItem = (cond: unknown, path: string, key: string) => cond ? [item(path, key)] : [];
+const navGroups = [
     {
-        pathname: getRelativeLocaleUrl(lang, '/take-a-screenshot'),
-        title: nav.screenshot.title,
-        name: nav.screenshot.name
+        label: groups.screenshot,
+        items: [
+            item('/take-a-screenshot', 'screenshot'),
+            item('/screenshot-beautifier', 'beautifier'),
+            item('/long-image', 'longImage')
+        ]
     },
     {
-        pathname: index,
-        title: nav.editor.title,
-        name: nav.editor.name
+        label: groups.image,
+        items: [
+            { pathname: index, title: nav.editor.title, name: nav.editor.name },
+            item('/photo-to-rounded', 'rounded'),
+            item('/background-remover', 'remover'),
+            item('/blur-background-online', 'blurBackground'),
+            item('/image-compressor', 'compressor')
+        ]
     },
     {
-        pathname: getRelativeLocaleUrl(lang, '/screenshot-beautifier'),
-        title: nav.beautifier.title,
-        name: nav.beautifier.name
+        label: groups.convert,
+        items: [
+            item('/convert', 'convert'),
+            item('/video-convert', 'videoConvert')
+        ]
     },
     {
-        pathname: getRelativeLocaleUrl(lang, '/photo-to-rounded'),
-        title: nav.rounded.title,
-        name: nav.rounded.name
+        label: groups.documents,
+        items: [
+            item('/viewer', 'viewer'),
+            ...optItem(nav.pdfTools, '/pdf-tools', 'pdfTools'),
+            ...optItem(nav.pdfSplit, '/pdf-split', 'pdfSplit'),
+            {
+                pathname: getRelativeLocaleUrl(lang, '/ocr-pdf'),
+                title: lang === 'zh-CN' ? 'OCR 文字识别与 PDF 编辑器' : 'OCR & Editable PDF',
+                name: 'OCR'
+            }
+        ]
     },
     {
         pathname: getRelativeLocaleUrl(lang, '/background-remover'),
@@ -94,9 +119,27 @@ const navList = [
 
 <header class="container flex flex-col gap-3 items-center justify-center p-4 relative z-10 select-none md:flex-row md:justify-between">
     <a href={index} class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
-    <nav class="grid grid-cols-4 justify-center gap-1 w-full max-w-[340px] text-center text-[11px] text-slate-600 bg-white rounded-3xl p-1 px-1 sm:max-w-full md:flex md:flex-wrap md:w-auto md:gap-2 md:px-2 md:text-sm [&_span]:rounded-xl [&_span]:px-1.5 md:[&_span]:px-2 [&_span]:bg-blue-600 [&_span]:text-white [&_a]:rounded-xl [&_a]:px-1.5 md:[&_a]:px-2 hover:[&_a]:bg-sky-50 hover:[&_a]:text-blue-600">
-        {navList.map(item => {
-            if (pathname.toLocaleLowerCase() === item.pathname.toLocaleLowerCase()) return (<span>{item.name}</span>)
+    <nav class="hidden md:flex items-center gap-1 w-auto text-sm text-slate-600 bg-white rounded-3xl px-2 py-1">
+        {navGroups.map((group, groupIndex) => {
+            const active = group.items.some(item => isCurrent(item.pathname));
+            return (
+                <div class="relative group py-1">
+                    <button type="button" aria-haspopup="true" class={active ? 'rounded-xl px-2 py-1 bg-blue-600 text-white' : 'rounded-xl px-2 py-1 hover:bg-sky-50 hover:text-blue-600'}>{group.label} <span class="text-[10px]">▾</span></button>
+                    <div class={groupIndex === navGroups.length - 1 ? 'absolute top-full right-0 pt-2 hidden group-hover:block group-focus-within:block z-20' : 'absolute top-full left-0 pt-2 hidden group-hover:block group-focus-within:block z-20'}>
+                        <div class="bg-white rounded-2xl shadow-lg ring-1 ring-black/5 py-1 min-w-[180px]">
+                            {group.items.map(item => {
+                                if (isCurrent(item.pathname)) return (<span class="block whitespace-nowrap px-3 py-1.5 mx-1 rounded-lg bg-blue-600 text-white">{item.name}</span>)
+                                return (<a href={item.pathname} title={item.title} class="block whitespace-nowrap px-3 py-1.5 mx-1 rounded-lg hover:bg-sky-50 hover:text-blue-600">{item.name}</a>)
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        })}
+    </nav>
+    <nav class="grid grid-cols-4 justify-center gap-1 w-full max-w-[340px] text-center text-[11px] text-slate-600 bg-white rounded-3xl p-1 px-1 sm:max-w-full md:hidden [&_span]:rounded-xl [&_span]:px-1.5 [&_span]:bg-blue-600 [&_span]:text-white [&_a]:rounded-xl [&_a]:px-1.5 hover:[&_a]:bg-sky-50 hover:[&_a]:text-blue-600">
+        {flatList.map(item => {
+            if (isCurrent(item.pathname)) return (<span>{item.name}</span>)
             return (<a href={item.pathname} title={item.title}>{item.name}</a>)
         })}
     </nav>

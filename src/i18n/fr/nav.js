@@ -58,5 +58,12 @@ export default {
     screenshot: {
         name: 'capture d\'écran',
         title: 'prendre une capture d\'écran'
+    },
+    navGroups: {
+        screenshot: 'Capture',
+        image: 'Image',
+        convert: 'Conversion',
+        documents: 'Documents',
+        qr: 'QR Code'
     }
 };

@@ -8,7 +8,7 @@ export default {
     onlineCont: 'L\'outil d\'embellissement de capture d\'écran aide à embellir vos captures d\'écran et photos avec une superbe collection d\'arrière-plans. Sélectionnez votre capture d\'écran et choisissez le thème souhaité, puis obtenez votre image.',
     what: 'Que pouvez-vous faire avec l\'outil d\'embellissement de capture d\'écran ?',
     whatCont1: 'Il aide à créer des images étonnantes en ajoutant un bel arrière-plan à votre capture d\'écran et en téléchargeant une belle image pouvant être partagée sur Facebook, Twitter et les forums Web.',
-    whatCont2: 'Les utilisateurs peuvent télécharger de belles images avec la taille parfaite et une bonne qualité.',
+    whatCont2: 'Vous pouvez télécharger une belle image à la taille parfaite et en bonne qualité, la copier dans le presse-papiers, ou copier sa mise en forme en HTML pour un article de blog, une documentation ou un README. Comparez l’original et le résultat embelli avec le curseur.',
     whatCont3: 'L\'outil en ligne d\'embellissement de capture d\'écran fonctionne bien sur Windows, MAC, Linux, Chrome, Firefox, Edge et Safari.',
     faqTitle: 'FAQ : embellir une capture d\'écran',
     faq: [
@@ -27,6 +27,10 @@ export default {
         {
             question: 'Dans quel format puis-je exporter le résultat ?',
             answer: 'Vous pouvez télécharger la capture d\'écran embellie au format PNG, à la taille de votre choix, ou la copier dans le presse-papiers.'
+        },
+        {
+            question: 'Puis-je comparer le résultat ou l’intégrer dans un article de blog ?',
+            answer: 'Oui. Le bouton de comparaison affiche l’original à côté du résultat embelli avec un curseur à glisser, et Copier le HTML fournit un extrait qui reproduit l’arrière-plan, les marges, les coins arrondis et l’ombre autour de votre image. Les cadres d’appareil sont disponibles en PNG uniquement : exportez le PNG pour la version encadrée.'
         },
         {
             question: 'Un filigrane est-il ajouté à ma capture d\'écran ?',
