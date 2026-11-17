@@ -1,0 +1,25 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import RuBackgroundRemoverClusterPage from '@components/RuBackgroundRemoverClusterPage.astro';
+import { ruBackgroundRemoverClusterPages } from '@lib/ruBackgroundRemoverClusterPages';
+
+const { locale } = Astro.params;
+if (locale !== 'ru') {
+    return Astro.redirect('/ru/background-remover', 301);
+}
+
+const page = ruBackgroundRemoverClusterPages.removeBackground;
+---
+
+<Layout title={page.title} description={page.description} keywords={page.keywords} languageAlternates={false}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
+        <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
+        <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
+        <Header />
+        <RuBackgroundRemoverClusterPage page={page} />
+        <Footer showLanguageSwitcher={false} />
+    </main>
+</Layout>
