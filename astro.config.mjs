@@ -22,6 +22,7 @@ const localizedPages = [
   'pdf-tools',
   'pdf-split',
   'qr-code-generator',
+  'qr-scanner',
   'ocr-pdf',
   'archive-viewer',
   'long-image',
