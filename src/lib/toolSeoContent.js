@@ -350,6 +350,7 @@ const TOOL_FEATURES = {
     pdfTools: ['Merge multiple PDFs into one', 'Compress PDF files locally', 'No upload, no sign-up'],
     pdfSplit: ['Split PDF into separate files', 'Extract selected pages', 'No upload, no sign-up'],
     qrCode: ['QR codes for links and text', 'Custom colors and error correction', 'PNG and SVG download, no upload'],
+    qrScanner: ['Scan QR codes with your camera', 'Decode QR codes from images', 'No upload, no sign-up'],
     videoConvert: ['Video to GIF', 'Format conversion', 'Compression, trim, crop, audio extraction']
 };
 
