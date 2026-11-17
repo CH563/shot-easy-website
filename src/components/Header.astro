@@ -69,6 +69,11 @@ const navList = [
         title: nav.qrCode.title,
         name: nav.qrCode.name
     }] : []),
+    ...(nav.qrScanner ? [{
+        pathname: getRelativeLocaleUrl(lang, '/qr-scanner'),
+        title: nav.qrScanner.title,
+        name: nav.qrScanner.name
+    }] : []),
     {
         pathname: getRelativeLocaleUrl(lang, '/ocr-pdf'),
         title: lang === 'zh-CN' ? 'OCR 文字识别与 PDF 编辑器' : 'OCR & Editable PDF',

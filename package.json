@@ -15,6 +15,8 @@
     "test:runtime": "node --test tests/runtime.test.mjs",
     "test:navigation": "node --test tests/navigation.test.mjs",
     "test:pdfsplit": "node --test tests/pdf-split.test.mjs",
+    "test:embed": "node --test tests/embed.test.mjs",
+    "test:qrscanner": "node --test tests/qr-scanner.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -49,6 +51,7 @@
     "highlight.js": "^11.9.0",
     "html-to-image": "^1.11.11",
     "js-sha256": "^0.10.1",
+    "jsqr": "^1.4.0",
     "jszip": "^3.10.1",
     "konva": "^9.3.0",
     "libarchive.js": "^2.0.2",

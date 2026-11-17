@@ -51,6 +51,10 @@ export default {
         name: 'QR code',
         title: 'Générateur de QR code'
     },
+    qrScanner: {
+        name: 'Scanner QR',
+        title: 'Scanner un QR code en ligne'
+    },
     screenshot: {
         name: 'capture d\'écran',
         title: 'prendre une capture d\'écran'

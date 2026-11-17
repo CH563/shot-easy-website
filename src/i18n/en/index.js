@@ -13,6 +13,7 @@ import viewer from './viewer';
 import pdfTools from './pdf-tools';
 import pdfSplit from './pdf-split';
 import qrCode from './qr-code-generator';
+import qrScanner from './qr-scanner';
 
 export default {
     title: 'Free Online Photo Editor & Screenshot Tools | ShotEasy',
@@ -42,5 +43,6 @@ export default {
     viewer,
     pdfTools,
     pdfSplit,
-    qrCode
+    qrCode,
+    qrScanner
 }
