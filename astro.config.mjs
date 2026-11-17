@@ -64,6 +64,10 @@ const ruVideoConverterClusterPages = [
   'kak-konvertirovat-video'
 ];
 
+const ruOcrClusterPages = [
+  'kak-raspoznat-tekst'
+];
+
 const toAbsoluteUrl = (path) => new URL(path, CONFIG.website).toString();
 const toLocalizedPath = (locale, page) => page ? `/${locale}/${page}/` : `/${locale}/`;
 const sitemapCustomPages = [
@@ -76,7 +80,8 @@ const sitemapCustomPages = [
   ...ruArchiveClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruBackgroundRemoverClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruCompressorClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
-  ...ruVideoConverterClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
+  ...ruVideoConverterClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
 ];
 
 // https://astro.build/config
