@@ -8,7 +8,7 @@ export default {
     onlineCont: 'Add a gradient, solid or photo background to your screenshot, wrap it in a MacBook Pro, iPhone, macOS or Windows frame, then adjust padding, rounded corners and shadow and export it as a PNG. Your screenshot stays in your browser — it is not uploaded.',
     what: 'What can you do with Screenshot Beautifier Tool?',
     whatCont1: 'Turn a plain screenshot into a share-ready image: pick a background and frame, set the padding, corner radius and shadow, then download it for docs, social posts, Product Hunt launches and client handoffs.',
-    whatCont2: 'Export a PNG at your chosen size, or copy it to the clipboard. No ShotEasy watermark is added to the export.',
+    whatCont2: 'Export a PNG at your chosen size, copy it to the clipboard, or copy the styling as HTML to paste into a blog post, docs page or README. Drag the compare slider to check the original against the beautified result. No ShotEasy watermark is added to the export.',
     whatCont3: 'Online Screenshot Beautifier tool works well on Windows, MAC, Linux, Chrome, Firefox, Edge, and Safari.',
     faqTitle: 'Screenshot Beautifier FAQ',
     faq: [
@@ -27,6 +27,10 @@ export default {
         {
             question: 'What format can I export?',
             answer: 'You can download the beautified screenshot as a PNG at your chosen size, or copy it to the clipboard.'
+        },
+        {
+            question: 'Can I compare the result or embed it in a blog post?',
+            answer: 'Yes. The compare button shows the original next to the beautified result with a drag slider, and Copy HTML gives you a snippet that recreates the background, padding, corner radius and shadow around your image. Device frames are PNG-only, so export the PNG for the framed version.'
         },
         {
             question: 'Does it add a watermark to my screenshot?',

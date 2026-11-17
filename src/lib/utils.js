@@ -71,6 +71,27 @@ export const copyAsBlob = (value) => {
     ]);
 };
 
+export const copyText = async (text) => {
+    if (navigator.clipboard?.writeText) {
+        return navigator.clipboard.writeText(text);
+    }
+    return new Promise((resolve, reject) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style = 'position: fixed; opacity: 0;';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            const ok = document.execCommand('copy');
+            document.body.removeChild(textarea);
+            ok ? resolve() : reject(new Error('Copy failed'));
+        } catch (error) {
+            document.body.removeChild(textarea);
+            reject(error);
+        }
+    });
+};
+
 export const toDownloadFile = (url, name) => {
     let tmpLink = document.createElement('a');
     tmpLink.href = url;

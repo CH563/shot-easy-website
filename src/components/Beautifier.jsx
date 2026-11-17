@@ -1,11 +1,14 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import ReactCompareImage from 'react-compare-image';
 import { toCanvas } from 'html-to-image';
 import { Stage, Layer } from 'react-konva';
 import { ShapeLine } from './Shape';
 import { Icon } from './Icons';
-import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, message } from 'antd';
+import { Button, Slider, Radio, Select, Switch, Upload, Watermark, Input, ColorPicker, Tooltip, message } from 'antd';
 import { Icons } from '../components/Icons';
-import { cn, supportImg, toDownloadFile, copyAsBlob, getBackground, captureScreen } from '../lib/utils';
+import { cn, supportImg, toDownloadFile, copyAsBlob, copyText, getBackground, captureScreen } from '../lib/utils';
+import { buildBeautifierEmbedHtml } from '../lib/beautifierEmbed';
 import backgroundConfig from '../lib/backgroundConfig';
 import { MacbookPro } from './MacbookPro';
 import { IphonePro } from './IphonePro';
@@ -53,6 +56,7 @@ export default function Beautifier() {
     const { imgColors, imgSize } = useImageColor(photoUrl);
     const [boxWidth, setBoxWidth] = useState(600);
     const [imgwidth, setImgWidth] = useState(boxWidth - marginValue);
+    const [compareUrl, setCompareUrl] = useState(null);
     const {
         canvasRef,
         shapes,
@@ -194,6 +198,30 @@ export default function Beautifier() {
         });
     }
 
+    const toCopyHtml = () => {
+        const html = buildBeautifierEmbedHtml({
+            bgValue, boxStyle, marginValue, paddingValue, paddingBg, roundValue, shadowValue, frame,
+            hasAnnotations: shapes.length > 0 || useWater
+        });
+        copyText(html).then(() => {
+            messageApi.success('HTML Copied!');
+        }).catch(() => {
+            messageApi.error('Copy Failed!');
+        });
+    }
+
+    const toCompare = () => {
+        setLoading(true);
+        mergeCanvas().then(canvas => {
+            setCompareUrl(canvas.toDataURL());
+        }).catch(error => {
+            console.log(error);
+            messageApi.error('Compare Failed!');
+        }).finally(() => {
+            setLoading(false);
+        });
+    }
+
     const toRefresh = () => {
         setPhotoUrl('');
         toRest();
@@ -246,6 +274,12 @@ export default function Beautifier() {
                             {ratioSize.key === 'auto' ? `${imgSize.width} x ${imgSize.height}`:`${ratioSize.width} x ${ratioSize.height}`} px
                         </div>
                         <DownBtn disabled={!photoUrl} loading={loading} toDownload={toDownload} toCopy={toCopy} />
+                        <Tooltip placement="top" title="Compare before / after">
+                            <Button type="primary" className="bg-black" disabled={!photoUrl} loading={loading} icon={<Icons.comparer />} onClick={toCompare} />
+                        </Tooltip>
+                        <Tooltip placement="top" title="Copy HTML embed code">
+                            <Button disabled={!photoUrl} icon={<Icon name="Code" />} onClick={toCopyHtml}>HTML</Button>
+                        </Tooltip>
                         <Button type="text" disabled={!photoUrl} loading={loading} icon={<Icon name="Eraser" />} onClick={toRefresh}></Button>
                     </div>
                 </div>
@@ -523,6 +557,16 @@ export default function Beautifier() {
                     </div>
                 </div>
             </div>
+            {compareUrl && createPortal(
+                <div className="fixed z-50 inset-0 flex items-center justify-center">
+                    <div className="w-[min(92vw,900px)] relative z-[1]">
+                        <ReactCompareImage leftImage={photoUrl} rightImage={compareUrl} leftImageLabel="Original" rightImageLabel="Beautified" />
+                    </div>
+                    <div className="absolute inset-0 bg-black/50 z-0" onClick={() => setCompareUrl(null)}></div>
+                    <Button onClick={() => setCompareUrl(null)} type="text" icon={<Icon name="X" size={24} />} shape="circle" size="large" className="absolute opacity-90 z-[2] top-2 right-2 bg-black/50 text-white" />
+                </div>,
+                document.body
+            )}
         </>
     )
 }
