@@ -4,6 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import vm from 'node:vm';
 import { defineMiddleware } from 'astro/middleware';
 import { CONFIG } from '../src/lib/config.js';
+import { getLocaleRedirect, isUnknownLocalePath } from '../src/lib/localeGuard.js';
 import { getLocaleSwitcherPath, getRelativeLocaleUrl } from '../src/lib/localePaths.js';
 
 test('navigation URLs point directly to canonical trailing-slash routes', () => {
@@ -37,27 +38,49 @@ const redirects = [
     ['/in/viewer/?ref=test', '/en-in/viewer/?ref=test'],
     ['/PT-BR/viewer/', '/pt-br/viewer/'],
     ['/EN-IN/viewer/', '/en-in/viewer/'],
+    ['/en', '/'],
+    ['/zh-cn/', '/zh-CN/'],
+    ['/sitemap.xml', '/sitemap-index.xml'],
+    ['/EN/take-a-screenshot/', '/en/take-a-screenshot/'],
+    ['/RU/take-a-screenshot/', '/ru/take-a-screenshot/'],
     ['//untrusted/viewer', '/untrusted/viewer/']
 ];
 
-test('all middleware redirects stay on the current site, even with an internal localhost origin', async () => {
-    // Load the real middleware body with its virtual Astro import supplied by
-    // the public runtime export, so this regression check needs no dev server.
+// Load the real middleware body with its virtual Astro import supplied by
+// the public runtime export, so these regression checks need no dev server.
+const loadMiddleware = async () => {
     const source = (await readFile(new URL('../src/middleware.js', import.meta.url), 'utf8'))
         .replace(/^import[^\n]+;\s*/gm, '')
         .replace('export const onRequest', 'globalThis.onRequest');
-    const sandbox = { defineMiddleware, CONFIG, URL };
+    const sandbox = { defineMiddleware, CONFIG, URL, Response, getLocaleRedirect, isUnknownLocalePath };
     vm.runInNewContext(source, sandbox);
+    return sandbox.onRequest;
+};
+
+const fakeContext = (url) => ({
+    request: { url },
+    redirect: (location, status) => new Response(null, { status, headers: { location } }),
+    rewrite: async () => new Response('Not Found', { status: 200, headers: { 'content-type': 'text/html' } })
+});
+
+test('all middleware redirects stay on the current site, even with an internal localhost origin', async () => {
+    const onRequest = await loadMiddleware();
     for (const origin of ['https://localhost', CONFIG.website, 'https://untrusted.invalid']) {
         for (const [path, expected] of redirects) {
-            const response = await sandbox.onRequest({
-                request: { url: `${origin}${path}` },
-                redirect: (location, status) => new Response(null, { status, headers: { location } })
-            }, () => new Response(null, { status: 200 }));
+            const response = await onRequest(fakeContext(`${origin}${path}`), () => new Response(null, { status: 200 }));
             assert.equal(response.status, 301, path);
             assert.equal(response.headers.get('location'), expected, path);
             assert.match(response.headers.get('location'), /^\/(?!\/)/);
         }
+    }
+});
+
+test('multi-segment paths under an unknown locale render the 404 page, not the tool in English', async () => {
+    const onRequest = await loadMiddleware();
+    for (const path of ['/foo/take-a-screenshot/', '/pricing/take-a-screenshot/']) {
+        const response = await onRequest(fakeContext(`${CONFIG.website}${path}`), () => new Response(null, { status: 200 }));
+        assert.equal(response.status, 404, path);
+        assert.equal(await response.text(), 'Not Found', path);
     }
 });
 

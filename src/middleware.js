@@ -1,10 +1,11 @@
 import { defineMiddleware } from 'astro:middleware';
 import { CONFIG } from './lib/config.js';
+import { getLocaleRedirect, isUnknownLocalePath } from './lib/localeGuard.js';
 
 const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const localizedBlogPattern = new RegExp(`^/(${CONFIG.locals.map(escapeRegExp).join('|')})/blog(?=$|/)`, 'i');
 
-export const onRequest = defineMiddleware((context, next) => {
+export const onRequest = defineMiddleware(async (context, next) => {
     const url = new URL(context.request.url);
     // Exactly one leading slash also prevents protocol-relative redirects.
     const redirectToPath = () => context.redirect(`/${url.pathname.replace(/^\/+/, '')}${url.search}`, 301);
@@ -24,6 +25,29 @@ export const onRequest = defineMiddleware((context, next) => {
     if (/^\/en-in(?=\/|$)/i.test(url.pathname) && !url.pathname.startsWith('/en-in')) {
         url.pathname = url.pathname.replace(/^\/en-in(?=\/|$)/i, '/en-in');
         return redirectToPath();
+    }
+    // Unknown locale spellings and the sitemap alias get a single 301 to the
+    // canonical address (/en -> /, /zh-cn/ -> /zh-CN/, /sitemap.xml ->
+    // /sitemap-index.xml). Anything else unknown is not a redirect.
+    // Paths starting with // are left to the trailing-slash rule below,
+    // which collapses the leading slashes first.
+    if (!url.pathname.startsWith('//')) {
+        const localeRedirect = getLocaleRedirect(url.pathname);
+        if (localeRedirect) {
+            return context.redirect(`${localeRedirect}${url.search}`, 301);
+        }
+        // A multi-segment path under an unknown locale (e.g.
+        // /pricing/take-a-screenshot/) only matched a [locale] page by
+        // accident: render the branded 404 page with a 404 status instead
+        // of the tool in English. Single-segment paths are decided by the
+        // [locale] homepage.
+        if (isUnknownLocalePath(url.pathname)) {
+            const notFound = await context.rewrite('/404/');
+            return new Response(await notFound.text(), {
+                status: 404,
+                headers: { 'content-type': notFound.headers.get('content-type') ?? 'text/html; charset=utf-8' }
+            });
+        }
     }
     if (!url.pathname.endsWith('/') && !url.pathname.includes('.')) {
         url.pathname += '/';
