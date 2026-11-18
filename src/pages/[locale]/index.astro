@@ -3,18 +3,33 @@ import Layout from '@layouts/Layout.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
 import IndexPage from '@components/IndexPage.astro';
+import NotFoundContent from '@components/NotFoundContent.astro';
 import { getLang } from '@i18n/index';
+import { CONFIG } from '@lib/config';
 const { locale } = Astro.params;
+// Any single segment reaches this page as a "locale", so an unknown one
+// (e.g. /pricing/) would otherwise render the English homepage with a 200.
+// Only real locales render the homepage; the rest get the 404 page.
+const isKnownLocale: boolean = CONFIG.locals.includes(locale as string);
+if (!isKnownLocale) {
+    Astro.response.status = 404;
+}
 const t = getLang(locale);
 ---
 
-<Layout title={t.title} description={t.description} keywords={t.keywords}>
+<Layout
+    title={isKnownLocale ? t.title : '404: Not Found | ShotEasy'}
+    description={isKnownLocale ? t.description : 'This page does not exist on ShotEasy.'}
+    keywords={isKnownLocale ? t.keywords : undefined}
+    languageAlternates={isKnownLocale ? undefined : false}
+    noindex={!isKnownLocale}
+>
     <main class="relative overflow-hidden min-h-screen flex flex-col">
         <div class="z-0 absolute w-80 h-60 bg-blue-600 blur-[80px] opacity-30 -top-20 -right-20"></div>
         <div class="z-0 absolute w-80 h-60 bg-blue-400 blur-[80px] opacity-30 top-40 left-40"></div>
         <div class="z-0 absolute w-80 h-60 bg-purple-400 blur-[80px] opacity-30 top-40 right-40"></div>
         <Header />
-        <IndexPage />
+        {isKnownLocale ? <IndexPage /> : <NotFoundContent />}
         <Footer />
     </main>
 </Layout>

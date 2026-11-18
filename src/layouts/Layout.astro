@@ -14,6 +14,7 @@ interface Props {
     languageAlternates?: false | { href: string; hrefLang: string }[];
     contentLocale?: string;
     canonicalPath?: string;
+    noindex?: boolean;
 }
 const { pathname } = Astro.url;
 const { locale } = Astro.params;
@@ -37,7 +38,7 @@ alternates.push({
     hrefLang: 'x-default'
 });
 const t = getLang(locale)
-const { title, description, keywords, image, languageAlternates } = Astro.props;
+const { title, description, keywords, image, languageAlternates, noindex } = Astro.props;
 const headTitle = title || t.title;
 const headDesc = description || t.description;
 const headKeywords = keywords || t.keywords;
@@ -59,6 +60,7 @@ const resolvedAlternates = languageAlternates === false ? undefined : (languageA
             title={headTitle}
             description={headDesc}
             canonical={canonicalURL}
+            noindex={noindex}
             languageAlternates={resolvedAlternates}
             twitter={{
                 creator: '@LiWen563',
