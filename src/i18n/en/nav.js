@@ -33,7 +33,7 @@ export default {
     },
     convert: {
         name: 'Convert',
-        title: 'Image Convert'
+        title: 'File Convert'
     },
     viewer: {
         name: 'Viewer',

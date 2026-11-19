@@ -2,13 +2,19 @@ import en from '../en/convert';
 
 export default {
     ...en,
-    title: 'Конвертер зображень онлайн - PNG у WebP, PDF у зображення | ShotEasy',
-    description: 'Безкоштовний онлайн-конвертер зображень для PNG у WebP, JPG у WebP, SVG у PNG, PNG у ICO, JPG у PDF, зображень у PDF і PDF у зображення. Конвертуйте файли локально в браузері.',
-    keywords: 'конвертер зображень онлайн, png у webp, jpg у webp, jpg в pdf, конвертувати jpg в pdf, зображення у pdf, pdf у зображення, svg у png, png у ico, локальний конвертер зображень',
-    tip: 'Конвертація зображень і PDF локально в браузері, без завантаження на сервер.',
-    localTitle: 'Локальний конвертер форматів зображень',
+    title: 'Конвертер файлів онлайн - зображення, PDF, CSV, XLSX, JSON, Markdown | ShotEasy',
+    description: 'Безкоштовний онлайн-конвертер файлів: зображення у JPG, PNG, WebP і PDF, PDF у JPG, PNG і WebP, конвертація CSV, XLSX, JSON і TSV, Markdown у HTML. Конвертуйте файли локально в браузері.',
+    keywords: 'конвертер файлів онлайн, конвертер зображень онлайн, png у webp, jpg у webp, jpg у pdf, pdf у jpg, pdf у webp, svg у jpg, gif у png, bmp у webp, tiff у jpg, csv у xlsx, xlsx у csv, json у csv, csv у json, markdown у html, локальний конвертер файлів',
+    tip: 'Конвертація зображень, PDF, таблиць і текстових файлів локально в браузері, без завантаження на сервер.',
+    localTitle: 'Локальний конвертер форматів файлів',
     tool: {
         ...en.tool,
+        emptyHint: 'Зображення, PDF, CSV, XLSX, JSON, Markdown',
+        groups: {
+            images: 'Зображення',
+            pdf: 'PDF',
+            data: 'Дані та текст'
+        },
         modes: {
             ...en.tool.modes,
             imageToWebp: 'PNG/JPG у WebP',
@@ -16,8 +22,21 @@ export default {
             imageToPng: 'Зображення у PNG',
             imagesToPdf: 'Зображення у PDF',
             pdfToImages: 'PDF у зображення',
+            pdfToJpg: 'PDF у JPG',
+            pdfToWebp: 'PDF у WebP',
             svgToPng: 'SVG у PNG',
-            pngToIco: 'PNG у ICO'
+            svgToJpg: 'SVG у JPG',
+            svgToWebp: 'SVG у WebP',
+            pngToIco: 'PNG у ICO',
+            csvToXlsx: 'CSV у XLSX',
+            xlsxToCsv: 'XLSX у CSV',
+            jsonToCsv: 'JSON у CSV',
+            csvToJson: 'CSV у JSON',
+            jsonToXlsx: 'JSON у XLSX',
+            xlsxToJson: 'XLSX у JSON',
+            tsvToCsv: 'TSV у CSV',
+            tsvToXlsx: 'TSV у XLSX',
+            mdToHtml: 'Markdown у HTML'
         }
     }
 };

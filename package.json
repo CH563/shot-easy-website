@@ -18,6 +18,7 @@
     "test:embed": "node --test tests/embed.test.mjs",
     "test:qrscanner": "node --test tests/qr-scanner.test.mjs",
     "test:localeguard": "node --test tests/locale-guard.test.mjs",
+    "test:convert": "node --test tests/convert.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -75,6 +76,8 @@
     "tailwindcss": "^3.0.24",
     "tinykeys": "^2.1.0",
     "typescript": "^5.9.3",
-    "vite-plugin-wasm": "^3.6.0"
+    "utif": "^3.1.0",
+    "vite-plugin-wasm": "^3.6.0",
+    "xlsx": "^0.18.5"
   }
 }

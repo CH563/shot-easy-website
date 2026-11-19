@@ -1,4 +1,4 @@
-export const imageInputTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
+export const imageInputTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif', 'image/bmp', 'image/avif', 'image/tiff'];
 
 export const formatBytes = (bytes) => {
     if (!bytes) return '0 B';
@@ -45,6 +45,48 @@ export const loadImageFile = (file) => new Promise((resolve, reject) => {
     image.src = src;
 });
 
+// Pure decode step, testable in Node: returns raw RGBA pixels for the first TIFF page.
+export const decodeTiffRgba = async (arrayBuffer) => {
+    const { default: UTIF } = await import('utif');
+    const ifds = UTIF.decode(arrayBuffer);
+    if (!ifds.length) throw new Error('Unable to decode TIFF image.');
+    const ifd = ifds[0];
+    UTIF.decodeImage(arrayBuffer, ifd);
+    const rgba = UTIF.toRGBA8(ifd);
+    const width = ifd['t256']?.[0];
+    const height = ifd['t257']?.[0];
+    if (!width || !height || rgba.length < width * height * 4) {
+        throw new Error('Unable to decode TIFF image.');
+    }
+    return { width, height, rgba };
+};
+
+// Browsers cannot decode TIFF with <img>, so decode the first page to a canvas
+// and reload it as a PNG. Returns the same shape as loadImageFile.
+export const loadTiffFile = async (file) => {
+    const buffer = await file.arrayBuffer();
+    const { width, height, rgba } = await decodeTiffRgba(buffer);
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    context.putImageData(new ImageData(new Uint8ClampedArray(rgba), width, height), 0, 0);
+    const blob = await canvasToBlob(canvas, 'image/png');
+    const src = URL.createObjectURL(blob);
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = () => {
+            URL.revokeObjectURL(src);
+            reject(new Error(`Unable to load ${file.name}`));
+        };
+        image.src = src;
+    });
+    return { file, src, image, width, height };
+};
+
+export const loadAnyImageFile = (file) => (file.type === 'image/tiff' ? loadTiffFile(file) : loadImageFile(file));
+
 export const drawImageToCanvas = (image, fill = null) => {
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, image.naturalWidth || image.width);
@@ -59,7 +101,7 @@ export const drawImageToCanvas = (image, fill = null) => {
 };
 
 export const convertImageFile = async (file, mime, quality = 0.92) => {
-    const loaded = await loadImageFile(file);
+    const loaded = await loadAnyImageFile(file);
     try {
         const fill = mime === 'image/jpeg' ? '#fff' : null;
         const canvas = drawImageToCanvas(loaded.image, fill);

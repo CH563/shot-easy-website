@@ -5,20 +5,39 @@ import { Icon } from './Icons';
 import { UploadDragger } from './UploadDragger';
 import { FormatTag } from './FormatTag';
 import { toDownloadFile } from '@lib/utils';
-import { convertImageFile, extensionForMime, formatBytes, imageInputTypes, loadImageFile, pngBlobToIcoBlob, replaceExtension } from '@lib/imageConvert';
+import { convertImageFile, extensionForMime, formatBytes, imageInputTypes, loadAnyImageFile, pngBlobToIcoBlob, replaceExtension } from '@lib/imageConvert';
+import { convertDataFile, convertMarkdownFile, dataInputTypes, getFileExtension } from '@lib/dataConvert';
 import { createImagesPdfBlob, renderPdfPages } from '@lib/pdfConvert';
 
 const modes = [
-    { value: 'image-to-webp', labelKey: 'imageToWebp', accept: ['image/png', 'image/jpeg'], output: 'image/webp' },
-    { value: 'image-to-jpg', labelKey: 'imageToJpg', accept: imageInputTypes, output: 'image/jpeg' },
-    { value: 'image-to-png', labelKey: 'imageToPng', accept: imageInputTypes, output: 'image/png' },
-    { value: 'images-to-pdf', labelKey: 'imagesToPdf', accept: imageInputTypes, output: 'application/pdf' },
-    { value: 'pdf-to-images', labelKey: 'pdfToImages', accept: ['application/pdf'], output: 'image/png' },
-    { value: 'svg-to-png', labelKey: 'svgToPng', accept: ['image/svg+xml'], output: 'image/png' },
-    { value: 'png-to-ico', labelKey: 'pngToIco', accept: ['image/png'], output: 'image/x-icon' },
+    { value: 'image-to-webp', labelKey: 'imageToWebp', group: 'images', accept: ['image/png', 'image/jpeg'], output: 'image/webp' },
+    { value: 'image-to-jpg', labelKey: 'imageToJpg', group: 'images', accept: imageInputTypes, output: 'image/jpeg' },
+    { value: 'image-to-png', labelKey: 'imageToPng', group: 'images', accept: imageInputTypes, output: 'image/png' },
+    { value: 'images-to-pdf', labelKey: 'imagesToPdf', group: 'images', accept: imageInputTypes, output: 'application/pdf' },
+    { value: 'svg-to-png', labelKey: 'svgToPng', group: 'images', accept: ['image/svg+xml'], output: 'image/png' },
+    { value: 'svg-to-jpg', labelKey: 'svgToJpg', group: 'images', accept: ['image/svg+xml'], output: 'image/jpeg' },
+    { value: 'svg-to-webp', labelKey: 'svgToWebp', group: 'images', accept: ['image/svg+xml'], output: 'image/webp' },
+    { value: 'png-to-ico', labelKey: 'pngToIco', group: 'images', accept: ['image/png'], output: 'image/x-icon' },
+    { value: 'pdf-to-images', labelKey: 'pdfToImages', group: 'pdf', accept: ['application/pdf'], output: 'image/png' },
+    { value: 'pdf-to-jpg', labelKey: 'pdfToJpg', group: 'pdf', accept: ['application/pdf'], output: 'image/jpeg' },
+    { value: 'pdf-to-webp', labelKey: 'pdfToWebp', group: 'pdf', accept: ['application/pdf'], output: 'image/webp' },
+    { value: 'csv-to-xlsx', labelKey: 'csvToXlsx', group: 'data', kind: 'data', target: 'xlsx', extensions: ['csv'], output: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+    { value: 'xlsx-to-csv', labelKey: 'xlsxToCsv', group: 'data', kind: 'data', target: 'csv', extensions: ['xlsx'], output: 'text/csv' },
+    { value: 'json-to-csv', labelKey: 'jsonToCsv', group: 'data', kind: 'data', target: 'csv', extensions: ['json'], output: 'text/csv' },
+    { value: 'csv-to-json', labelKey: 'csvToJson', group: 'data', kind: 'data', target: 'json', extensions: ['csv'], output: 'application/json' },
+    { value: 'json-to-xlsx', labelKey: 'jsonToXlsx', group: 'data', kind: 'data', target: 'xlsx', extensions: ['json'], output: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+    { value: 'xlsx-to-json', labelKey: 'xlsxToJson', group: 'data', kind: 'data', target: 'json', extensions: ['xlsx'], output: 'application/json' },
+    { value: 'tsv-to-csv', labelKey: 'tsvToCsv', group: 'data', kind: 'data', target: 'csv', extensions: ['tsv'], output: 'text/csv' },
+    { value: 'tsv-to-xlsx', labelKey: 'tsvToXlsx', group: 'data', kind: 'data', target: 'xlsx', extensions: ['tsv'], output: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+    { value: 'md-to-html', labelKey: 'mdToHtml', group: 'data', kind: 'text', extensions: ['md'], output: 'text/html' },
 ];
 
-const inputTypes = [...new Set([...imageInputTypes, 'application/pdf'])];
+const inputTypes = [...new Set([...imageInputTypes, 'application/pdf', ...dataInputTypes])];
+const acceptedExtensions = ['csv', 'tsv', 'json', 'xlsx', 'md'];
+const acceptAttr = [...inputTypes, ...acceptedExtensions.map((ext) => `.${ext}`)].join(',');
+
+// Browsers report flaky MIME types for .csv/.tsv/.json/.md, so fall back to the extension.
+const isAcceptedFile = (file) => inputTypes.includes(file.type) || acceptedExtensions.includes(getFileExtension(file.name));
 const dotBackground = {
     backgroundImage: 'radial-gradient(circle, rgba(100,116,139,.45) 1px, transparent 1px)',
     backgroundSize: '16px 16px',
@@ -106,15 +125,31 @@ const cleanupItems = (list) => {
     });
 };
 
-const getFormatLabel = (type) => {
+const getFormatLabel = (item) => {
+    const type = item?.type;
     if (type === 'application/pdf') return 'PDF';
     if (type === 'image/jpeg') return 'JPG';
     if (type === 'image/svg+xml') return 'SVG';
+    if (type === 'image/tiff') return 'TIFF';
+    if (type === 'image/gif') return 'GIF';
+    if (type === 'image/bmp') return 'BMP';
+    if (type === 'image/avif') return 'AVIF';
+    if (type === 'text/csv') return 'CSV';
+    if (type === 'text/tab-separated-values') return 'TSV';
+    if (type === 'application/json') return 'JSON';
+    if (type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'XLSX';
+    if (type === 'text/markdown') return 'MD';
+    if (type === 'text/html') return 'HTML';
     if (type?.startsWith('image/')) return type.replace('image/', '').toUpperCase();
-    return 'FILE';
+    const extension = getFileExtension(item?.name);
+    return extension ? extension.toUpperCase() : 'FILE';
 };
 
-const isCompatible = (item, activeMode) => activeMode.accept.includes(item.type);
+const isCompatible = (item, activeMode) => {
+    if (activeMode.accept?.includes(item.type)) return true;
+    if (activeMode.extensions?.includes(getFileExtension(item.name))) return true;
+    return false;
+};
 
 const outputWithUrl = (output, fallbackName) => {
     const name = output.name || fallbackName;
@@ -173,10 +208,17 @@ export default function ConvertTool({ copy = {} }) {
     const [loading, setLoading] = useState(false);
 
     const activeMode = useMemo(() => modes.find((item) => item.value === mode) || modes[0], [mode]);
-    const modeOptions = useMemo(() => modes.map((item) => ({
-        value: item.value,
-        label: copy.modes?.[item.labelKey] || item.value,
-    })), [copy.modes]);
+    const modeOptions = useMemo(() => {
+        const groups = ['images', 'pdf', 'data'];
+        return groups.map((group) => ({
+            label: copy.groups?.[group] || group,
+            options: modes
+                .filter((item) => item.group === group)
+                .map((item) => ({ value: item.value, label: copy.modes?.[item.labelKey] || item.value })),
+        })).filter((group) => group.options.length);
+    }, [copy.groups, copy.modes]);
+    const showsQuality = activeMode.output === 'image/jpeg' || activeMode.output === 'image/webp';
+    const isPdfMode = activeMode.group === 'pdf';
     const supportsDirectoryPicker = typeof window !== 'undefined' && !!window.showDirectoryPicker;
     const outputs = useMemo(() => items.flatMap((item) => item.outputs || []), [items]);
     const inputSize = useMemo(() => items.reduce((total, item) => total + item.size, 0), [items]);
@@ -218,12 +260,12 @@ export default function ConvertTool({ copy = {} }) {
 
     const addFiles = async (files) => {
         const sortedFiles = sortFiles(files);
-        const acceptedFiles = sortedFiles.filter((file) => inputTypes.includes(file.type));
+        const acceptedFiles = sortedFiles.filter((file) => isAcceptedFile(file));
         if (acceptedFiles.length !== sortedFiles.length) {
             messageApi.warning('Unsupported files were skipped.');
         }
         if (!acceptedFiles.length) {
-            messageApi.warning('Please select supported image or PDF files.');
+            messageApi.warning('Please select supported image, PDF, data or text files.');
             return;
         }
 
@@ -244,7 +286,7 @@ export default function ConvertTool({ copy = {} }) {
 
                 if (imageInputTypes.includes(file.type)) {
                     try {
-                        const preview = await loadImageFile(file);
+                        const preview = await loadAnyImageFile(file);
                         loadedItems.push({
                             ...baseItem,
                             src: preview.src,
@@ -342,21 +384,6 @@ export default function ConvertTool({ copy = {} }) {
             return { ...item, status: 'skipped', skipReason: unsupportedReason, outputs: [] };
         }
 
-        if (selectedMode.value === 'image-to-webp') {
-            const output = await convertImageFile(item.file, 'image/webp', quality / 100);
-            return { ...item, status: 'done', outputs: [outputWithUrl(output, replaceExtension(item.name, extensionForMime(selectedMode.output)))] };
-        }
-
-        if (selectedMode.value === 'image-to-jpg') {
-            const output = await convertImageFile(item.file, 'image/jpeg', quality / 100);
-            return { ...item, status: 'done', outputs: [outputWithUrl(output, replaceExtension(item.name, extensionForMime(selectedMode.output)))] };
-        }
-
-        if (selectedMode.value === 'image-to-png' || selectedMode.value === 'svg-to-png') {
-            const output = await convertImageFile(item.file, 'image/png');
-            return { ...item, status: 'done', outputs: [outputWithUrl(output, replaceExtension(item.name, extensionForMime(selectedMode.output)))] };
-        }
-
         if (selectedMode.value === 'png-to-ico') {
             const blob = await pngBlobToIcoBlob(item.file, icoSize);
             const output = {
@@ -370,8 +397,12 @@ export default function ConvertTool({ copy = {} }) {
             return { ...item, status: 'done', outputs: [outputWithUrl(output, output.name)] };
         }
 
-        if (selectedMode.value === 'pdf-to-images') {
-            const pageOutputs = await renderPdfPages(item.file, { scale: pdfScale, outputType: 'image/png' });
+        if (selectedMode.group === 'pdf') {
+            const pageOutputs = await renderPdfPages(item.file, {
+                scale: pdfScale,
+                outputType: selectedMode.output,
+                quality: quality / 100,
+            });
             return {
                 ...item,
                 status: 'done',
@@ -379,7 +410,18 @@ export default function ConvertTool({ copy = {} }) {
             };
         }
 
-        return item;
+        if (selectedMode.kind === 'data') {
+            const output = await convertDataFile(item.file, selectedMode.target);
+            return { ...item, status: 'done', outputs: [outputWithUrl(output, output.name)] };
+        }
+
+        if (selectedMode.kind === 'text') {
+            const output = await convertMarkdownFile(item.file);
+            return { ...item, status: 'done', outputs: [outputWithUrl(output, output.name)] };
+        }
+
+        const output = await convertImageFile(item.file, selectedMode.output, quality / 100);
+        return { ...item, status: 'done', outputs: [outputWithUrl(output, replaceExtension(item.name, extensionForMime(selectedMode.output)))] };
     };
 
     const convertImagesToPdf = async (sourceItems, selectedMode) => {
@@ -397,7 +439,7 @@ export default function ConvertTool({ copy = {} }) {
             try {
                 let preparedItem = item;
                 if (!preparedItem.image) {
-                    const preview = await loadImageFile(preparedItem.file);
+                    const preview = await loadAnyImageFile(preparedItem.file);
                     preparedItem = {
                         ...preparedItem,
                         src: preview.src,
@@ -614,7 +656,7 @@ export default function ConvertTool({ copy = {} }) {
                             <div className="min-w-0">
                                 <div className="font-semibold mb-1.5 truncate">{item.name}</div>
                                 <div className="text-xs flex flex-wrap gap-x-2 gap-y-1 text-slate-500">
-                                    <span><FormatTag type={getFormatLabel(item.type)} /></span>
+                                    <span><FormatTag type={getFormatLabel(item)} /></span>
                                     <span>{getItemMeta(item)}</span>
                                     <span>{formatBytes(item.size)}</span>
                                     {item.outputs?.length > 0 && <span>{item.outputs.length} {copy.output || 'Output'}</span>}
@@ -654,7 +696,7 @@ export default function ConvertTool({ copy = {} }) {
                 multiple={true}
                 onDrop={onDrop}
                 customRequest={() => {}}
-                accept={inputTypes.join(',')}
+                accept={acceptAttr}
                 desc={copy.emptyHint || 'PNG / JPG / WEBP / SVG / PDF'}
             />
         </div>
@@ -666,7 +708,7 @@ export default function ConvertTool({ copy = {} }) {
             <div className="bg-white shadow-md rounded-md overflow-hidden border-t border-t-gray-600">
                 <div className="flex min-w-0 gap-4 p-2 justify-center flex-col-reverse min-[1300px]:flex-row min-[1300px]:justify-between border-b border-dotted bg-white">
                     <div className="flex min-w-0 w-full gap-3 items-center justify-center flex-wrap min-[1300px]:w-auto">
-                        <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false} accept={inputTypes.join(',')}>
+                        <Upload name="file" multiple={true} beforeUpload={beforeUpload} showUploadList={false} accept={acceptAttr}>
                             <Button className="max-w-full whitespace-normal" disabled={loading} icon={<Icon name="ImagePlus" />}>{copy.addFiles || 'Add Files'}</Button>
                         </Upload>
                         {supportsDirectoryPicker && <Button className="max-w-full whitespace-normal" disabled={loading} icon={<Icon name="FolderPlus" />} onClick={addFolder}>{copy.addFolder || 'Add Folder'}</Button>}
@@ -701,13 +743,13 @@ export default function ConvertTool({ copy = {} }) {
                         <label className="shrink-0 font-semibold">{copy.convert || 'Convert'}:</label>
                         <Select className="min-w-0 flex-1 min-[1300px]:w-44 min-[1300px]:flex-none" size="small" value={mode} options={modeOptions} onChange={handleModeChange} disabled={loading} />
                     </div>
-                    {(mode === 'image-to-webp' || mode === 'image-to-jpg') && (
+                    {showsQuality && (
                         <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                             <label className="shrink-0 font-semibold">{copy.quality || 'Quality'}:</label>
                             <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={1} max={100} value={quality} addonAfter="%" onChange={updateQuality} disabled={loading} />
                         </div>
                     )}
-                    {mode === 'pdf-to-images' && (
+                    {isPdfMode && (
                         <div className="flex min-w-0 w-full gap-2 items-center min-[1300px]:w-auto">
                             <label className="shrink-0 font-semibold">{copy.pdfScale || 'PDF Scale'}:</label>
                             <InputNumber className="min-w-0 flex-1 min-[1300px]:w-28 min-[1300px]:flex-none" size="small" min={0.5} max={4} step={0.5} value={pdfScale} addonAfter="x" onChange={updatePdfScale} disabled={loading} />
