@@ -200,12 +200,12 @@ const markPdfSerializationFailures = async (items, errorMessage) => {
     return { serializableItems, failedIds, errorMessage };
 };
 
-export default function ConvertTool({ copy = {} }) {
+export default function ConvertTool({ copy = {}, defaultMode = 'image-to-webp' }) {
     const [messageApi, contextHolder] = message.useMessage();
     const itemsRef = useRef([]);
     const uploadQueueRef = useRef({ files: [], timer: null });
     const [items, setItems] = useState([]);
-    const [mode, setMode] = useState('image-to-webp');
+    const [mode, setMode] = useState(modes.some((item) => item.value === defaultMode) ? defaultMode : 'image-to-webp');
     const [quality, setQuality] = useState(92);
     const [pdfScale, setPdfScale] = useState(2);
     const [icoSize, setIcoSize] = useState(256);
@@ -772,7 +772,7 @@ export default function ConvertTool({ copy = {} }) {
                             disabled={loading}
                             onClick={() => {
                                 setItems((prev) => resetOutputs(prev));
-                                setMode('image-to-webp');
+                                setMode(defaultMode);
                                 setQuality(92);
                                 setPdfScale(2);
                                 setIcoSize(256);

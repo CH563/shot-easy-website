@@ -3,6 +3,7 @@ export default {
     description: 'Free online file converter: images to JPG, PNG, WebP and PDF — including HEIC and ICO inputs — PDF to JPG, PNG and WebP, CSV, XLSX, JSON and TSV conversion, and Markdown to HTML. Convert files locally in your browser.',
     keywords: 'file converter online, image converter online, png to webp, jpg to webp, jpg to pdf, pdf to jpg, pdf to webp, svg to jpg, gif to png, bmp to webp, tiff to jpg, heic to jpg, heic to png, heic to webp, ico to png, ico to jpg, heic converter, ico converter, csv to xlsx, xlsx to csv, json to csv, csv to json, json to xlsx, markdown to html, local file converter',
     tip: 'Convert images, PDFs, spreadsheets and text files locally in your browser. No upload, no signup.',
+    convertersTitle: 'All converters',
     localTitle: 'Local file format converter',
     localCont1: 'Choose a conversion mode, add images, PDFs, spreadsheets or text files, and convert them in your browser without uploading them to a server.',
     localCont2: 'Use it for PNG to WebP, JPG to WebP, SVG to PNG, PNG to ICO, HEIC to JPG, ICO to PNG, images to PDF, PDF pages to images, CSV to XLSX, XLSX to CSV, JSON to CSV, and Markdown to HTML.',

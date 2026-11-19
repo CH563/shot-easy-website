@@ -1,7 +1,18 @@
 import { CONFIG } from './config.js';
 
-// Top-level URL prefixes that are real routes, not locale routes.
-const NON_LOCALE_PREFIXES = ['api', 'blog'];
+// Top-level URL prefixes that are real routes, not locale routes. Every
+// directory under src/pages/ (except [locale]) belongs here, so a nested
+// page such as /convert/image-to-webp/ is not mistaken for a path under an
+// unknown locale. New top-level tools must be added here too.
+const NON_LOCALE_PREFIXES = [
+  'api', 'blog',
+  'about', 'archive-viewer', 'background-remover', 'blur-background-online',
+  'contact', 'convert', 'csv-viewer', 'doc-viewer', 'excel-viewer',
+  'image-compressor', 'long-image', 'ocr-pdf', 'pdf-split', 'pdf-tools',
+  'pdf-viewer', 'photo-to-rounded', 'ppt-viewer', 'privacy-policy',
+  'qr-code-generator', 'qr-scanner', 'screenshot-beautifier',
+  'take-a-screenshot', 'terms-of-service', 'video-convert', 'viewer',
+];
 
 const splitPath = (pathname = '/') => String(pathname).split('/').filter(Boolean);
 
