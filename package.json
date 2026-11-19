@@ -20,7 +20,8 @@
     "test:localeguard": "node --test tests/locale-guard.test.mjs",
     "test:convert": "node --test tests/convert.test.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:audioconvert": "node --test tests/audio-convert.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

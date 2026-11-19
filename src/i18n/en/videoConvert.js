@@ -1,12 +1,12 @@
 export default {
     title: 'GIF Maker, Video to GIF & MP4 to GIF Converter | ShotEasy',
-    description: 'Free online gif maker and video to gif converter. Convert MP4 to GIF, compress video, change speed, extract audio, crop, trim, and run FFmpeg locally in your browser.',
-    keywords: 'gif maker, video to gif, mp4 to gif, online gif maker, convert video to gif, mp4 gif converter, video converter, ffmpeg wasm, browser video editor, compress video, trim video, extract audio from video',
+    description: 'Free online gif maker and video to gif converter. Convert MP4 to GIF, compress video, change speed, extract audio, crop, trim, and run FFmpeg locally in your browser. Convert audio between MP3, WAV, FLAC, OGG, AAC and M4A, including WMA and AIFF inputs.',
+    keywords: 'gif maker, video to gif, mp4 to gif, online gif maker, convert video to gif, mp4 gif converter, video converter, ffmpeg wasm, browser video editor, compress video, trim video, extract audio from video, audio converter, mp3 to wav, wav to mp3, convert audio online, m4a converter, flac converter',
     h1: 'GIF Maker and Video to GIF Converter',
     tip: 'Convert MP4 to GIF, make GIFs from video, compress clips, and edit media locally with ffmpeg.wasm. No upload, no signup, no server queue.',
     localTitle: 'Local video conversion',
     localCont1: 'Video Convert runs FFmpeg directly in your browser with WebAssembly, so your media stays on your device.',
-    localCont2: 'Use it for MP4, WebM, MOV, MKV, GIF, audio extraction, thumbnails, and quick compression presets.',
+    localCont2: 'Use it for MP4, WebM, MOV, MKV, GIF, audio extraction, audio format conversion between MP3, WAV, FLAC, OGG, AAC and M4A, thumbnails, and quick compression presets.',
     workflowTitle: 'What ffmpeg.wasm does',
     workflowCont1: 'ffmpeg.wasm brings FFmpeg into the browser through WebAssembly, enabling video and audio processing without a backend conversion service.',
     workflowCont2: 'It powers format conversion, compression, trimming, GIF creation, audio extraction, frame capture, and custom FFmpeg commands while keeping files local.',
@@ -34,7 +34,7 @@ export default {
         },
         {
             title: 'Extract, mute, normalize, and adjust audio',
-            body: 'Pull audio out as MP3, AAC, WAV, OGG, or FLAC; remove audio entirely; change volume; or normalize loudness with FFmpeg loudnorm targets for YouTube, podcasts, and broadcast-style output.'
+            body: 'Pull audio out as MP3, AAC, WAV, OGG, or FLAC; convert audio files between MP3, WAV, FLAC, OGG, AAC and M4A (WMA and AIFF inputs work too); remove audio entirely; change volume; or normalize loudness with FFmpeg loudnorm targets for YouTube, podcasts, and broadcast-style output.'
         },
         {
             title: 'Capture frames, strip metadata, pad, denoise, sharpen, or run raw FFmpeg',
@@ -54,6 +54,10 @@ export default {
         {
             question: 'Can I use it as a general video converter too?',
             answer: 'Yes. Besides video to gif and mp4 to gif, the page supports video format conversion, compression, crop, rotate, speed change, reverse, audio extraction, mute, normalize audio, frame export, and raw FFmpeg commands.'
+        },
+        {
+            question: 'Can I convert audio files, like MP3 to WAV?',
+            answer: 'Yes. Load an MP3, WAV, FLAC, OGG, AAC, M4A, WMA or AIFF file — the tool switches to the Audio operation — pick the output format and process. Conversion runs locally with ffmpeg.wasm.'
         },
         {
             question: 'Why does processing take time?',
@@ -82,6 +86,8 @@ export default {
             preserveAudio: 'Preserve and retime audio',
             transform: 'Transform',
             audioFormat: 'Audio format',
+            audioConvertDesc: 'Convert audio format',
+            processAudio: 'Process Audio',
             timestampSeconds: 'Timestamp seconds',
             imageFormat: 'Image format',
             reverseAudio: 'Reverse audio too',

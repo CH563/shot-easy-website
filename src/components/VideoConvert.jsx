@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Icon } from './Icons';
+import { audioCodecArgs, isAudioExtension } from '@lib/audioConvert';
 
 const CORE_BASE = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
 const FFMPEG_WORKER_URL = '/ffmpeg-worker.js';
@@ -92,6 +93,7 @@ const MIME = {
     wav: 'audio/wav',
     ogg: 'audio/ogg',
     flac: 'audio/flac',
+    m4a: 'audio/mp4',
     jpg: 'image/jpeg',
     png: 'image/png',
 };
@@ -241,12 +243,7 @@ function buildArgs({
 
     if (operation === 'audio') {
         outputExt = audioFormat;
-        args.push('-vn');
-        if (audioFormat === 'mp3') args.push('-c:a', 'libmp3lame', '-q:a', '2');
-        if (audioFormat === 'aac') args.push('-c:a', 'aac');
-        if (audioFormat === 'wav') args.push('-c:a', 'pcm_s16le');
-        if (audioFormat === 'ogg') args.push('-c:a', 'libvorbis');
-        if (audioFormat === 'flac') args.push('-c:a', 'flac');
+        args.push('-vn', ...audioCodecArgs(audioFormat));
     }
 
     if (operation === 'mute') {
@@ -486,7 +483,7 @@ export default function VideoConvert({ copy = {} }) {
             bytes = Number(gif.width) * height * Number(gif.fps) * selectedDuration * 0.35;
         }
         if (operation === 'audio') {
-            const rates = { mp3: 16000, aac: 16000, wav: 176400, ogg: 16000, flac: 88200 };
+            const rates = { mp3: 16000, aac: 16000, wav: 176400, ogg: 16000, flac: 88200, m4a: 16000 };
             bytes = (rates[audioFormat] || 16000) * selectedDuration;
         }
         if (operation === 'raw' || operation === 'thumbnail') return '';
@@ -505,7 +502,7 @@ export default function VideoConvert({ copy = {} }) {
         setLogs([`Loaded ${selected.name} (${formatBytes(selected.size)})`]);
         setTrim({ start: 0, end: 0 });
         setThumbnail((value) => ({ ...value, time: 0 }));
-        if (['mp3', 'aac', 'wav', 'ogg', 'flac', 'm4a'].includes(ext)) {
+        if (isAudioExtension(ext)) {
             setOperation('audio');
         }
     };
@@ -754,6 +751,7 @@ export default function VideoConvert({ copy = {} }) {
                         <option value="wav">WAV</option>
                         <option value="ogg">OGG</option>
                         <option value="flac">FLAC</option>
+                        <option value="m4a">M4A</option>
                     </select>
                 </label>
             );
@@ -910,10 +908,10 @@ export default function VideoConvert({ copy = {} }) {
         return <p className="text-sm text-slate-500">{uiText('muteHelp', 'The output keeps the video track and removes the audio stream.')}</p>;
     };
 
-    const audioOutput = output && ['mp3', 'aac', 'wav', 'ogg', 'flac'].includes(output.ext);
+    const audioOutput = output && ['mp3', 'aac', 'wav', 'ogg', 'flac', 'm4a'].includes(output.ext);
     const imageOutput = output && ['gif', 'jpg', 'png'].includes(output.ext);
     const ffmpegStatus = getFFmpegStatus({ status, ffmpegLoaded, progress, copy: t });
-    const isAudioInput = file?.type?.startsWith('audio/');
+    const isAudioInput = file ? isAudioExtension(getExtension(file)) : false;
 
     return (
         <div className="rounded-md border border-white/70 bg-white/90 p-3 shadow-lg backdrop-blur border-t-gray-600">
@@ -953,7 +951,7 @@ export default function VideoConvert({ copy = {} }) {
                             onFile(event.dataTransfer.files?.[0]);
                         }}
                     >
-                        <input ref={fileInputRef} className="hidden" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.webm,.mp4,.mp3,.wav,.flac,.ogg,.aac" onChange={(event) => onFile(event.target.files?.[0])} />
+                        <input ref={fileInputRef} className="hidden" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.webm,.mp4,.mp3,.wav,.flac,.ogg,.aac,.m4a,.wma,.aiff,.aif" onChange={(event) => onFile(event.target.files?.[0])} />
                         {file ? (
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between gap-3">
@@ -1035,7 +1033,7 @@ export default function VideoConvert({ copy = {} }) {
                                         <span className="truncate text-sm font-bold leading-5">{labels.title || item.title}</span>
                                         {item.badge && <span className="shrink-0 text-xs leading-none" aria-label="Popular">{item.badge}</span>}
                                     </span>
-                                    <span className={`mt-0.5 block truncate text-[11px] leading-4 ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{labels.desc || item.desc}</span>
+                                    <span className={`mt-0.5 block truncate text-[11px] leading-4 ${operation === item.id ? 'text-blue-100' : 'text-slate-400'}`}>{item.id === 'audio' && isAudioInput ? uiText('audioConvertDesc', 'Convert audio format') : (labels.desc || item.desc)}</span>
                                 </button>
                             );
                         })}
@@ -1054,7 +1052,7 @@ export default function VideoConvert({ copy = {} }) {
                         className="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-bold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
                     >
                         <Icon name={status === 'processing' ? 'Loader2' : 'Cog'} className={status === 'processing' ? 'animate-spin' : ''} />
-                        {status === 'processing' ? t.processing : t.process}
+                        {status === 'processing' ? t.processing : (isAudioInput ? uiText('processAudio', 'Process Audio') : t.process)}
                     </button>
 
                     <div className="rounded-md border border-slate-100 bg-white p-4 shadow-sm">
