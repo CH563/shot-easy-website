@@ -5,12 +5,12 @@ import { Icon } from './Icons';
 import { UploadDragger } from './UploadDragger';
 import { FormatTag } from './FormatTag';
 import { toDownloadFile } from '@lib/utils';
-import { convertImageFile, extensionForMime, formatBytes, imageInputTypes, loadAnyImageFile, pngBlobToIcoBlob, replaceExtension } from '@lib/imageConvert';
+import { convertImageFile, extensionForMime, formatBytes, imageExtensions, imageInputTypes, loadAnyImageFile, mimeForImageExtension, pngBlobToIcoBlob, replaceExtension } from '@lib/imageConvert';
 import { convertDataFile, convertMarkdownFile, dataInputTypes, getFileExtension } from '@lib/dataConvert';
 import { createImagesPdfBlob, renderPdfPages } from '@lib/pdfConvert';
 
 const modes = [
-    { value: 'image-to-webp', labelKey: 'imageToWebp', group: 'images', accept: ['image/png', 'image/jpeg'], output: 'image/webp' },
+    { value: 'image-to-webp', labelKey: 'imageToWebp', group: 'images', accept: imageInputTypes, output: 'image/webp' },
     { value: 'image-to-jpg', labelKey: 'imageToJpg', group: 'images', accept: imageInputTypes, output: 'image/jpeg' },
     { value: 'image-to-png', labelKey: 'imageToPng', group: 'images', accept: imageInputTypes, output: 'image/png' },
     { value: 'images-to-pdf', labelKey: 'imagesToPdf', group: 'images', accept: imageInputTypes, output: 'application/pdf' },
@@ -33,7 +33,7 @@ const modes = [
 ];
 
 const inputTypes = [...new Set([...imageInputTypes, 'application/pdf', ...dataInputTypes])];
-const acceptedExtensions = ['csv', 'tsv', 'json', 'xlsx', 'md'];
+const acceptedExtensions = ['csv', 'tsv', 'json', 'xlsx', 'md', 'heic', 'heif', 'ico'];
 const acceptAttr = [...inputTypes, ...acceptedExtensions.map((ext) => `.${ext}`)].join(',');
 
 // Browsers report flaky MIME types for .csv/.tsv/.json/.md, so fall back to the extension.
@@ -147,6 +147,10 @@ const getFormatLabel = (item) => {
 
 const isCompatible = (item, activeMode) => {
     if (activeMode.accept?.includes(item.type)) return true;
+    // Browsers report flaky or empty MIME types for some image files, so fall
+    // back to the extension-derived type before rejecting the file.
+    const extType = mimeForImageExtension(getFileExtension(item.name));
+    if (extType && activeMode.accept?.includes(extType)) return true;
     if (activeMode.extensions?.includes(getFileExtension(item.name))) return true;
     return false;
 };
@@ -284,7 +288,7 @@ export default function ConvertTool({ copy = {} }) {
                     outputs: [],
                 };
 
-                if (imageInputTypes.includes(file.type)) {
+                if (imageInputTypes.includes(file.type) || imageExtensions.includes(getImageExtension(file.name))) {
                     try {
                         const preview = await loadAnyImageFile(file);
                         loadedItems.push({

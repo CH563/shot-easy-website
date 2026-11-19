@@ -89,6 +89,9 @@ importers:
       filesize:
         specifier: ^10.1.2
         version: 10.1.2
+      heic2any:
+        specifier: ^0.0.4
+        version: 0.0.4
       highlight.js:
         specifier: ^11.9.0
         version: 11.9.0
@@ -2650,6 +2653,9 @@ packages:
 
   hastscript@8.0.0:
     resolution: {integrity: sha512-dMOtzCEd3ABUeSIISmrETiKuyydk1w0pa+gE/uormcTpSYuaNJPbX1NU3JLyscSLjwAQM8bWMhhIlnCqnRvDTw==}
+
+  heic2any@0.0.4:
+    resolution: {integrity: sha512-3lLnZiDELfabVH87htnRolZ2iehX9zwpRyGNz22GKXIu0fznlblf0/ftppXKNqS26dqFSeqfIBhAmAj/uSp0cA==}
 
   highlight.js@11.9.0:
     resolution: {integrity: sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==}
@@ -7428,6 +7434,8 @@ snapshots:
       hast-util-parse-selector: 4.0.0
       property-information: 6.4.0
       space-separated-tokens: 2.0.2
+
+  heic2any@0.0.4: {}
 
   highlight.js@11.9.0: {}
 

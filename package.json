@@ -21,7 +21,9 @@
     "test:convert": "node --test tests/convert.test.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "test:audioconvert": "node --test tests/audio-convert.test.mjs"
+    "test:audioconvert": "node --test tests/audio-convert.test.mjs",
+    "test:icoconvert": "node --test tests/ico-convert.test.mjs",
+    "test:imageconvert": "node --test tests/image-convert.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -51,6 +53,7 @@
     "dayjs": "^1.11.11",
     "emoji-mart": "^5.5.2",
     "filesize": "^10.1.2",
+    "heic2any": "^0.0.4",
     "highlight.js": "^11.9.0",
     "html-to-image": "^1.11.11",
     "js-sha256": "^0.10.1",
