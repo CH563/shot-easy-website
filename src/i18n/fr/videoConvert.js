@@ -3,13 +3,13 @@ import en from '../en/videoConvert';
 export default {
     ...en,
     title: 'Créateur de GIF, Video to GIF et MP4 to GIF | ShotEasy',
-    description: 'Créateur de GIF gratuit et convertisseur video to GIF. Convertissez MP4 en GIF, compressez, changez la vitesse, extrayez audio, recadrez et utilisez FFmpeg dans le navigateur.',
-    keywords: 'gif maker, créateur de gif, video to gif, vidéo en gif, mp4 to gif, mp4 en gif, convertisseur vidéo, ffmpeg wasm, compresser vidéo, recadrer vidéo, extraire audio vidéo',
+    description: 'Créateur de GIF gratuit et convertisseur video to GIF. Convertissez MP4 en GIF, compressez, changez la vitesse, extrayez audio, recadrez et utilisez FFmpeg dans le navigateur. Convertissez l’audio entre MP3, WAV, FLAC, OGG, AAC et M4A, y compris les entrées WMA et AIFF.',
+    keywords: 'gif maker, créateur de gif, video to gif, vidéo en gif, mp4 to gif, mp4 en gif, convertisseur vidéo, ffmpeg wasm, compresser vidéo, recadrer vidéo, extraire audio vidéo, convertisseur audio, mp3 en wav, wav en mp3, convertir audio en ligne, convertisseur m4a',
     h1: 'Créateur de GIF et convertisseur vidéo en GIF',
     tip: 'Convertissez MP4 en GIF, créez des GIF depuis une vidéo, compressez des clips et éditez localement avec ffmpeg.wasm. Aucun envoi, aucune inscription, aucune file.',
     localTitle: 'Conversion vidéo locale',
     localCont1: 'Video Convert exécute FFmpeg directement dans votre navigateur avec WebAssembly, vos médias restent donc sur votre appareil.',
-    localCont2: 'Utilisez-le pour MP4, WebM, MOV, MKV, GIF, extraction audio, vignettes et préréglages de compression rapides.',
+    localCont2: 'Utilisez-le pour MP4, WebM, MOV, MKV, GIF, extraction audio, conversion audio entre MP3, WAV, FLAC, OGG, AAC et M4A, vignettes et préréglages de compression rapides.',
     workflowTitle: 'Ce que fait ffmpeg.wasm',
     workflowCont1: 'ffmpeg.wasm apporte FFmpeg dans le navigateur via WebAssembly pour traiter vidéo et audio sans service de conversion côté serveur.',
     workflowCont2: 'Il prend en charge conversion, compression, découpe, création de GIF, extraction audio, capture d’image et commandes FFmpeg personnalisées localement.',
@@ -37,7 +37,7 @@ export default {
         },
         {
             title: 'Extrayez, coupez, normalisez et ajustez l’audio',
-            body: 'Exportez l’audio en MP3, AAC, WAV, OGG ou FLAC, supprimez-le, changez le volume ou normalisez la sonie avec loudnorm.'
+            body: 'Exportez l’audio en MP3, AAC, WAV, OGG ou FLAC, convertissez l’audio entre MP3, WAV, FLAC, OGG, AAC et M4A (les entrées WMA et AIFF fonctionnent aussi), supprimez-le, changez le volume ou normalisez la sonie avec loudnorm.'
         },
         {
             title: 'Capturez des images, retirez les métadonnées et utilisez FFmpeg',
@@ -57,6 +57,10 @@ export default {
         {
             question: 'Puis-je l’utiliser comme convertisseur vidéo général ?',
             answer: 'Oui. En plus de video to GIF et MP4 to GIF, la page gère conversion, compression, recadrage, rotation, vitesse, inversion, audio, image fixe et commandes FFmpeg.'
+        },
+        {
+            question: 'Puis-je convertir des fichiers audio, par exemple MP3 en WAV ?',
+            answer: 'Oui. Déposez un MP3, WAV, FLAC, OGG, AAC, M4A, WMA ou AIFF — l’outil passe à l’opération Audio — choisissez le format de sortie et lancez le traitement. La conversion se fait localement avec ffmpeg.wasm.'
         },
         {
             question: 'Pourquoi le traitement peut-il être long ?',
@@ -86,6 +90,8 @@ export default {
             preserveAudio: 'Conserver et resynchroniser l’audio',
             transform: 'Transformation',
             audioFormat: 'Format audio',
+            audioConvertDesc: 'Convertir le format audio',
+            processAudio: 'Traiter l’audio',
             timestampSeconds: 'Horodatage en secondes',
             imageFormat: 'Format d’image',
             reverseAudio: 'Inverser aussi l’audio',
