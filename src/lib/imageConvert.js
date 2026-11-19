@@ -1,4 +1,31 @@
-export const imageInputTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif', 'image/bmp', 'image/avif', 'image/tiff'];
+import { decodeIco } from './icoConvert.js';
+
+export const imageInputTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif', 'image/bmp', 'image/avif', 'image/tiff', 'image/heic', 'image/heif', 'image/x-icon', 'image/vnd.microsoft.icon'];
+
+// Browsers report flaky or empty MIME types for .heic/.heif/.ico/.tiff files,
+// so image handling falls back to the file extension when the type is missing.
+export const imageExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'bmp', 'avif', 'tiff', 'heic', 'heif', 'ico'];
+
+export const getImageExtension = (file) => (file?.name?.split('.').pop() || '').toLowerCase();
+
+export const mimeForImageExtension = (extension) => ({
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    webp: 'image/webp',
+    svg: 'image/svg+xml',
+    gif: 'image/gif',
+    bmp: 'image/bmp',
+    avif: 'image/avif',
+    tiff: 'image/tiff',
+    heic: 'image/heic',
+    heif: 'image/heif',
+    ico: 'image/x-icon',
+}[extension] || '');
+
+export const isHeicFile = (file) => ['image/heic', 'image/heif'].includes(file?.type) || ['heic', 'heif'].includes(getImageExtension(file));
+
+export const isIcoFile = (file) => ['image/x-icon', 'image/vnd.microsoft.icon'].includes(file?.type) || getImageExtension(file) === 'ico';
 
 export const formatBytes = (bytes) => {
     if (!bytes) return '0 B';
@@ -11,7 +38,9 @@ export const extensionForMime = (mime) => {
     if (mime === 'image/jpeg') return 'jpg';
     if (mime === 'image/png') return 'png';
     if (mime === 'image/webp') return 'webp';
-    if (mime === 'image/x-icon') return 'ico';
+    if (mime === 'image/heic') return 'heic';
+    if (mime === 'image/heif') return 'heif';
+    if (mime === 'image/x-icon' || mime === 'image/vnd.microsoft.icon') return 'ico';
     if (mime === 'application/pdf') return 'pdf';
     return 'bin';
 };
@@ -85,7 +114,63 @@ export const loadTiffFile = async (file) => {
     return { file, src, image, width, height };
 };
 
-export const loadAnyImageFile = (file) => (file.type === 'image/tiff' ? loadTiffFile(file) : loadImageFile(file));
+// Browsers cannot decode HEIC with <img> (except Safari), so convert it to PNG
+// with heic2any (libheif WASM, bundled, runs in a worker) and reload it as an
+// image. Dynamically imported so the ~1.3 MB decoder only loads for HEIC files.
+// Returns the same shape as loadImageFile.
+export const loadHeicFile = async (file) => {
+    const { default: heic2any } = await import('heic2any');
+    const converted = await heic2any({ blob: file, toType: 'image/png' });
+    const blob = Array.isArray(converted) ? converted[0] : converted;
+    if (!blob) throw new Error(`Unable to load ${file.name}`);
+    const src = URL.createObjectURL(blob);
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = () => {
+            URL.revokeObjectURL(src);
+            reject(new Error(`Unable to load ${file.name}`));
+        };
+        image.src = src;
+    });
+    return { file, src, image, width: image.naturalWidth || image.width, height: image.naturalHeight || image.height };
+};
+
+// Browsers cannot decode ICO with <img>, so decode it to pixels (BMP icons)
+// or pass PNG-embedded icons straight to an <img>. Same shape as loadImageFile.
+export const loadIcoFile = async (file) => {
+    const buffer = await file.arrayBuffer();
+    const decoded = decodeIco(buffer);
+    let blob;
+    if (decoded.pngBytes) {
+        blob = new Blob([decoded.pngBytes], { type: 'image/png' });
+    } else {
+        const canvas = document.createElement('canvas');
+        canvas.width = decoded.width;
+        canvas.height = decoded.height;
+        const context = canvas.getContext('2d');
+        context.putImageData(new ImageData(new Uint8ClampedArray(decoded.rgba), decoded.width, decoded.height), 0, 0);
+        blob = await canvasToBlob(canvas, 'image/png');
+    }
+    const src = URL.createObjectURL(blob);
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = () => {
+            URL.revokeObjectURL(src);
+            reject(new Error(`Unable to load ${file.name}`));
+        };
+        image.src = src;
+    });
+    return { file, src, image, width: image.naturalWidth || image.width, height: image.naturalHeight || image.height };
+};
+
+export const loadAnyImageFile = (file) => {
+    if (file.type === 'image/tiff' || getImageExtension(file) === 'tiff') return loadTiffFile(file);
+    if (isHeicFile(file)) return loadHeicFile(file);
+    if (isIcoFile(file)) return loadIcoFile(file);
+    return loadImageFile(file);
+};
 
 export const drawImageToCanvas = (image, fill = null) => {
     const canvas = document.createElement('canvas');
