@@ -169,3 +169,15 @@ test('Russian screenshot breadcrumb entities always use production URLs', { skip
         `${CONFIG.website}/ru/kak-sdelat-skrinshot/`
     ]);
 });
+
+test('the header nav is flat: every tool link is visible, no hover dropdown', async () => {
+    const header = await readFile(new URL('../src/components/Header.astro', import.meta.url), 'utf8');
+    assert.ok(!header.includes('group-hover'), 'no hover dropdown');
+    assert.ok(!header.includes('aria-haspopup'), 'no dropdown button');
+    assert.ok(!header.includes('▾'), 'no dropdown chevron');
+    assert.ok(!header.includes('absolute top-full'), 'no dropdown panel');
+    // The desktop nav renders the grouped links directly as <a> tags.
+    assert.match(header, /hidden md:flex flex-wrap/);
+    assert.ok(header.includes('navGroups.map'), 'desktop nav iterates the groups');
+    assert.ok(header.includes('{item.name}'), 'desktop nav renders each item name');
+});

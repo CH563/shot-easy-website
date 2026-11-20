@@ -66,25 +66,21 @@ const flatList = navGroups.flatMap(group => group.items);
 const isCurrent = (path: string) => pathname.toLocaleLowerCase() === path.toLocaleLowerCase();
 ---
 
-<header class="container flex flex-col gap-3 items-center justify-center p-4 relative z-10 select-none md:flex-row md:flex-wrap md:justify-between">
-    <a href={index} class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
-    <nav class="hidden md:flex items-center gap-1 w-auto text-sm text-slate-600 bg-white rounded-3xl px-2 py-1">
-        {navGroups.map((group, groupIndex) => {
-            const active = group.items.some(item => isCurrent(item.pathname));
-            return (
-                <div class="relative group py-1">
-                    <button type="button" aria-haspopup="true" class={active ? 'rounded-xl px-2 py-1 bg-blue-600 text-white' : 'rounded-xl px-2 py-1 hover:bg-sky-50 hover:text-blue-600'}>{group.label} <span class="text-[10px]">▾</span></button>
-                    <div class={groupIndex === navGroups.length - 1 ? 'absolute top-full right-0 pt-2 hidden group-hover:block group-focus-within:block z-20' : 'absolute top-full left-0 pt-2 hidden group-hover:block group-focus-within:block z-20'}>
-                        <div class="bg-white rounded-2xl shadow-lg ring-1 ring-black/5 py-1 min-w-[180px]">
-                            {group.items.map(item => {
-                                if (isCurrent(item.pathname)) return (<span class="block whitespace-nowrap px-3 py-1.5 mx-1 rounded-lg bg-blue-600 text-white">{item.name}</span>)
-                                return (<a href={item.pathname} title={item.title} class="block whitespace-nowrap px-3 py-1.5 mx-1 rounded-lg hover:bg-sky-50 hover:text-blue-600">{item.name}</a>)
-                            })}
-                        </div>
-                    </div>
-                </div>
-            );
-        })}
+<header class="container flex flex-col gap-3 p-4 relative z-10 select-none">
+    <div class="flex items-center justify-center md:justify-start">
+        <a href={index} class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
+    </div>
+    <nav class="hidden md:flex flex-wrap items-center justify-center gap-x-1 gap-y-1 w-full text-sm text-slate-600 bg-white rounded-2xl px-3 py-2">
+        {navGroups.map((group, groupIndex) => (
+            <span class="flex items-center gap-1 whitespace-nowrap">
+                {groupIndex > 0 && <span class="mx-1.5 h-4 w-px bg-slate-200" aria-hidden="true" />}
+                <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-1">{group.label}</span>
+                {group.items.map(item => {
+                    if (isCurrent(item.pathname)) return (<span class="rounded-xl px-2 py-1 bg-blue-600 text-white">{item.name}</span>)
+                    return (<a href={item.pathname} title={item.title} class="rounded-xl px-2 py-1 hover:bg-sky-50 hover:text-blue-600">{item.name}</a>)
+                })}
+            </span>
+        ))}
     </nav>
     <nav class="grid grid-cols-4 justify-center gap-1 w-full max-w-[340px] text-center text-[11px] text-slate-600 bg-white rounded-3xl p-1 px-1 sm:max-w-full md:hidden [&_span]:rounded-xl [&_span]:px-1.5 [&_span]:bg-blue-600 [&_span]:text-white [&_a]:rounded-xl [&_a]:px-1.5 hover:[&_a]:bg-sky-50 hover:[&_a]:text-blue-600">
         {flatList.map(item => {
