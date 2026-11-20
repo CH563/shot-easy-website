@@ -6,6 +6,7 @@ export default {
     description: 'Convertisseur de fichiers gratuit en ligne : images en JPG, PNG, WebP et PDF — y compris les entrées HEIC et ICO —, PDF en JPG, PNG et WebP, conversion CSV, XLSX, JSON et TSV, et Markdown en HTML. Convertissez vos fichiers localement dans votre navigateur.',
     keywords: 'convertisseur de fichiers en ligne, convertisseur d’images en ligne, png en webp, jpg en webp, jpg en pdf, pdf en jpg, pdf en webp, svg en jpg, gif en png, bmp en webp, tiff en jpg, heic en jpg, heic en png, heic en webp, ico en png, ico en jpg, convertisseur heic, convertisseur ico, csv en xlsx, xlsx en csv, json en csv, csv en json, markdown en html, convertisseur de fichiers local',
     tip: 'Convertissez images, PDF, feuilles de calcul et fichiers texte localement dans votre navigateur. Aucun envoi, aucune inscription.',
+    convertersTitle: 'Tous les convertisseurs',
     localTitle: 'Convertisseur local de formats de fichiers',
     tool: {
         ...en.tool,

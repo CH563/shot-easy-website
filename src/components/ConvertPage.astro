@@ -6,12 +6,14 @@ import SeoContentBlock from '@components/SeoContentBlock.astro';
 import ToolStructuredData from '@components/ToolStructuredData.astro';
 import { getLang, getLocale } from '@i18n/index';
 import { getToolSeoContent } from '@lib/toolSeoContent';
+import { convertModes } from '@lib/convertModePages';
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.convert;
 const seoContent = getToolSeoContent(lang, 'convert', t);
+const converterGroups = ['images', 'pdf', 'data'];
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -20,6 +22,21 @@ const seoContent = getToolSeoContent(lang, 'convert', t);
     <div class="pb-12 min-h-[300px]">
         <ConvertTool client:only="react" copy={t.tool} />
     </div>
+    <section class="mb-3 rounded-md p-4 bg-white/75 text-xs shadow-sm ring-1 ring-slate-200/70">
+        <h2 class="text-lg font-bold mb-3">{t.convertersTitle}</h2>
+        {converterGroups.map(group => (
+            <div class="mb-3 last:mb-0">
+                <h3 class="font-semibold mb-2 text-sm">{t.tool.groups[group]}</h3>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {convertModes.filter(item => item.group === group).map(item => (
+                        <li>
+                            <a href={`/convert/${item.value}/`} class="block rounded-md px-3 py-2 bg-slate-50 ring-1 ring-slate-200/70 text-blue-600 hover:bg-sky-100/60 hover:underline">{t.tool.modes[item.labelKey]}</a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </section>
     <section class="mb-3 rounded-md p-4 bg-sky-100/40 text-xs [&>p]:mb-1">
         <div class="mb-1 text-sm">🔁</div>
         <h2 class="text-lg font-bold mb-2">{t.localTitle}</h2>

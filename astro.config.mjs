@@ -68,6 +68,29 @@ const ruOcrClusterPages = [
   'kak-raspoznat-tekst'
 ];
 
+const convertModePages = [
+  'image-to-webp',
+  'image-to-jpg',
+  'image-to-png',
+  'images-to-pdf',
+  'svg-to-png',
+  'svg-to-jpg',
+  'svg-to-webp',
+  'png-to-ico',
+  'pdf-to-images',
+  'pdf-to-jpg',
+  'pdf-to-webp',
+  'csv-to-xlsx',
+  'xlsx-to-csv',
+  'json-to-csv',
+  'csv-to-json',
+  'json-to-xlsx',
+  'xlsx-to-json',
+  'tsv-to-csv',
+  'tsv-to-xlsx',
+  'md-to-html'
+];
+
 const toAbsoluteUrl = (path) => new URL(path, CONFIG.website).toString();
 const toLocalizedPath = (locale, page) => page ? `/${locale}/${page}/` : `/${locale}/`;
 const sitemapCustomPages = [
@@ -81,7 +104,9 @@ const sitemapCustomPages = [
   ...ruBackgroundRemoverClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruCompressorClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruVideoConverterClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
-  ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`))
+  ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...convertModePages.map((page) => toAbsoluteUrl(`/convert/${page}/`)),
+  ...convertModePages.map((page) => toAbsoluteUrl(`/ru/convert/${page}/`))
 ];
 
 // https://astro.build/config

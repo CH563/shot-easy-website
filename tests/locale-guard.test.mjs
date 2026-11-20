@@ -53,6 +53,10 @@ test('multi-segment paths under a known locale or a real route pass through', ()
     assert.equal(isUnknownLocalePath('/en/take-a-screenshot/'), false);
     assert.equal(isUnknownLocalePath('/blog/some-post/'), false);
     assert.equal(isUnknownLocalePath('/api/remove-bg'), false);
+    // Nested pages under real top-level tools are real routes, not locales.
+    assert.equal(isUnknownLocalePath('/convert/image-to-webp/'), false);
+    assert.equal(isUnknownLocalePath('/convert/nope/'), false);
+    assert.equal(isUnknownLocalePath('/about/team/'), false);
 });
 
 test('single-segment paths are left to the [locale] page', () => {

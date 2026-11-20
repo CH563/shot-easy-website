@@ -1,0 +1,24 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import ConvertModePage from '@components/ConvertModePage.astro';
+import { getConvertModePage } from '@lib/convertModePages';
+import { getLang } from '@i18n/index';
+
+const mode = Astro.params.mode || '';
+const page = getConvertModePage(mode, 'en');
+if (!page) {
+    return new Response('Not Found', { status: 404 });
+}
+const t = getLang().convert;
+const nav = getLang().nav;
+---
+
+<Layout title={page.title} description={page.description} keywords={page.keywords} languageAlternates={false}>
+    <main class="relative overflow-hidden min-h-screen flex flex-col">
+        <Header />
+        <ConvertModePage page={page} mode={mode} toolCopy={t.tool} convertUrl="/convert/" convertName={nav.convert.title} />
+        <Footer />
+    </main>
+</Layout>
