@@ -52,6 +52,10 @@ export default {
         {
             question: 'Puis-je capturer une page entière avec défilement ?',
             answer: 'L\'outil web capture l\'écran, une fenêtre ou un onglet du navigateur. Pour capturer une page entière avec défilement en un clic, utilisez l\'extension ShotEasy pour navigateur.'
+        },
+        {
+            question: 'Puis-je capturer un site web en saisissant son URL ?',
+            answer: 'Oui. Collez l\'URL de la page dans le champ de capture par URL : la page est rendue sur le serveur puis s\'ouvre dans l\'éditeur, où vous pouvez la recadrer, la copier ou l\'enregistrer. Pour éviter les abus, la limite est de 5 captures par URL toutes les 10 minutes.'
         }
     ]
 }

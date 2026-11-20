@@ -15,7 +15,16 @@ const en = {
   loadFailed: 'Could not load the screenshot editor. Reload the page to retry.',
   captureUnsupported: 'This browser cannot capture the screen. Take a system screenshot, then open or paste the image here.',
   captureDenied: 'Screen capture was cancelled or permission was denied. Retry and allow sharing, or open/paste a system screenshot.',
-  captureFailed: 'Could not capture the screen. Check browser and system permissions, or open/paste a system screenshot.'
+  captureFailed: 'Could not capture the screen. Check browser and system permissions, or open/paste a system screenshot.',
+  urlTitle: 'Screenshot a website by URL',
+  urlPlaceholder: 'https://example.com',
+  urlCapture: 'Capture URL',
+  urlHint: 'Up to 5 URL screenshots every 10 minutes. The page is rendered on the server and opens in the editor below.',
+  urlInvalid: 'Enter a valid http(s) URL, for example https://example.com.',
+  urlRateLimited: 'Too many URL screenshots. Try again in {s} seconds.',
+  urlFailed: 'Could not capture this page. Check the URL and retry.',
+  urlUnavailable: 'URL screenshots are not available right now. Try again later.',
+  urlCooldown: 'Wait {s}s'
 };
 
 const ru = {
@@ -35,7 +44,16 @@ const ru = {
   loadFailed: 'Не удалось загрузить редактор скриншотов. Обновите страницу.',
   captureUnsupported: 'В этом браузере захват экрана недоступен. Сделайте системный скриншот, затем откройте или вставьте изображение сюда.',
   captureDenied: 'Захват отменён или доступ не разрешён. Повторите попытку и разрешите захват либо откройте или вставьте системный скриншот.',
-  captureFailed: 'Не удалось захватить экран. Проверьте разрешения браузера и системы либо откройте или вставьте системный скриншот.'
+  captureFailed: 'Не удалось захватить экран. Проверьте разрешения браузера и системы либо откройте или вставьте системный скриншот.',
+  urlTitle: 'Скриншот сайта по ссылке',
+  urlPlaceholder: 'https://example.com',
+  urlCapture: 'Сделать скриншот',
+  urlHint: 'Не более 5 скриншотов по ссылке за 10 минут. Страница рендерится на сервере и откроется в редакторе ниже.',
+  urlInvalid: 'Введите корректную ссылку http(s), например https://example.com.',
+  urlRateLimited: 'Слишком много запросов. Повторите попытку через {s} сек.',
+  urlFailed: 'Не удалось сделать скриншот страницы. Проверьте ссылку и повторите попытку.',
+  urlUnavailable: 'Скриншоты по ссылке сейчас недоступны. Повторите попытку позже.',
+  urlCooldown: 'Подождите {s} сек'
 };
 
 const uk = {
@@ -55,7 +73,16 @@ const uk = {
   loadFailed: 'Не вдалося завантажити редактор скріншотів. Оновіть сторінку.',
   captureUnsupported: 'У цьому браузері захоплення екрана недоступне. Зробіть системний скріншот, а потім відкрийте або вставте зображення сюди.',
   captureDenied: 'Захоплення скасовано або доступ не дозволено. Повторіть спробу й дозвольте захоплення або відкрийте чи вставте системний скріншот.',
-  captureFailed: 'Не вдалося захопити екран. Перевірте дозволи браузера й системи або відкрийте чи вставте системний скріншот.'
+  captureFailed: 'Не вдалося захопити екран. Перевірте дозволи браузера й системи або відкрийте чи вставте системний скріншот.',
+  urlTitle: 'Скріншот сайту за посиланням',
+  urlPlaceholder: 'https://example.com',
+  urlCapture: 'Зробити скріншот',
+  urlHint: 'Не більше 5 скріншотів за посиланням за 10 хвилин. Сторінка рендериться на сервері й відкриється в редакторі нижче.',
+  urlInvalid: 'Введіть коректне посилання http(s), наприклад https://example.com.',
+  urlRateLimited: 'Забагато запитів. Повторіть спробу через {s} сек.',
+  urlFailed: 'Не вдалося зробити скріншот сторінки. Перевірте посилання й повторіть спробу.',
+  urlUnavailable: 'Скріншоти за посиланням зараз недоступні. Повторіть спробу пізніше.',
+  urlCooldown: 'Зачекайте {s} сек'
 };
 
 export const getScreenshotToolCopy = (locale = 'en') => ({ en, ru, uk }[locale] || en);
