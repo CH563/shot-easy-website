@@ -66,18 +66,17 @@ const flatList = navGroups.flatMap(group => group.items);
 const isCurrent = (path: string) => pathname.toLocaleLowerCase() === path.toLocaleLowerCase();
 ---
 
-<header class="container flex flex-col gap-3 p-4 relative z-10 select-none">
+<header class="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-4 py-3 relative z-10 select-none md:flex-row md:flex-wrap md:items-center">
     <div class="flex items-center justify-center md:justify-start">
         <a href={index} class="flex items-center gap-2 font-extrabold text-lg text-gray-700"><Logo height={42} />ShotEasy</a>
     </div>
-    <nav class="hidden md:flex flex-wrap items-center justify-center gap-x-1 gap-y-1 w-full text-sm text-slate-600 bg-white rounded-2xl px-3 py-2">
+    <nav class="hidden md:flex flex-1 flex-wrap items-center justify-center gap-x-0.5 gap-y-1 min-w-0 text-sm text-slate-600 bg-white rounded-3xl px-2 py-1">
         {navGroups.map((group, groupIndex) => (
-            <span class="flex items-center gap-1 whitespace-nowrap">
-                {groupIndex > 0 && <span class="mx-1.5 h-4 w-px bg-slate-200" aria-hidden="true" />}
-                <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 px-1">{group.label}</span>
+            <span aria-label={group.label} class="flex items-center gap-0.5 whitespace-nowrap">
+                {groupIndex > 0 && <span class="mx-1 h-4 w-px bg-slate-200" aria-hidden="true" />}
                 {group.items.map(item => {
-                    if (isCurrent(item.pathname)) return (<span class="rounded-xl px-2 py-1 bg-blue-600 text-white">{item.name}</span>)
-                    return (<a href={item.pathname} title={item.title} class="rounded-xl px-2 py-1 hover:bg-sky-50 hover:text-blue-600">{item.name}</a>)
+                    if (isCurrent(item.pathname)) return (<span class="rounded-xl px-1.5 py-1 bg-blue-600 text-white">{item.name}</span>)
+                    return (<a href={item.pathname} title={item.title} class="rounded-xl px-1.5 py-1 hover:bg-sky-50 hover:text-blue-600">{item.name}</a>)
                 })}
             </span>
         ))}

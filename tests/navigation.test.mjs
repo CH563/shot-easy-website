@@ -177,7 +177,12 @@ test('the header nav is flat: every tool link is visible, no hover dropdown', as
     assert.ok(!header.includes('▾'), 'no dropdown chevron');
     assert.ok(!header.includes('absolute top-full'), 'no dropdown panel');
     // The desktop nav renders the grouped links directly as <a> tags.
-    assert.match(header, /hidden md:flex flex-wrap/);
+    assert.match(header, /hidden md:flex flex-1 flex-wrap/);
+    // Logo and nav share one row on desktop: the header is a flex row and
+    // the nav takes the remaining width instead of its own strip.
+    assert.match(header, /md:flex-row/);
+    assert.ok(header.includes('flex-1'), 'desktop nav shares the logo row');
+    assert.ok(!header.includes('uppercase tracking-wider'), 'no group labels taking row width');
     assert.ok(header.includes('navGroups.map'), 'desktop nav iterates the groups');
     assert.ok(header.includes('{item.name}'), 'desktop nav renders each item name');
 });
