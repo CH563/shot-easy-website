@@ -49,7 +49,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
             });
         }
     }
-    if (!url.pathname.endsWith('/') && !url.pathname.includes('.')) {
+    // API routes are not pages: a POST to /api/screenshot must reach the
+    // handler, not 301 to the slashed URL (a fetch follows a 301 by
+    // re-issuing as GET, which the endpoint rejects with 404).
+    if (!url.pathname.endsWith('/') && !url.pathname.includes('.') && !url.pathname.startsWith('/api/')) {
         url.pathname += '/';
         return redirectToPath();
     }
