@@ -86,6 +86,8 @@ The privacy disclosure reflects source-configured services. The live GTM contain
 ```
 // request secret key
 PUBLIC_SECRET_KEY=
+// server-side only, used by POST /api/screenshot; set it in the Vercel dashboard for production
+ADSCRAWL_API_KEY=
 ```
 
 ## 🧞 Commands

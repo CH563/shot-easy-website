@@ -18,6 +18,7 @@
     "test:embed": "node --test tests/embed.test.mjs",
     "test:qrscanner": "node --test tests/qr-scanner.test.mjs",
     "test:localeguard": "node --test tests/locale-guard.test.mjs",
+    "test:screenshot": "node --test tests/adscrawl.test.mjs",
     "test:convert": "node --test tests/convert.test.mjs",
     "preview": "astro preview",
     "astro": "astro",
