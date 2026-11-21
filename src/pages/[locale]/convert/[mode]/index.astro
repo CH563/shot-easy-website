@@ -8,10 +8,10 @@ import { getLang } from '@i18n/index';
 
 const { locale } = Astro.params;
 const mode = Astro.params.mode || '';
-if (locale !== 'ru') {
+if (locale !== 'ru' && locale !== 'uk') {
     return Astro.redirect(`/convert/${mode}/`, 301);
 }
-const page = getConvertModePage(mode, 'ru');
+const page = getConvertModePage(mode, locale);
 if (!page) {
     return new Response('Not Found', { status: 404 });
 }
@@ -22,7 +22,7 @@ const nav = getLang(locale).nav;
 <Layout title={page.title} description={page.description} keywords={page.keywords} languageAlternates={false}>
     <main class="relative overflow-hidden min-h-screen flex flex-col">
         <Header />
-        <ConvertModePage page={page} mode={mode} toolCopy={t.tool} convertUrl="/ru/convert/" convertName={nav.convert.title} />
+        <ConvertModePage page={page} mode={mode} toolCopy={t.tool} convertUrl={`/${locale}/convert/`} convertName={nav.convert.title} />
         <Footer />
     </main>
 </Layout>

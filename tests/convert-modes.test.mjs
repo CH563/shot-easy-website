@@ -18,9 +18,9 @@ test('every landing mode exists in the ConvertTool dropdown', () => {
     }
 });
 
-test('every mode has complete en + ru content', () => {
+test('every mode has complete en + ru + uk content', () => {
     for (const value of modeValues) {
-        for (const locale of ['en', 'ru']) {
+        for (const locale of ['en', 'ru', 'uk']) {
             const page = convertModePages[value][locale];
             assert.ok(page, `${value}/${locale} missing`);
             for (const field of ['title', 'description', 'keywords', 'h1', 'eyebrow', 'backLink']) {
@@ -42,7 +42,7 @@ test('every mode has complete en + ru content', () => {
 });
 
 test('titles are unique per locale', () => {
-    for (const locale of ['en', 'ru']) {
+    for (const locale of ['en', 'ru', 'uk']) {
         const titles = modeValues.map((value) => convertModePages[value][locale].title);
         assert.equal(new Set(titles).size, titles.length, `duplicate title in ${locale}`);
     }
@@ -50,8 +50,9 @@ test('titles are unique per locale', () => {
 
 test('getConvertModePage falls back and rejects unknown modes', () => {
     assert.equal(getConvertModePage('nope', 'en'), null);
-    assert.equal(getConvertModePage('image-to-webp', 'uk').title, convertModePages['image-to-webp'].en.title);
+    assert.equal(getConvertModePage('image-to-webp', 'fr').title, convertModePages['image-to-webp'].en.title);
     assert.equal(getConvertModePage('image-to-webp', 'ru').title, convertModePages['image-to-webp'].ru.title);
+    assert.equal(getConvertModePage('image-to-webp', 'uk').title, convertModePages['image-to-webp'].uk.title);
 });
 
 test('mode routes exist', () => {
@@ -60,11 +61,12 @@ test('mode routes exist', () => {
     assert.ok(existsSync(new URL('../src/components/ConvertModePage.astro', import.meta.url)));
 });
 
-test('sitemap lists every ru mode page', () => {
+test('sitemap lists every ru and uk mode page', () => {
     const config = readFileSync(new URL('../astro.config.mjs', import.meta.url), 'utf8');
     for (const value of modeValues) {
         assert.ok(config.includes(`'${value}'`), `mode ${value} missing from sitemap config`);
     }
     assert.ok(config.includes("`/ru/convert/${page}/`"));
+    assert.ok(config.includes("`/uk/convert/${page}/`"));
     assert.ok(config.includes("`/convert/${page}/`"));
 });

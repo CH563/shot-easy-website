@@ -76,6 +76,14 @@ const ruPptxClusterPages = [
   'kak-otkryt-prezentatsiyu'
 ];
 
+const ukDocxClusterPages = [
+  'yak-vidkryty-docx'
+];
+
+const ukPptxClusterPages = [
+  'yak-vidkryty-prezentatsiyu'
+];
+
 const convertModePages = [
   'image-to-webp',
   'image-to-jpg',
@@ -115,8 +123,11 @@ const sitemapCustomPages = [
   ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruDocxClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruPptxClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...ukDocxClusterPages.map((page) => toAbsoluteUrl(`/uk/${page}/`)),
+  ...ukPptxClusterPages.map((page) => toAbsoluteUrl(`/uk/${page}/`)),
   ...convertModePages.map((page) => toAbsoluteUrl(`/convert/${page}/`)),
-  ...convertModePages.map((page) => toAbsoluteUrl(`/ru/convert/${page}/`))
+  ...convertModePages.map((page) => toAbsoluteUrl(`/ru/convert/${page}/`)),
+  ...convertModePages.map((page) => toAbsoluteUrl(`/uk/convert/${page}/`))
 ];
 
 // https://astro.build/config
