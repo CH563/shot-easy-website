@@ -16,7 +16,7 @@ const seoContent = getToolSeoContent(lang, 'convert', t);
 const converterGroups = ['images', 'pdf', 'data'];
 // Mode pages exist in en, ru and uk; other locales fall back to the en route.
 const modePageLocales = ['ru', 'uk'];
-const modeHref = (value) => modePageLocales.includes(locale) ? `/${locale}/convert/${value}/` : `/convert/${value}/`;
+const modeHref = (value: string) => modePageLocales.includes(locale ?? '') ? `/${locale}/convert/${value}/` : `/convert/${value}/`;
 ---
 
 <div class="container py-8 relative z-10 flex-1">
