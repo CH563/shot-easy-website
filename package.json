@@ -28,7 +28,8 @@
     "test:icoconvert": "node --test tests/ico-convert.test.mjs",
     "test:imageconvert": "node --test tests/image-convert.test.mjs",
     "test:convertmodes": "node --test tests/convert-modes.test.mjs",
-    "test:ppuocr": "node --test tests/ppu-ocr.test.mjs"
+    "test:ppuocr": "node --test tests/ppu-ocr.test.mjs",
+    "test:cameraeffects": "node --test tests/camera-effects.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -67,6 +68,7 @@
     "konva": "^9.3.0",
     "libarchive.js": "^2.0.2",
     "lucide-react": "^0.298.0",
+    "longpipe": "0.0.23",
     "markdown-it": "^14.1.0",
     "mobx": "^6.12.3",
     "mobx-react-lite": "^4.0.7",

@@ -31,6 +31,10 @@ export default {
         name: 'Video',
         title: 'Video Convert',
     },
+    cameraEffects: {
+        name: 'Caméra',
+        title: 'Effets caméra en ligne',
+    },
     convert: {
         name: 'Convert',
         title: 'Conversion de fichiers'

@@ -31,6 +31,10 @@ export default {
         name: 'Video',
         title: 'Video Convert'
     },
+    cameraEffects: {
+        name: 'Camera FX',
+        title: 'Camera Effects'
+    },
     convert: {
         name: 'Convert',
         title: 'File Convert'

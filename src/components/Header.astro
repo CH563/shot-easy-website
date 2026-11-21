@@ -21,7 +21,8 @@ const navGroups = [
         items: [
             item('/take-a-screenshot', 'screenshot'),
             item('/screenshot-beautifier', 'beautifier'),
-            item('/long-image', 'longImage')
+            item('/long-image', 'longImage'),
+            ...optItem(nav.cameraEffects, '/camera-effects', 'cameraEffects')
         ]
     },
     {

@@ -31,6 +31,10 @@ export default {
         name: 'Відео',
         title: 'Конвертер відео та GIF'
     },
+    cameraEffects: {
+        name: 'Камера',
+        title: 'Ефекти для камери онлайн'
+    },
     convert: {
         name: 'Convert',
         title: 'Конвертація файлів'

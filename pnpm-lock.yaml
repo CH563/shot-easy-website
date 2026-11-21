@@ -113,6 +113,9 @@ importers:
       libarchive.js:
         specifier: ^2.0.2
         version: 2.0.2
+      longpipe:
+        specifier: 0.0.23
+        version: 0.0.23
       lucide-react:
         specifier: ^0.298.0
         version: 0.298.0(react@18.2.0)
@@ -3046,6 +3049,9 @@ packages:
 
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
+
+  longpipe@0.0.23:
+    resolution: {integrity: sha512-2TebS+xbdMMfTBlXlJsUukntv/6AAaGRBAFBPLh9apTfZgVINO2qMZXSpWlfue+WRxqUlBM2GOL6BNBuabqTdQ==}
 
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -7934,6 +7940,8 @@ snapshots:
   long@5.2.3: {}
 
   longest-streak@3.1.0: {}
+
+  longpipe@0.0.23: {}
 
   loose-envify@1.4.0:
     dependencies:
