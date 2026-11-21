@@ -27,6 +27,7 @@ const localizedPages = [
   'archive-viewer',
   'long-image',
   'video-convert',
+  'camera-effects',
   'background-remover',
   'blur-background-online',
   'photo-to-rounded',

@@ -11,7 +11,7 @@ const NON_LOCALE_PREFIXES = [
   'image-compressor', 'long-image', 'ocr-pdf', 'pdf-split', 'pdf-tools',
   'pdf-viewer', 'photo-to-rounded', 'ppt-viewer', 'privacy-policy',
   'qr-code-generator', 'qr-scanner', 'screenshot-beautifier',
-  'take-a-screenshot', 'terms-of-service', 'video-convert', 'viewer',
+  'take-a-screenshot', 'terms-of-service', 'video-convert', 'camera-effects', 'viewer',
 ];
 
 const splitPath = (pathname = '/') => String(pathname).split('/').filter(Boolean);

@@ -1,0 +1,71 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import Privacy from '@components/Privacy.astro';
+import CameraEffects from '@components/CameraEffects';
+import { getLocale } from '@i18n/index';
+import { getCameraEffectsCopy } from '@lib/cameraEffectsCopy';
+
+const { locale } = Astro.params;
+const lang = getLocale(locale);
+const copy = getCameraEffectsCopy(lang);
+type CopyPair = [string, string];
+type CopyTriple = [string, string, string];
+---
+
+<Layout title={`${copy.title} - ShotEasy`} description={copy.description} keywords={copy.keywords}>
+  <main class="relative min-h-screen overflow-hidden flex flex-col">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,.12),transparent_58%)]"></div>
+    <Header />
+    <div class="container relative z-10 flex-1 py-8">
+      <div class="mx-auto mb-7 max-w-3xl text-center">
+        <div class="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/80 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          {copy.badge}
+        </div>
+        <h1 class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-4xl font-bold leading-tight text-transparent">{copy.title}</h1>
+        <p class="mt-2 text-sm text-slate-600">{copy.tip}</p>
+      </div>
+      <CameraEffects client:only="react" lang={lang} />
+
+      <section class="mx-auto mt-8 grid max-w-5xl gap-3 md:grid-cols-3">
+        {copy.cards.map((card: CopyTriple) => <article class="rounded-md border border-slate-100 bg-white/80 p-4 shadow-sm"><div class="mb-2 text-xl">{card[0]}</div><h2 class="font-bold text-slate-800">{card[1]}</h2><p class="mt-2 text-sm leading-6 text-slate-600">{card[2]}</p></article>)}
+      </section>
+
+      <section class="mx-auto mt-8 max-w-5xl overflow-hidden rounded-xl border border-slate-100 bg-white/85 shadow-sm">
+        <div class="border-b border-slate-100 p-5 md:p-7">
+          <p class="mb-2 text-[11px] font-bold uppercase tracking-[.18em] text-blue-600">longpipe · WebGPU / WebGL2 · On-device</p>
+          <h2 class="text-2xl font-extrabold text-slate-800">{copy.introTitle}</h2>
+          <p class="mt-3 max-w-4xl text-sm leading-7 text-slate-600">{copy.intro}</p>
+        </div>
+        <div class="p-5 md:p-7">
+          <h2 class="text-xl font-extrabold text-slate-800">{copy.techTitle}</h2>
+          <div class="mt-4 grid gap-3 md:grid-cols-2">
+            {copy.tech.map((item: CopyPair, index: number) => <article class="rounded-lg bg-slate-50 p-4"><div class="mb-3 flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-xs font-black text-white">{index + 1}</div><h3 class="font-bold text-slate-800">{item[0]}</h3><p class="mt-2 text-sm leading-6 text-slate-600">{item[1]}</p></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section class="mx-auto mt-6 max-w-5xl rounded-xl border border-slate-100 bg-white/85 p-5 shadow-sm md:p-7">
+        <h2 class="text-xl font-extrabold text-slate-800">{copy.howTitle}</h2>
+        <ol class="mt-5 grid gap-3 md:grid-cols-4">
+          {copy.steps.map((step: CopyTriple) => <li class="relative rounded-lg border border-slate-100 p-4"><span class="text-3xl font-black text-blue-100">{step[0]}</span><h3 class="mt-1 font-bold text-slate-800">{step[1]}</h3><p class="mt-2 text-xs leading-5 text-slate-600">{step[2]}</p></li>)}
+        </ol>
+      </section>
+
+      <section class="mx-auto mt-6 max-w-5xl rounded-xl border border-slate-100 bg-white/85 p-5 shadow-sm md:p-7">
+        <h2 class="text-xl font-extrabold text-slate-800">{copy.faqTitle}</h2>
+        <div class="mt-4 divide-y divide-slate-100">
+          {copy.faqs.map((item: CopyPair) => <details class="group py-3"><summary class="cursor-pointer list-none pr-6 text-sm font-bold text-slate-800 group-open:text-blue-600">{item[0]}</summary><p class="mt-2 max-w-4xl text-sm leading-6 text-slate-600">{item[1]}</p></details>)}
+        </div>
+      </section>
+      <div class="mx-auto mt-6 max-w-5xl"><Privacy /></div>
+    </div>
+    <Footer />
+  </main>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context':'https://schema.org', '@type':'FAQPage',
+    mainEntity: copy.faqs.map((item: CopyPair) => ({ '@type':'Question', name:item[0], acceptedAnswer:{ '@type':'Answer', text:item[1] } }))
+  })}/>
+</Layout>
