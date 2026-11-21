@@ -72,6 +72,10 @@ const ruDocxClusterPages = [
   'kak-otkryt-docx'
 ];
 
+const ruPptxClusterPages = [
+  'kak-otkryt-prezentatsiyu'
+];
+
 const convertModePages = [
   'image-to-webp',
   'image-to-jpg',
@@ -110,6 +114,7 @@ const sitemapCustomPages = [
   ...ruVideoConverterClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruDocxClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...ruPptxClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...convertModePages.map((page) => toAbsoluteUrl(`/convert/${page}/`)),
   ...convertModePages.map((page) => toAbsoluteUrl(`/ru/convert/${page}/`))
 ];
