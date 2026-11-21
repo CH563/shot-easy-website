@@ -27,7 +27,8 @@
     "test:audioconvert": "node --test tests/audio-convert.test.mjs",
     "test:icoconvert": "node --test tests/ico-convert.test.mjs",
     "test:imageconvert": "node --test tests/image-convert.test.mjs",
-    "test:convertmodes": "node --test tests/convert-modes.test.mjs"
+    "test:convertmodes": "node --test tests/convert-modes.test.mjs",
+    "test:ppuocr": "node --test tests/ppu-ocr.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -70,8 +71,10 @@
     "mobx": "^6.12.3",
     "mobx-react-lite": "^4.0.7",
     "octokit": "^4.0.2",
+    "onnxruntime-web": "^1.31.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.10.38",
+    "ppu-paddle-ocr": "^6.7.1",
     "qrcode": "^1.5.4",
     "react": "^18.0.0",
     "react-compare-image": "^3.4.0",
