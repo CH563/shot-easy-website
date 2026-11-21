@@ -14,6 +14,9 @@ const nav = l.nav;
 const t = l.convert;
 const seoContent = getToolSeoContent(lang, 'convert', t);
 const converterGroups = ['images', 'pdf', 'data'];
+// Mode pages exist in en, ru and uk; other locales fall back to the en route.
+const modePageLocales = ['ru', 'uk'];
+const modeHref = (value) => modePageLocales.includes(locale) ? `/${locale}/convert/${value}/` : `/convert/${value}/`;
 ---
 
 <div class="container py-8 relative z-10 flex-1">
@@ -30,7 +33,7 @@ const converterGroups = ['images', 'pdf', 'data'];
                 <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {convertModes.filter(item => item.group === group).map(item => (
                         <li>
-                            <a href={`/convert/${item.value}/`} class="block rounded-md px-3 py-2 bg-slate-50 ring-1 ring-slate-200/70 text-blue-600 hover:bg-sky-100/60 hover:underline">{t.tool.modes[item.labelKey]}</a>
+                            <a href={modeHref(item.value)} class="block rounded-md px-3 py-2 bg-slate-50 ring-1 ring-slate-200/70 text-blue-600 hover:bg-sky-100/60 hover:underline">{t.tool.modes[item.labelKey]}</a>
                         </li>
                     ))}
                 </ul>
