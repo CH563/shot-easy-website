@@ -68,6 +68,10 @@ const ruOcrClusterPages = [
   'kak-raspoznat-tekst'
 ];
 
+const ruDocxClusterPages = [
+  'kak-otkryt-docx'
+];
+
 const convertModePages = [
   'image-to-webp',
   'image-to-jpg',
@@ -105,6 +109,7 @@ const sitemapCustomPages = [
   ...ruCompressorClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruVideoConverterClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...ruOcrClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
+  ...ruDocxClusterPages.map((page) => toAbsoluteUrl(`/ru/${page}/`)),
   ...convertModePages.map((page) => toAbsoluteUrl(`/convert/${page}/`)),
   ...convertModePages.map((page) => toAbsoluteUrl(`/ru/convert/${page}/`))
 ];
