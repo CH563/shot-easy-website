@@ -115,6 +115,13 @@ export default function OcrTool({ lang = 'en' }) {
   const getOcr = async () => {
     if (ocrRef.current) return ocrRef.current;
     setProgress(t.loadingModel);
+    if (lang === 'ru' || lang === 'uk' || lang === 'fr') {
+      // Cyrillic (ru/uk) and Latin (fr) recognition via ppu-paddle-ocr;
+      // the PaddleOCR.js engine below has no model for these languages.
+      const { createPpuOcr } = await import('@lib/ppuOcr');
+      ocrRef.current = await createPpuOcr(lang);
+      return ocrRef.current;
+    }
     const { PaddleOCR } = await import('@paddleocr/paddleocr-js');
     ocrRef.current = await PaddleOCR.create({
       lang: zh ? 'ch' : 'en',
