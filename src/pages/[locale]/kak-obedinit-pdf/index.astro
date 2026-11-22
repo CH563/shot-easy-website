@@ -7,7 +7,7 @@ import { ruPdfClusterPages } from '@lib/ruPdfClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'ru') {
-    return Astro.redirect('/ru/pdf-tools', 301);
+    return Astro.redirect(`/${locale}/pdf-tools/`, 301);
 }
 
 const page = ruPdfClusterPages.howToPdfTools;

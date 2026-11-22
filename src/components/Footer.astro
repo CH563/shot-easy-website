@@ -10,25 +10,24 @@ const { showLanguageSwitcher = true } = Astro.props;
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
+// Merge with the English nav so every locale lists the same core tools;
+// locales without a translation for a tool fall back to its English name.
+const nav = { ...getLang('en').nav, ...l.nav };
 const copy = homepageCopy[lang as keyof typeof homepageCopy];
 const languages = LANGUAGES as {[key: string]: string}
 const coreTools = [
-    { href: getRelativeLocaleUrl(lang, '/take-a-screenshot'), title: l.nav.screenshot.title, label: l.nav.screenshot.name },
-    { href: getRelativeLocaleUrl(lang, '/screenshot-beautifier'), title: l.nav.beautifier.title, label: l.nav.beautifier.name },
-    { href: getRelativeLocaleUrl(lang, '/image-compressor'), title: l.nav.compressor.title, label: l.nav.compressor.name },
-    { href: getRelativeLocaleUrl(lang, '/convert'), title: l.nav.convert.title, label: l.nav.convert.name },
-    { href: getRelativeLocaleUrl(lang, '/viewer'), title: l.nav.viewer.title, label: l.nav.viewer.name },
-    { href: getRelativeLocaleUrl(lang, '/long-image'), title: l.nav.longImage.title, label: l.nav.longImage.name },
-    { href: getRelativeLocaleUrl(lang, '/video-convert'), title: l.nav.videoConvert.title, label: l.nav.videoConvert.name },
-    { href: getRelativeLocaleUrl(lang, '/background-remover'), title: l.nav.remover.title, label: l.nav.remover.name },
-    { href: getRelativeLocaleUrl(lang, '/blur-background-online'), title: l.nav.blurBackground.title, label: l.nav.blurBackground.name }
+    { href: getRelativeLocaleUrl(lang, '/take-a-screenshot'), title: nav.screenshot.title, label: nav.screenshot.name },
+    { href: getRelativeLocaleUrl(lang, '/screenshot-beautifier'), title: nav.beautifier.title, label: nav.beautifier.name },
+    { href: getRelativeLocaleUrl(lang, '/image-compressor'), title: nav.compressor.title, label: nav.compressor.name },
+    { href: getRelativeLocaleUrl(lang, '/convert'), title: nav.convert.title, label: nav.convert.name },
+    { href: getRelativeLocaleUrl(lang, '/viewer'), title: nav.viewer.title, label: nav.viewer.name },
+    { href: getRelativeLocaleUrl(lang, '/long-image'), title: nav.longImage.title, label: nav.longImage.name },
+    { href: getRelativeLocaleUrl(lang, '/video-convert'), title: nav.videoConvert.title, label: nav.videoConvert.name },
+    { href: getRelativeLocaleUrl(lang, '/background-remover'), title: nav.remover.title, label: nav.remover.name },
+    { href: getRelativeLocaleUrl(lang, '/blur-background-online'), title: nav.blurBackground.title, label: nav.blurBackground.name },
+    { href: getRelativeLocaleUrl(lang, '/pdf-tools'), title: nav.pdfTools.title, label: nav.pdfTools.name },
+    { href: getRelativeLocaleUrl(lang, '/qr-code-generator'), title: nav.qrCode.title, label: nav.qrCode.name }
 ];
-if (l.nav.pdfTools) {
-    coreTools.push({ href: getRelativeLocaleUrl(lang, '/pdf-tools'), title: l.nav.pdfTools.title, label: l.nav.pdfTools.name });
-}
-if (l.nav.qrCode) {
-    coreTools.push({ href: getRelativeLocaleUrl(lang, '/qr-code-generator'), title: l.nav.qrCode.title, label: l.nav.qrCode.name });
-}
 const aiPrompt = 'ShotEasy is a free local-first browser toolkit for screenshots, image editing, image compression, image format conversion, document viewing, PDF and image conversion, long image composition, background removal, and video/GIF conversion. It helps users process files online without uploading them to a server whenever possible. Summarize the highlights from ShotEasy website: https://shoteasy.fun';
 const encodedAiPrompt = encodeURIComponent(aiPrompt);
 const chatGptUrl = `https://chatgpt.com/?q=${encodedAiPrompt}`;

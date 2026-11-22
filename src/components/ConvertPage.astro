@@ -12,6 +12,17 @@ const lang = getLocale(locale);
 const l = getLang(locale);
 const nav = l.nav;
 const t = l.convert;
+// Locales with a stale convert copy (no tool.groups / convertersTitle / new
+// modes) fall back to the English copy field by field, so /<locale>/convert/
+// renders the full 20-mode directory instead of throwing on t.tool.groups.
+const enConvert = getLang('en').convert;
+const toolCopy = {
+    ...enConvert.tool,
+    ...t.tool,
+    modes: { ...enConvert.tool.modes, ...(t.tool.modes || {}) },
+    groups: { ...enConvert.tool.groups, ...(t.tool.groups || {}) },
+};
+const convertersTitle = t.convertersTitle || enConvert.convertersTitle;
 const seoContent = getToolSeoContent(lang, 'convert', t);
 const converterGroups = ['images', 'pdf', 'data'];
 // Mode pages exist in en, ru and uk; other locales fall back to the en route.
@@ -23,17 +34,17 @@ const modeHref = (value: string) => modePageLocales.includes(locale ?? '') ? `/$
     <h1 class="text-4xl text-center leading-[42px] font-bold mb-0.5 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent">{nav.convert.title}</h1>
     <p class="text-slate-600 text-center mb-2">{t.tip}</p>
     <div class="pb-12 min-h-[300px]">
-        <ConvertTool client:only="react" copy={t.tool} />
+        <ConvertTool client:only="react" copy={toolCopy} />
     </div>
     <section class="mb-3 rounded-md p-4 bg-white/75 text-xs shadow-sm ring-1 ring-slate-200/70">
-        <h2 class="text-lg font-bold mb-3">{t.convertersTitle}</h2>
+        <h2 class="text-lg font-bold mb-3">{convertersTitle}</h2>
         {converterGroups.map(group => (
             <div class="mb-3 last:mb-0">
-                <h3 class="font-semibold mb-2 text-sm">{t.tool.groups[group]}</h3>
+                <h3 class="font-semibold mb-2 text-sm">{toolCopy.groups[group]}</h3>
                 <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {convertModes.filter(item => item.group === group).map(item => (
                         <li>
-                            <a href={modeHref(item.value)} class="block rounded-md px-3 py-2 bg-slate-50 ring-1 ring-slate-200/70 text-blue-600 hover:bg-sky-100/60 hover:underline">{t.tool.modes[item.labelKey]}</a>
+                            <a href={modeHref(item.value)} class="block rounded-md px-3 py-2 bg-slate-50 ring-1 ring-slate-200/70 text-blue-600 hover:bg-sky-100/60 hover:underline">{toolCopy.modes[item.labelKey]}</a>
                         </li>
                     ))}
                 </ul>

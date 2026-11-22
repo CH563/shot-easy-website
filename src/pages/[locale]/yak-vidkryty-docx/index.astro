@@ -7,7 +7,7 @@ import { ukDocxClusterPages } from '@lib/ukDocxClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'uk') {
-    return Astro.redirect('/uk/doc-viewer', 301);
+    return Astro.redirect(`/${locale}/doc-viewer/`, 301);
 }
 
 const page = ukDocxClusterPages.openDocx;
