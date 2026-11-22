@@ -7,7 +7,7 @@ import { ruOcrClusterPages } from '@lib/ruOcrClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'ru') {
-    return Astro.redirect('/ru/ocr-pdf', 301);
+    return Astro.redirect(`/${locale}/ocr-pdf/`, 301);
 }
 
 const page = ruOcrClusterPages.recognizeText;

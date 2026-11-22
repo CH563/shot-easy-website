@@ -7,7 +7,7 @@ import { ruQrClusterPages } from '@lib/ruQrClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'ru') {
-    return Astro.redirect('/ru/qr-code-generator', 301);
+    return Astro.redirect(`/${locale}/qr-code-generator/`, 301);
 }
 
 const page = ruQrClusterPages.howToQrCode;

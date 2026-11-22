@@ -7,7 +7,7 @@ import { ukPptxClusterPages } from '@lib/ukPptxClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'uk') {
-    return Astro.redirect('/uk/ppt-viewer', 301);
+    return Astro.redirect(`/${locale}/ppt-viewer/`, 301);
 }
 
 const page = ukPptxClusterPages.openPresentation;

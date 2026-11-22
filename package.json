@@ -29,7 +29,8 @@
     "test:imageconvert": "node --test tests/image-convert.test.mjs",
     "test:convertmodes": "node --test tests/convert-modes.test.mjs",
     "test:ppuocr": "node --test tests/ppu-ocr.test.mjs",
-    "test:cameraeffects": "node --test tests/camera-effects.test.mjs"
+    "test:cameraeffects": "node --test tests/camera-effects.test.mjs",
+    "test:localeparity": "node --test tests/locale-parity.test.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

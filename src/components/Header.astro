@@ -6,7 +6,9 @@ const { pathname } = Astro.url;
 const { locale } = Astro.params;
 const lang = getLocale(locale);
 const l = getLang(locale);
-const nav = l.nav;
+// Merge with the English nav so every locale shows the same 17 links;
+// locales without a translation for a tool fall back to its English name.
+const nav = { ...getLang('en').nav, ...l.nav };
 const index = getRelativeLocaleUrl(lang);
 const groups = nav.navGroups || getLang('en').nav.navGroups;
 const item = (path: string, key: string) => ({

@@ -7,7 +7,7 @@ import { ruPptxClusterPages } from '@lib/ruPptxClusterPages';
 
 const { locale } = Astro.params;
 if (locale !== 'ru') {
-    return Astro.redirect('/ru/ppt-viewer', 301);
+    return Astro.redirect(`/${locale}/ppt-viewer/`, 301);
 }
 
 const page = ruPptxClusterPages.openPresentation;
