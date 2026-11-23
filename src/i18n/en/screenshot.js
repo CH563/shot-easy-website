@@ -25,10 +25,6 @@ export default {
         {
             question: 'Which browsers are supported?',
             answer: 'Modern Chrome, Edge, Firefox and Safari. Screen-capture permission and behaviour depend on the browser.'
-        },
-        {
-            question: 'Can I screenshot a website by entering its URL?',
-            answer: 'Yes. Paste the page URL in the URL screenshot box and the page is rendered on the server, then opens in the editor where you can crop, copy or save it. To prevent abuse it is limited to 5 URL screenshots every 10 minutes.'
         }
     ],
     how: 'How to take a screenshot online?',

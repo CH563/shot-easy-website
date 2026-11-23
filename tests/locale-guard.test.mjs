@@ -65,7 +65,7 @@ test('single-segment paths are left to the [locale] page', () => {
 });
 
 test('the middleware trailing-slash rule exempts /api/ routes', async () => {
-    // A POST to /api/screenshot must reach the endpoint: a 301 to the
+    // A POST to /api/remove-bg must reach the endpoint: a 301 to the
     // slashed URL makes fetch re-issue it as GET, which 404s.
     const { readFile } = await import('node:fs/promises');
     const source = await readFile(new URL('../src/middleware.js', import.meta.url), 'utf8');
