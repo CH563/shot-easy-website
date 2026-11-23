@@ -36,13 +36,11 @@ test('other viewer routes retain their original metadata and do not inherit targ
 
 test('Russian and Ukrainian screenshot controls and errors have complete localized copy', () => {
     const en = getScreenshotToolCopy();
-    // Language-neutral values that are legitimately identical everywhere.
-    const identicalOk = new Set(['urlPlaceholder']);
     for (const locale of ['ru', 'uk']) {
         const copy = getScreenshotToolCopy(locale);
         assert.deepEqual(Object.keys(copy).sort(), Object.keys(en).sort());
         for (const [key, value] of Object.entries(copy)) {
-            assert.ok(value && (identicalOk.has(key) || value !== en[key]), `${locale}:${key}`);
+            assert.ok(value && value !== en[key], `${locale}:${key}`);
         }
     }
     assert.equal(getScreenshotToolCopy('de'), en);
